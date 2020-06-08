@@ -13,7 +13,7 @@ class GeneralTransformer{
     protected function noContentFormat(){
         
     }
-//     200 - Ok                                // 성공
+// 200 - Ok                                // 성공
 // 201 - Created                           // 새로운 리소스 생성 요청에 대한 응답                     
 // 204 - No Content                        // 리소스 삭제 요청 성공 등에 사용
 // 304 - Not Modified                      // 클라이언트에 캐시된 리소스 대비 서버 리소스의 변경이 없을 때 

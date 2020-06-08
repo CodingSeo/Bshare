@@ -17,6 +17,10 @@ class PostsController extends Controller
     {
         return (new PostTransformer) -> withItem($post);
     }
+    public function show($index){
+        $post = Post::find($index);
+        return (new PostTransformer)->withItem($post);
+    }
 
     public function store(PostsRequest $request)
     {

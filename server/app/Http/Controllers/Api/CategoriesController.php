@@ -16,6 +16,6 @@ class CategoriesController extends Controller
     }
     // public function index($category_id)
     // {
-    //  return (new PostTransformer)->withPagination Category::find($category_id)->posts()->latest()->paginate(5));
+    //     return (new PostTransformer)->withPagination Category::find($category_id)->posts()->latest()->paginate(5));
     // }
 }
