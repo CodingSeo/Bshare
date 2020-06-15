@@ -33,7 +33,7 @@ class PostRepositoryImp implements PostRepository
     {
         $this->post->fill((array)$content);
         $this->post->exists=true;
-        dd($this->post->update((array)$content));
+        $this->post->update((array)$content);
         // $post = $this->post->find($content->id);
         // $post->update((array)$content);
         // return $this->mapper->map($post, PostDTO::class);
@@ -43,7 +43,6 @@ class PostRepositoryImp implements PostRepository
     {
         $this->post->fill((array)$content);
         $this->post->exists=true;
-        dd($this->post->delete());
         return $this->post->delete();
     }
     public function save($content): object
@@ -72,7 +71,7 @@ class PostRepositoryImp implements PostRepository
         $this->content->save();
         return $this->mapper->map($this->content, ContentDTO::class);
     }
-    public function updateContent($post, array $content) : object
+    public function updateContent(object $post, array $content) : object
     {
         $post_content = $this->content->where('post_id',$post->id)->first();
         $post_content->update($content);

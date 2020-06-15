@@ -70,7 +70,7 @@ class PostServiceImp implements PostService
         $post = $this->post_repository->getOne($content['post_id']);
         if (!$post->id) throw new \App\Exceptions\ModuleNotFound('Post not Found');
         $delete_result = $this->post_repository->delete($post);
-        if (!$delete_result) return 'delete failed';
+        if (!$delete_result) throw new \App\Exceptions\ModuleNotFound('delete failed');
         return true;
     }
 }
