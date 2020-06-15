@@ -15,7 +15,7 @@ class JWTRegisterRequest extends ApiRequest
     {
         return [
             'name' => ['required','string','max:100'],
-            'email' => ['required','email','max:255','unique:users'],
+            'email' => ['required','email','max:255'],
             'password' => ['required','string','min:8','max:255','confirmed'],
             'password_confirmation' => ['required','string','min:8','max:255'],
         ];
@@ -25,7 +25,6 @@ class JWTRegisterRequest extends ApiRequest
         return [
             'required' => ':attribute is required',
             'string' => ':attribute should be string',
-            'unique' => ':attribute is already taken',
             'min' => ':attribute should be no shorter than 8 length',
             'max'  => ':attribute should be no longer than 255 length',
             'confirmed' =>':attribute does not match',

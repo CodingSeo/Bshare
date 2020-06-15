@@ -1,6 +1,6 @@
 <?php
 namespace App\Transformers;
 
-class Transformer{
-    
+interface Transformer{
+
 }

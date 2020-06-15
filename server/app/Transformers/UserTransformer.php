@@ -1,9 +1,10 @@
 <?php
 namespace App\Transformers;
-use App\User;
+
+use Illuminate\Support\Collection;
 
 class UserTransformer{
-    
+
     public function respondWithToken($token) {
         return response()->json([
             'access_token' => $token,
@@ -18,17 +19,17 @@ class UserTransformer{
             'message' => 'logout'
         ], 200);
     }
-    public function registerResponse(User $user){
+    public function registerResponse(Collection $user){
         return response()->json([
             'status' => 'success',
-            'data' => $this->transform($user),
+            'data' => $this->withUser($user),
         ], 200);
     }
-    public function transform(User $user){
+    public function withUser(Collection $user){
         return [
-            'name' => $user->name,
-            'email' => $user->email,
-            'created' => $user->created_at->toIso8601String(),
+            'name' => $user->get('name'),
+            'email' => $user->get('email'),
+            'created' => $user->get('created_at'),
         ];
     }
 }

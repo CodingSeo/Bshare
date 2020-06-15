@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,29 +13,47 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['namespace'=>'Api','as'=>'api.'], function(){
-    Route::get('/',[
-        'as'=>'index',
-        'uses'=>'HomeController@index',
+Route::group(['as' => 'api.'], function () {
+    Route::get('/', [
+        'as' => 'index',
+        'uses' => 'HomeController@index',
     ]);
-    
-    Route::resource('category.posts', 'CategoriesController',[
-        'only'=>['index']
+    //category
+    Route::get('category/{category_id}/posts', [
+        'as' => 'category.index',
+        'uses' => 'CategoriesController@index'
     ]);
-    // Route::get('category/{category_id}/posts',[
-    //     'as'=>'category.posts',
-    //     'uses'=>'CategoriesController@index'
-    // ]);
+    //post
+    Route::get('posts/{post_id}', [
+        'as' => 'posts.show',
+        'uses' => 'PostsController@show'
+    ]);
+    Route::post('posts', [
+        'as' => 'posts.store',
+        'uses' => 'PostsController@store'
+    ]);
+    Route::put('posts/{post_id}', [
+        'as' => 'posts.update',
+        'uses' => 'PostsController@update'
+    ]);
+    Route::delete('posts/{post_id}', [
+        'as' => 'posts.delete',
+        'uses' => 'PostsController@destroy'
+    ]);
+    // //comments
+    Route::post('posts/{post_id}/comments', [
+        'as' => 'posts.comments.store',
+        'uses' => 'CommentsController@store'
+    ]);
+    Route::put('comments/{comment_id}', [
+        'as' => 'comments.update',
+        'uses' => 'CommentsController@update'
+    ]);
+    Route::delete('comments/{comment_id}', [
+        'as' => 'comments.delete',
+        'uses' => 'CommentsController@destroy'
+    ]);
 
-    Route::resource('posts', 'PostsController',[
-        'except'=>['index','edit','create']
-    ]);
+    //file
 
-    Route::resource('comments', 'CommentsController',[
-        'only'=>['show','update','destroy']
-    ]);
-    
-    Route::resource('posts.comments', 'PostsController',[
-        'only'=>['index','store']
-    ]);
 });

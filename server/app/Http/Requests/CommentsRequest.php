@@ -8,27 +8,23 @@ class CommentsRequest extends ApiRequest
 {
     public function authorize()
     {
-        return false;
+        return true;
     }
-    
+
     public function rules()
     {
         return [
-            'title'=>['required','max:255'],
-            'files'=>['array'],
-            'files.*'=>['mimes::jpg,png,png,zip,tar','max:30000'], 
+            'body'=>['required','max:255'],
         ];
     }
     public function message(){
         return[
             'required'=>':arribute should be required.',
-            'min'=>':arribute should be longer.',
-            'max'=>':arribute should be shorter.'
         ];
     }
     public function attributes(){
         return[
-            'title'=>'title'
+            'body'=>'body'
         ];
     }
 }
