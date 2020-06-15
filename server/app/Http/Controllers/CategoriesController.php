@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Services\CategoryService;
+use App\Services\Interfaces\CategoryService;
 use App\Transformers\PostTransformer;
 
 class CategoriesController extends Controller

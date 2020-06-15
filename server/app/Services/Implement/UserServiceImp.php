@@ -1,0 +1,39 @@
+<?php
+
+namespace App\Services\Implement;
+use App\Repositories\Interfaces\UserRepository;
+use App\Services\Interfaces\UserService;
+
+class UserServiceImp implements UserService
+{
+    protected $user_repository;
+    public function __construct(UserRepository $user_repository)
+    {
+        $this->user_repository = $user_repository;
+    }
+    public function registerUser(array $user_info)
+    {
+        $user = $this->user_repository->registerUser($user_info);
+        return collect($user);
+    }
+    public function loginUser(array $user_info){
+        $email = $user_info['email'];
+        $password = $user_info['password'];
+        $token = auth('api')->attempt(['email' => $email, 'password' => $password]);
+        if (!$token){
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+        return $token;
+    }
+    public function getUserInfo(){
+        return auth()->user();
+    }
+
+    public function refreshToken(){
+        return auth('api')->refresh();
+    }
+
+    public function logoutUser(){
+        return auth()->logout();
+    }
+}

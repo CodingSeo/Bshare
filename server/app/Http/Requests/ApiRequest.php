@@ -2,21 +2,36 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Foundation\Http\FormRequest;
 
-abstract class APIRequest extends FormRequest
+abstract class ApiRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public abstract function authorize();
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json([
+            'code' => 422,
+            'errors' => $validator->errors(),
+            'links' => [
+                [
+                    'rel' => 'self',
+                    'href' => $this->getRedirectUrl(),
+                ],
+            ]
+        ], 422, [], JSON_PRETTY_PRINT));
+    }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public abstract function rules();
+    public function messages()
+    {
+        return [
+            'required' => ':attribute is required',
+            'string' => ':attribute should be string',
+            'unique' => ':attribute is already taken',
+            'numeric' => ':attribute should be numeric',
+            'min' => ':attribute should be no shorter than 8 length',
+            'max'  => ':attribute should be no longer than 255 length',
+            'confirmed' => ':attribute does not match',
+        ];
+    }
 }

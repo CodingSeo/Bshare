@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['as' => 'jwt.'], function () {
-Route::post('register', [
+    Route::post('register', [
         'as' => 'register',
         'uses' => 'JWTAuthController@register',
     ]);

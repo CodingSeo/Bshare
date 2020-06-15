@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\JWT\JWTRegisterRequest;
 use App\Http\Requests\JWT\JWTRequest;
-use App\Services\UserService;
+use App\Services\Interfaces\UserService;
 use App\Transformers\UserTransformer;
 
 class JWTAuthController extends Controller

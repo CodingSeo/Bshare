@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['as' => 'api.'], function () {
+    Route::get('/test/{test}', [
+        'as' => 'test',
+        'uses' => 'HomeController@test',
+    ]);
     Route::get('/', [
         'as' => 'index',
         'uses' => 'HomeController@index',
@@ -24,6 +28,10 @@ Route::group(['as' => 'api.'], function () {
         'uses' => 'CategoriesController@index'
     ]);
     //post
+    Route::get('posts', [
+        'as' => 'posts.show',
+        'uses' => 'PostsController@show'
+    ]);
     Route::get('posts/{post_id}', [
         'as' => 'posts.show',
         'uses' => 'PostsController@show'
@@ -41,7 +49,7 @@ Route::group(['as' => 'api.'], function () {
         'uses' => 'PostsController@destroy'
     ]);
     // //comments
-    Route::post('posts/{post_id}/comments', [
+    Route::post('comments', [
         'as' => 'posts.comments.store',
         'uses' => 'CommentsController@store'
     ]);

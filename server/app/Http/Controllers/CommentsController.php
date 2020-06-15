@@ -4,8 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CommentsRequest;
-use App\Services\CommentService;
-use Illuminate\Http\Request;
+use App\Services\Interfaces\CommentService;
 
 class CommentsController extends Controller
 {
@@ -14,9 +13,10 @@ class CommentsController extends Controller
     {
         $this->comment_service = $comment_service;
     }
-    public function store($post_id, CommentsRequest $request)
+    public function store(CommentsRequest $request)
     {
-        $comment = $this->comment_service->storeComment($post_id, $request->all());
+        $parent_id = $request->input('parent_id',null);
+        $comment = $this->comment_service->storeComment($request->all());
         return $comment;
     }
 

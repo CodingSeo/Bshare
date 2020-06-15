@@ -4,42 +4,56 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PostsRequest;
-use App\Services\PostService;
+use App\Http\Requests\PostsRequestIndex;
+use App\Http\Requests\PostsRequestUpdate;
+use App\Services\Interfaces\PostService;
 use App\Transformers\PostTransformer;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class PostsController extends Controller
 {
     protected $service;
     protected $transform;
+
     public function __construct(PostService $service, PostTransformer $transform)
     {
         $this->service = $service;
         $this->transform = $transform;
     }
-    public function show($post_id)
+    public function show(PostsRequestIndex $request)
     {
-        $post = $this->service->getPost($post_id);
+        $content = $request->only([
+            'post_id'
+        ]);
+        $post_content_comments_array = $this->service->getPost($content);
+        return $post_content_comments_array;
         return $this->transform->withItem($post);
     }
-
     public function store(PostsRequest $request)
     {
-        $post = $this->service->storePost($request->all());
+        $content = $request->only([
+            'title', 'body', 'category_id'
+        ]);
+        $post_content_array = $this->service->storePost($content);
+        return $post_content_array;
         return $this->transform->withItem($post);
     }
 
-    public function update($post_id, PostsRequest $request)
+    public function update(PostsRequestUpdate $request)
     {
-        //Eloquent
-        $post = $this->service->updatePost($post_id, $request->all());
+        $content = $request->only([
+            'post_id', 'title', 'body', 'category_id'
+        ]);
+        $post = $this->service->updatePost($content);
         return $post;
     }
 
-    public function destroy($post_id)
+    public function destroy(PostsRequestIndex $request)
     {
-        //Eloquent
-        $post = $this->service->deletePost($post_id);
-        return $post;
+        $content = $request->only([
+            'post_id'
+        ]);
+        $result = $this->service->deletePost($content);
+        return $result;
     }
 }

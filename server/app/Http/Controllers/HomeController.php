@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Transformers\Transformer;
 
 class HomeController extends Controller
 {

@@ -48,8 +48,15 @@ class Handler extends ExceptionHandler
      *
      * @throws \Throwable
      */
-    public function render($request, Throwable $exception)
+    public function render($request, Throwable $e)
     {
-        return parent::render($request, $exception);
+
+        switch (true) {
+            // case $e instanceof
+            //     throw new
+            //     break;
+            default:
+                return parent::render($request, $e);
+        }
     }
 }

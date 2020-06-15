@@ -16,6 +16,9 @@ class Comment extends Model
         'parent_order',
         'post_id',
     ];
+    protected $hidden = [
+        'post_id','parent_id','parent_order'
+    ];
     public function post()
     {
         return $this->belongsTo(Post::class);

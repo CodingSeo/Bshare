@@ -8,7 +8,7 @@ class Content extends Model
 {
     //
     public $timestamps = false;
-    protected $fillable = ['text'];
+    protected $fillable = ['body'];
     protected $hidden = ['id', 'post_id'];
     public function post()
     {

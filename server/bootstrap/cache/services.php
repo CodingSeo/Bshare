@@ -37,9 +37,8 @@
     33 => 'App\\Providers\\AuthServiceProvider',
     34 => 'App\\Providers\\EventServiceProvider',
     35 => 'App\\Providers\\RouteServiceProvider',
-    36 => 'App\\Providers\\Bshare\\ControllerProvider',
-    37 => 'App\\Providers\\Bshare\\RepositoryProvider',
-    38 => 'App\\Providers\\Bshare\\ServicesProvider',
+    36 => 'App\\Providers\\Bshare\\RequestProvider',
+    37 => 'App\\Providers\\Bshare\\BshareProvider',
   ),
   'eager' => 
   array (
@@ -64,9 +63,8 @@
     18 => 'App\\Providers\\AuthServiceProvider',
     19 => 'App\\Providers\\EventServiceProvider',
     20 => 'App\\Providers\\RouteServiceProvider',
-    21 => 'App\\Providers\\Bshare\\ControllerProvider',
-    22 => 'App\\Providers\\Bshare\\RepositoryProvider',
-    23 => 'App\\Providers\\Bshare\\ServicesProvider',
+    21 => 'App\\Providers\\Bshare\\RequestProvider',
+    22 => 'App\\Providers\\Bshare\\BshareProvider',
   ),
   'deferred' => 
   array (
