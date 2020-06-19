@@ -37,7 +37,7 @@ class UserServiceImp implements UserService
 
     public function getUserInfo()
     {
-        return auth()->user();
+        return auth('api')->user();
     }
 
     public function refreshToken()

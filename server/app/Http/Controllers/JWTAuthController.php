@@ -9,6 +9,7 @@ use App\Http\Requests\JWT\JWTRequest;
 use App\Services\Interfaces\UserService;
 use App\Transformers\UserTransformer;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Tymon\JWTAuth\JWT;
 
 class JWTAuthController extends Controller
 {
@@ -38,8 +39,8 @@ class JWTAuthController extends Controller
     //사용안한다.
     public function user()
     {
-        $token = JWTAuth::parseToken();
-        $user = $token->authenticate();
+        $token = JWTAUTH::getToken();
+        $user = JWTAuth::toUser($token);
         dd($user);
         $user_info = $this->user_service->getUserInfo();
         return $this->transform->withUser($user_info);
@@ -47,15 +48,15 @@ class JWTAuthController extends Controller
 
 
     //middleware로 갑니다.
-    public function refresh()
-    {
-        $refresh_info = $this->user_service->refreshToken();
-        return $this->transform->respondWithToken($refresh_info);
-    }
+    // public function refresh()
+    // {
+    //     $refresh_info = $this->user_service->refreshToken();
+    //     return $this->transform->respondWithToken($refresh_info);
+    // }
 
-    public function logout()
-    {
-        $this->user_service->logoutUser();
-        return $this->transform->logout();
-    }
+    // public function logout()
+    // {
+    //     $this->user_service->logoutUser();
+    //     return $this->transform->logout();
+    // }
 }

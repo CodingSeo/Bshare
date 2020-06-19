@@ -8,6 +8,7 @@ Route::group(['as' => 'jwt.',], function () {
         'as' => 'register',
         'uses' => 'JWTAuthController@register',
     ]);
+
     Route::post('login', [
         'as' => 'login',
         'uses' => 'JWTAuthController@login'
