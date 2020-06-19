@@ -4,7 +4,6 @@ namespace App\Auth\Implement;
 
 use App\Auth\Interfaces\AuthUserRepository;
 use App\EloquentModel\User;
-use Illuminate\Auth\DatabaseUserProvider;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Contracts\Support\Arrayable;
@@ -26,7 +25,7 @@ class EloquentAuthUserReository extends AuthUserRepository
      * @param  mixed  $identifier
      * @return array|null;
      */
-    public function retrieveById($identifier)
+    public function retrieveById($identifier) :?array
     {
         $user = $this->user->where($this->id_key, $identifier)->first();
         return is_null($user)
@@ -64,12 +63,12 @@ class EloquentAuthUserReository extends AuthUserRepository
      * @param  array  $credentials
      * @return array|null;
      */
-    public  function retrieveByCredentials(array $credentials)
+    public  function retrieveByCredentials(array $credentials) :?array
     {
         if (empty($credentials) ||
            (count($credentials) === 1 &&
             array_key_exists($this->password_key, $credentials))) {
-            return;
+            return null;
         }
 
         $query = $this->user->newQuery();
@@ -98,7 +97,7 @@ class EloquentAuthUserReository extends AuthUserRepository
      * @param  array  $credentials
      * @return bool
      */
-    public  function validateCredentials(Authenticatable $user, array $credentials)
+    public  function validateCredentials(Authenticatable $user, array $credentials) : bool
     {
         $plain = $credentials[$this->password_key];
         return $this->hasher->check($plain, $user->getAuthPassword());
