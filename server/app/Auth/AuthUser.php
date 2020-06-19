@@ -3,9 +3,11 @@
 namespace App\Auth;
 
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Support\Jsonable;
+use Illuminate\Database\Eloquent\JsonEncodingException;
 use Tymon\JWTAuth\Contracts\JWTSubject as JWTSubjectContract;
 
-class AuthUser implements AuthenticatableContract, JWTSubjectContract
+class AuthUser implements AuthenticatableContract, JWTSubjectContract,Jsonable
 {
     use Authenticatable, JWTSubject;
     /**
@@ -13,7 +15,7 @@ class AuthUser implements AuthenticatableContract, JWTSubjectContract
      *
      * @var array
      */
-    protected $attributes, $primary_key, $id, $password, $rememberToken;
+    protected $attributes, $id, $password, $rememberToken;
 
     /**
      * Create a new generic User object.
@@ -102,6 +104,24 @@ class AuthUser implements AuthenticatableContract, JWTSubjectContract
     public function __unset($key)
     {
         unset($this->attributes[$key]);
+    }
+    /**
+     * Convert the model instance to JSON.
+     *
+     * @param  int  $options
+     * @return string
+     *
+     * @throws \Illuminate\Database\Eloquent\JsonEncodingException
+     */
+    public function toJson($options = 0)
+    {
+        $json = json_encode($this->attributes, $options);
+
+        if (JSON_ERROR_NONE !== json_last_error()) {
+            throw JsonEncodingException::forModel($this, json_last_error_msg());
+        }
+
+        return $json;
     }
 
 
