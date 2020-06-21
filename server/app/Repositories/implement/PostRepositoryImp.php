@@ -19,9 +19,10 @@ class PostRepositoryImp implements PostRepository
         $this->content = $content;
         $this->mapper = $mapper;
     }
-    public function getOne(int $id) : PostDTO
+    public function getOne(int $id): PostDTO
     {
-        $post = $this->post->find($id);
+        $post = $this->post->find($id)->where('active', 1);
+        dd($post);
         return $this->mapper->map($post, PostDTO::class);
     }
     public function findAll(): array

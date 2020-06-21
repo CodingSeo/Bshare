@@ -47,7 +47,7 @@ class PostServiceImp implements PostService
         ];
     }
 
-    public function updatePost(array $content) : array
+    public function updatePost(array $content): array
     {
         $post_exit = $this->post_repository->getOne($content['post_id']);
         if (!$post_exit->id) throw new \App\Exceptions\ModuleNotFound('Post do not exist');
@@ -61,7 +61,7 @@ class PostServiceImp implements PostService
         ];
     }
 
-    public function deletePost(array $content) : bool
+    public function deletePost(array $content): bool
     {
         $post = $this->post_repository->getOne($content['post_id']);
         if (!$post->id) throw new \App\Exceptions\ModuleNotFound('Post not Found');

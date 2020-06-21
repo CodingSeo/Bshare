@@ -31,22 +31,22 @@ Route::group(['as' => 'jwt.',], function () {
         ]);
     });
 
-    // // //socialite
-    // Route::get('login/hiworks', [
-    //     'as' => 'login.hiworks',
-    //     'uses' => 'SocialiteController@redirectToProvider'
-    // ]);
+    // //socialite
+    Route::get('login/hiworks', [
+        'as' => 'login.hiworks',
+        'uses' => 'SocialiteController@redirectToProvider'
+    ]);
 
-    // Route::get('hiworks/callback', [
-    //     'as' => 'hiworks.callback',
-    //     'uses' => 'SocialiteController@handleProviderCallback'
-    // ]);
+    Route::get('hiworks/callback', [
+        'as' => 'hiworks.callback',
+        'uses' => 'SocialiteController@handleProviderCallback'
+    ]);
 
-    // //허가가 없는 상태
-    // Route::get('unauthorized', function () {
-    //     return response()->json([
-    //         'status' => 'error',
-    //         'message' => 'Unauthorized'
-    //     ], 401);
-    // })->name('unauthorized');
+    //허가가 없는 상태
+    Route::get('unauthorized', function () {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Unauthorized'
+        ], 401);
+    })->name('unauthorized');
 });

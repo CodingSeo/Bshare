@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Providers;
 
 // namespace Laravel\Socialite\Two;
@@ -28,7 +29,7 @@ class HiworksProvider extends AbstractProvider implements ProviderInterface
             'redirect_uri' => $this->redirectUrl,
             // 'scope' => $this->formatScopes($this->getScopes(), $this->scopeSeparator),
             'response_type' => 'code',
-            'access_type'=>'offline'
+            'access_type' => 'offline'
         ];
 
         if ($this->usesState()) {
@@ -78,9 +79,9 @@ class HiworksProvider extends AbstractProvider implements ProviderInterface
         return [
             'client_id' => $this->clientId,
             'client_secret' => $this->clientSecret,
-            'grant_type'=> 'refresh_token',
+            'grant_type' => 'refresh_token',
             'auth_code' => $code,
-            'access_type'=> 'offline',
+            'access_type' => 'offline',
         ];
     }
 
@@ -92,9 +93,9 @@ class HiworksProvider extends AbstractProvider implements ProviderInterface
         $userUrl = 'https://api.hiworks.com/user/v2/me';
 
         $response = $this->getHttpClient()->get([
-            'header'=>[
-                'Authorization'=>'Bearer' .$token,
-                'Content-Type'=> 'application/json'
+            'header' => [
+                'Authorization' => 'Bearer' . $token,
+                'Content-Type' => 'application/json'
             ],
         ]);
         return json_decode($response->getBody(), true);
@@ -108,9 +109,8 @@ class HiworksProvider extends AbstractProvider implements ProviderInterface
     {
         return (new User)->setRaw($user)->map([
             'id' => $user['user_id'],
-            'name'=>$user['name'],
+            'name' => $user['name'],
             'user_num' => $user['no'],
         ]);
     }
-
 }

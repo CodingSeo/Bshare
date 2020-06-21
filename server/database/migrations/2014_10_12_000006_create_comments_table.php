@@ -17,15 +17,15 @@ class CreateCommentsTable extends Migration
             $table->increments('id');
             // $table->integer('user_id')->unsigned()->index();
             $table->integer('post_id')->unsigned()->index();
-            $table->text('body',255);
+            $table->text('body', 255);
             $table->integer('parent_id')->unsigned()->nullable();
             $table->integer('parent_order')->default(0);
             $table->timestamps();
             $table->foreign('post_id')->references('id')->on('posts')
-            ->onUpdate('cascade')->onDelete('cascade');
+                ->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('parent_id')->references('id')->on('comments')
-            ->onUpdate('cascade')->onDelete('cascade');
-            // $table->foreign('user_id')->references('id')->on('users')
+                ->onUpdate('cascade')->onDelete('cascade');
+            // $table->foreign('user_id')->references('email')->on('users')
             // ->onUpdate('cascade')->onDelete('cascade');
         });
     }

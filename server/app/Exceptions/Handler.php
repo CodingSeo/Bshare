@@ -2,7 +2,10 @@
 
 namespace App\Exceptions;
 
+use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Prophecy\Exception\Doubler\MethodNotFoundException;
+use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -50,13 +53,23 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $e)
     {
-
-        switch (true) {
-            // case $e instanceof
-            //     throw new
-            //     break;
-            default:
-                return parent::render($request, $e);
+        $code = $e->getCode();
+        switch ($e) {
+            case $e instanceof MethodNotFoundException:
+                $message = $e->getMessage() ?: 'not_found';
+                break;
+            case $e instanceof MethodNotAllowedException:
+                $message = $e->getMessage() ?: 'not_allowed';
+                break;
+            case $e instanceof Exception:
+                $message = $e->getMessage() ?: 'Something broken :(';
+                break;
         }
+        return response()->json([
+            'code' => $code ?: 400,
+            'errors' => $message,
+        ], $code ?: 400);
+
+        return parent::render($request, $e);
     }
 }
