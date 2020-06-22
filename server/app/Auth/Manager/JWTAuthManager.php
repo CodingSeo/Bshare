@@ -8,8 +8,12 @@ interface JWTAuthManager{
     public function getToken(Request $request) : string;
     public function getTokenPayload(string $token) : array;
     public function checkTokenValidation(string $token) : bool;
-    public function checkPayloadValidation(string $token): bool;
-    public function checkTokenExpired(Request $request) : bool;
+    /**
+     * @param string $token
+     * @return boolean|string
+     */
+    public function checkPayloadValidation(string $token);
+    public function checkTokenExpired(string $token) : bool;
     public function checkTokenRefreshAble(Request $request) : bool;
     public function checkAuthorizationToken(Request $requst) : bool;
     public function getTokenByUserDTO(UserDTO $user): string;

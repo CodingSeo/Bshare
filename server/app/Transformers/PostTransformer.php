@@ -52,6 +52,12 @@ class PostTransformer
             ],
         ];
     }
+    public function transformContent(ContentDTO $content)
+    {
+        return [
+            'body' => $content->body,
+        ];
+    }
     public function transformComments(PostCommentsDTO $comments)
     {
 
@@ -61,12 +67,6 @@ class PostTransformer
             'replies'=>empty($comments->replies)?
             []:
             array_map([$this,'transformReplies'],$comments->replies),
-        ];
-    }
-    public function transformContent(ContentDTO $content)
-    {
-        return [
-            'body' => $content->body,
         ];
     }
     public function transformReplies($replies){

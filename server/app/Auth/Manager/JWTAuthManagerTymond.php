@@ -5,36 +5,61 @@ namespace App\Auth\Manager;
 use App\Auth\AuthUser;
 use Exception;
 use App\DTO\UserDTO;
+use App\Exceptions\JWTTokenException;
 use Illuminate\Http\Request;
+use Tymon\JWTAuth\Claims\Collection as JWTPayloadCollection;
 use Tymon\JWTAuth\Facades\JWTAuth;
-use Tymon\JWTAuth\Validators\PayloadValidator;
+use Tymon\JWTAuth\Claims\Factory as JWTFactory;
+use Tymon\JWTAuth\Providers\JWT\Lcobucci;
+use Tymon\JWTAuth\Payload;
+use Tymon\JWTAuth\Token;
 use Tymon\JWTAuth\Validators\TokenValidator;
 
 class JWTAuthManagerTymond implements JWTAuthManager
 {
+    protected $requiredClaims = [
+        'iss',
+        'iat',
+        'exp',
+        'nbf',
+        'sub',
+        'jti',
+    ];
     /**
      * @var JWTAuth
      */
     private $jwtauth;
-    private $payloadValidator;
+    /**
+     * @var JWTFactory
+     */
+    private $jwtfactory;
+    /**
+     * @var TokenValidator
+     */
     private $tokenValidator;
-    public function __construct(JWTAuth $jwtauth, PayloadValidator $payloadValidator, TokenValidator $tokenValidator)
+    /**
+     * @var Lcobucci
+     */
+    private $tokenProvider;
+    public function __construct(JWTAuth $jwtauth, JWTFactory $jwtfactory, TokenValidator $tokenValidator, Lcobucci $tokenProvider)
     {
-        $this->payloadValidator = $payloadValidator;
+        $this->jwtfactory = $jwtfactory;
         $this->tokenValidator = $tokenValidator;
         $this->jwtauth = $jwtauth;
+        $this->tokenProvider = $tokenProvider;
     }
-    public function getToken(Request $request): string
+    public function getToken(Request $request) : string
     {
         $token = $request->bearerToken();
         return $token;
     }
     public function getTokenPayload(string $token): array
     {
-        $this->jwtauth::setToken($token);
-        $token = $this->jwtauth::getToken();
-        $payload = $this->jwtauth::getPayload($token)->toArray();
-        return $payload;
+        try{
+            return $this->tokenProvider->decode($token);
+        }catch(Exception $e){
+            throw new JWTTokenException('can not decode the token');
+        }
     }
     public function checkTokenValidation(string $token): bool
     {
@@ -44,17 +69,25 @@ class JWTAuthManagerTymond implements JWTAuthManager
             return false;
         }
     }
-    public function checkPayloadValidation(string $token): bool
+    /**
+     * @param string $token
+     * @return boolean|string
+     */
+    public function checkPayloadValidation(string $token)
     {
-        try{
-            return $this->payloadValidator->check($token);
-        }catch(Exception $e){
-            return false;
+        $payload = $this->getTokenPayload($token);
+        foreach($this->requiredClaims as $key){
+            if (!array_key_exists($key, $payload)){
+                return false;
+            };
+            if($payload[$key] ==null) return false;
         }
+        return $payload;
     }
-    public function checkTokenExpired(Request $request): bool
+    public function checkTokenExpired(string $exp) : bool
     {
-
+        $exp_now = $this->jwtfactory->exp();
+        if((int)$exp>(int)$exp_now) return false;
         return true;
     }
     public function checkTokenRefreshAble(Request $request): bool
@@ -69,7 +102,7 @@ class JWTAuthManagerTymond implements JWTAuthManager
     }
     public function getTokenByUserDTO(UserDTO $user): string
     {
-        $auth_user = new AuthUser((array) $user, 'id', 'password');
+        $auth_user = new AuthUser((array) $user, 'email', 'password');
         $token = $this->jwtauth::fromSubject($auth_user);
         return $token;
     }

@@ -15,7 +15,6 @@ Route::group(['as' => 'jwt.',], function () {
     ]);
 
     //+ should it be the
-
     Route::group(['middleware' => 'jwt'], function () {
         Route::get('user', [
             'as' => 'user',

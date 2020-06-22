@@ -2,8 +2,10 @@
 
 namespace App\Http;
 
-use App\Http\Middleware\JWTTokenChecking;
-use App\Http\Middleware\JWTTokenValidateChecking;
+use App\Http\Middleware\JWTmiddleware\JWTTokenChecking;
+use App\Http\Middleware\JWTmiddleware\JWTTokenValidateChecking;
+use App\Http\Middleware\JWTmiddleware\JWTPayloadValidateChecking;
+use App\Http\Middleware\JWTmiddleware\JWTTokenExpiredChecking;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -48,9 +50,11 @@ class Kernel extends HttpKernel
         //servlet filter
         'jwt' =>[
             JWTTokenChecking::class, //getting token from request
-            JWTTokenValidateChecking::class, //checking token validate
-            // JWTTokenExpiredChecking::class, //checking token expried
-            // JWTTokenRefreshAbleChecking::class, //checking
+            JWTTokenValidateChecking::class, //checking token format validate
+            JWTPayloadValidateChecking::class, //checking token Payload
+            JWTTokenExpiredChecking::class, //checking token expried
+
+            // JWTTokenRefreshAbleChecking::class, //checking whether it's refreshable
         ]
 
     ];
