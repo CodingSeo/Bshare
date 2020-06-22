@@ -31,14 +31,14 @@ Route::group(['as' => 'jwt.',], function () {
         ]);
     });
 
-    // //socialite
-    // Route::get('login/hiworks', [
-    //     'as' => 'login.hiworks',
-    //     'uses' => 'SocialiteController@redirectToProvider'
-    // ]);
+    //socialite
+    Route::get('login/hiworks', [
+        'as' => 'login.hiworks',
+        'uses' => 'SocialiteController@redirectToProvider'
+    ]);
 
-    // Route::get('hiworks/callback', [
-    //     'as' => 'hiworks.callback',
-    //     'uses' => 'SocialiteController@handleProviderCallback'
-    // ]);
+    Route::get('hiworks/callback', [
+        'as' => 'hiworks.callback',
+        'uses' => 'SocialiteController@handleProviderCallback'
+    ]);
 });
