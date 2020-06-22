@@ -7,5 +7,5 @@ class ContentDTO
     /**
      * @var string
      */
-    public $text;
+    public $body;
 }

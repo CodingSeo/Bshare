@@ -7,9 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Comment extends Model
 {
     //
-    protected $hidden=[
-        'id',
-    ];
     protected $fillable = [
         'body',
         'parent_id',
