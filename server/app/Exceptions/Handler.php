@@ -6,6 +6,8 @@ use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Prophecy\Exception\Doubler\MethodNotFoundException;
 use Symfony\Component\Routing\Exception\MethodNotAllowedException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -55,21 +57,32 @@ class Handler extends ExceptionHandler
     {
         $code = $e->getCode();
         switch ($e) {
+            case $e instanceof NotFoundHttpException:
             case $e instanceof MethodNotFoundException:
+            case $e instanceof MethodNotAllowedHttpException:
                 $message = $e->getMessage() ?: 'not_found';
+                $this->responseWithMessage($code,$message);
                 break;
             case $e instanceof MethodNotAllowedException:
                 $message = $e->getMessage() ?: 'not_allowed';
+                $this->responseWithMessage($code,$message);
                 break;
-            case $e instanceof Exception:
-                $message = $e->getMessage() ?: 'Something broken :(';
-                break;
+            // case $e instanceof Exception:
+            //     $message = $e->getMessage() ?: 'Something went wrong '. get_class($e);
+            //     break;
         }
+        //making the response better
+        // return response()->json([
+        //     'code' => $code ?: 400,
+        //     'errors' => $message,
+        // ], $code ?: 400);
+        return parent::render($request, $e);
+    }
+
+    public function responseWithMessage($code, $message){
         return response()->json([
             'code' => $code ?: 400,
             'errors' => $message,
         ], $code ?: 400);
-
-        return parent::render($request, $e);
     }
 }

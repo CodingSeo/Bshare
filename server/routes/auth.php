@@ -16,7 +16,7 @@ Route::group(['as' => 'jwt.',], function () {
 
     //+ should it be the
 
-    Route::group(['middleware' => 'jwt.verify'], function () {
+    Route::group(['middleware' => 'jwt'], function () {
         Route::get('user', [
             'as' => 'user',
             'uses' => 'JWTAuthController@user'
@@ -32,21 +32,13 @@ Route::group(['as' => 'jwt.',], function () {
     });
 
     // //socialite
-    Route::get('login/hiworks', [
-        'as' => 'login.hiworks',
-        'uses' => 'SocialiteController@redirectToProvider'
-    ]);
+    // Route::get('login/hiworks', [
+    //     'as' => 'login.hiworks',
+    //     'uses' => 'SocialiteController@redirectToProvider'
+    // ]);
 
-    Route::get('hiworks/callback', [
-        'as' => 'hiworks.callback',
-        'uses' => 'SocialiteController@handleProviderCallback'
-    ]);
-
-    //허가가 없는 상태
-    Route::get('unauthorized', function () {
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Unauthorized'
-        ], 401);
-    })->name('unauthorized');
+    // Route::get('hiworks/callback', [
+    //     'as' => 'hiworks.callback',
+    //     'uses' => 'SocialiteController@handleProviderCallback'
+    // ]);
 });

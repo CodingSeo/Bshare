@@ -21,6 +21,8 @@ trait JWTSubject
      */
     public function getJWTCustomClaims()
     {
-        return [];
+        return [
+
+        ];
     }
 }

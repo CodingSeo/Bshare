@@ -29,10 +29,10 @@ class JWTAuthController extends Controller
 
     public function login(JWTRequest $request)
     {
-        $credentials = request(['email', 'password']);
-        if (! $token = auth('api')->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
+        $content = $request->only([
+            'email', 'password'
+        ]);
+        $token = $this->user_service->loginUser($content);
         return $this->transform->respondWithToken($token);
     }
 

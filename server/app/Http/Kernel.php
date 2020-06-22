@@ -2,6 +2,8 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\JWTTokenChecking;
+use App\Http\Middleware\JWTTokenValidateChecking;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -44,6 +46,12 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
         //servlet filter
+        'jwt' =>[
+            JWTTokenChecking::class, //getting token from request
+            JWTTokenValidateChecking::class, //checking token validate
+            // JWTTokenExpiredChecking::class, //checking token expried
+            // JWTTokenRefreshAbleChecking::class, //checking
+        ]
 
     ];
 

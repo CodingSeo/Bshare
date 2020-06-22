@@ -28,7 +28,7 @@ class AuthUser implements AuthenticatableContract, JWTSubjectContract, JsonableC
      * @param string $rememberToken
      * @return void
      */
-    public function __construct(array $attributes, $id, $password, $rememberToken)
+    public function __construct(array $attributes, $id, $password, $rememberToken = null)
     {
         $this->attributes = $attributes;
         $this->id = $id;

@@ -12,10 +12,10 @@ class AuthUserProvider implements UserProvider
     /**
      * @var AuthUserRepository
      */
-    public $auth;
-    public function __construct(AuthUserRepository $auth)
+    public $authRepository;
+    public function __construct(AuthUserRepository $authRepository)
     {
-        $this->auth = $auth;
+        $this->authRepository = $authRepository;
     }
     /**
      * Retrieve a user by their unique identifier.
@@ -24,7 +24,7 @@ class AuthUserProvider implements UserProvider
      * @return \Illuminate\Contracts\Auth\Authenticatable|null
      */
     public function retrieveById($identifier){
-        $user = $this->auth->retrieveById($identifier);
+        $user = $this->authRepository->retrieveById($identifier);
         return $this->getAuthUser($user);
     }
 
@@ -57,7 +57,7 @@ class AuthUserProvider implements UserProvider
      * @return \Illuminate\Contracts\Auth\Authenticatable|null
      */
     public function retrieveByCredentials(array $credentials){
-        $user = $this->auth->retrieveByCredentials($credentials);
+        $user = $this->authRepository->retrieveByCredentials($credentials);
         return $this->getAuthUser($user);
     }
 
@@ -69,7 +69,7 @@ class AuthUserProvider implements UserProvider
      * @return bool
      */
     public function validateCredentials(Authenticatable $user, array $credentials){
-        return $this->auth->validateCredentials($user,$credentials);
+        return $this->authRepository->validateCredentials($user,$credentials);
     }
 
     /**
@@ -79,11 +79,11 @@ class AuthUserProvider implements UserProvider
      * @param  array  $credentials
      * @return \Illuminate\Contracts\Auth\Authenticatable|null
      */
-    protected function getAuthUser($user)
+    public function getAuthUser($user)
     {
-        $id_key = $this->auth->id_key;
-        $password_key = $this->auth->password_key;
-        $rememberToken = $this->auth->rememberToken;
+        $id_key = $this->authRepository->id_key;
+        $password_key = $this->authRepository->password_key;
+        $rememberToken = $this->authRepository->rememberToken;
 
         if (!is_null($user) && !empty($user)) {
             return new AuthUser((array) $user ,$id_key, $password_key, $rememberToken);
