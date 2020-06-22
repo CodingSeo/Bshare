@@ -67,15 +67,15 @@ class Handler extends ExceptionHandler
                 $message = $e->getMessage() ?: 'not_allowed';
                 $this->responseWithMessage($code,$message);
                 break;
-            // case $e instanceof Exception:
-            //     $message = $e->getMessage() ?: 'Something went wrong '. get_class($e);
-            //     break;
+            case $e instanceof Exception:
+                $message = $e->getMessage() ?: 'Something went wrong '. get_class($e);
+                break;
         }
-        //making the response better
-        // return response()->json([
-        //     'code' => $code ?: 400,
-        //     'errors' => $message,
-        // ], $code ?: 400);
+        // making the response better
+        return response()->json([
+            'code' => $code ?: 400,
+            'errors' => $message,
+        ], $code ?: 400);
         return parent::render($request, $e);
     }
 
