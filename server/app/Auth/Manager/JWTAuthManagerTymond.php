@@ -87,8 +87,7 @@ class JWTAuthManagerTymond implements JWTAuthManager
     public function checkTokenExpired(string $exp): bool
     {
         $exp_now = Carbon::now('UTC')->getTimestamp();
-        if ((int) $exp < (int) $exp_now) return false;
-        return true;
+        return ((int) $exp < (int) $exp_now)? false : true;
     }
     /**
      * @param string $token_user

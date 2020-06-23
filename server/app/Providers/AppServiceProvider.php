@@ -8,12 +8,9 @@ class AppServiceProvider extends ServiceProvider
 {
     protected function bootHiworksSocialite(){
         $socialite = $this->app->make('Laravel\Socialite\Contracts\Factory');
-        $socialite->extend(
-            'hiworks',
-            function ($app) use ($socialite) {
+        $socialite->extend('hiworks', function ($app) use ($socialite) {
                 $config = $app['config']['services.hiworks'];
-                return $socialite->buildProvider(
-                    HiworksProvider::class, $config);
+                return $socialite->buildProvider(HiworksProvider::class, $config);
             }
         );
     }
@@ -31,6 +28,6 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->bootHiworksSocialite();
     }
-    
-    
+
+
 }

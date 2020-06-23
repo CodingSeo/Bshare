@@ -6,7 +6,6 @@ namespace App\Providers;
 use Laravel\Socialite\Two\AbstractProvider;
 use Laravel\Socialite\Two\ProviderInterface;
 use Laravel\Socialite\Two\User;
-use Illuminate\Support\Arr;
 
 class HiworksProvider extends AbstractProvider implements ProviderInterface
 {
@@ -27,15 +26,12 @@ class HiworksProvider extends AbstractProvider implements ProviderInterface
         $fields = [
             'client_id' => $this->clientId,
             'redirect_uri' => $this->redirectUrl,
-            // 'scope' => $this->formatScopes($this->getScopes(), $this->scopeSeparator),
             'response_type' => 'code',
             'access_type' => 'offline'
         ];
-
         if ($this->usesState()) {
             $fields['state'] = $state;
         }
-
         return array_merge($fields, $this->parameters);
     }
 
@@ -54,6 +50,7 @@ class HiworksProvider extends AbstractProvider implements ProviderInterface
     {
         return 'https://api.hiworks.com/open/auth/accesstoken';
     }
+
     /**
      * {@inheritdoc}
      */
@@ -68,6 +65,7 @@ class HiworksProvider extends AbstractProvider implements ProviderInterface
 
         return json_decode($response->getBody(), true);
     }
+
     /**
      * Get the POST fields for the token request.
      *

@@ -42,7 +42,7 @@ class CommentsController extends Controller
     {
         $user = $this->authUser->getAuthUser();
         $content = $request->only([
-            'comment_id'
+            'comment_id','post_id',
         ]);
         $result = $this->comment_service->deleteComment($content,$user);
         return $result;

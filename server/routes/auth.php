@@ -13,7 +13,6 @@ Route::group(['as' => 'jwt.',], function () {
         'as' => 'login',
         'uses' => 'JWTAuthController@login'
     ]);
-
     //Hiworks
     Route::get('login/hiworks', [
         'as' => 'login.hiworks',
