@@ -41,6 +41,7 @@ class PostTransformer
     {
         return [
             'id' => $post->id,
+            'user_id' => $post->user_id,
             'title' => $post->title,
             'view_count' => $post->view_count,
             'created' => $post->created_at,

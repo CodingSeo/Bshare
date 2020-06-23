@@ -2,7 +2,9 @@
 
 namespace App\Services\Implement;
 
+use App\Auth\AuthUser;
 use App\DTO\CommentDTO;
+use App\Exceptions\IllegalUserApproach;
 use App\Repositories\Interfaces\CommentRepository;
 use App\Repositories\Interfaces\PostRepository;
 use App\Services\Interfaces\CommentService;
@@ -16,31 +18,32 @@ class CommentServiceImp implements CommentService
         $this->comment_repository = $comment_repository;
     }
 
-    public function storeComment(array $content): CommentDTO
+    public function storeComment(array $content, AuthUser $user): CommentDTO
     {
         $post = $this->post_repository->getOne($content['post_id']);
         if (!$post->id) throw new \App\Exceptions\ModuleNotFound('Post not Found');
-        //parent_id checking
         if (array_key_exists('parent_id', $content)) {
             $parent_comment = $this->comment_repository->getOne($content['parent_id']);
             if (!$parent_comment->id) throw new \App\Exceptions\ModuleNotFound('parent_comment not Found');
         }
-        $comment = $this->comment_repository->save($content);
+        $comment = $this->comment_repository->save($content, $user->email);
         return $comment;
     }
 
-    public function updateComment(array $content): CommentDTO
+    public function updateComment(array $content, AuthUser $user): CommentDTO
     {
         $comment = $this->comment_repository->getOne($content['comment_id']);
         if (!$comment->id) throw new \App\Exceptions\ModuleNotFound('comment not Found');
+        if (!$comment->user_id) throw new IllegalUserApproach();
         $comment = $this->comment_repository->updateByContent($content);
         return $comment;
     }
 
-    public function deleteComment(array $content): bool
+    public function deleteComment(array $content, AuthUser $user): bool
     {
         $comment = $this->comment_repository->getOne($content['comment_id']);
         if (!$comment->id) throw new \App\Exceptions\ModuleNotFound('comment not Found');
+        if (!$comment->user_id) throw new IllegalUserApproach();
         $result = $this->comment_repository->delete($comment);
         if (!$result) throw new \App\Exceptions\ModuleNotFound('delete failed');
         return true;

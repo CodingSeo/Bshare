@@ -14,6 +14,16 @@ Route::group(['as' => 'jwt.',], function () {
         'uses' => 'JWTAuthController@login'
     ]);
 
+    //Hiworks
+    Route::get('login/hiworks', [
+        'as' => 'login.hiworks',
+        'uses' => 'SocialiteController@redirectToProvider'
+    ]);
+    Route::get('hiworks/callback', [
+        'as' => 'hiworks.callback',
+        'uses' => 'SocialiteController@handleProviderCallback'
+    ]);
+
     //+ should it be the
     Route::group(['middleware' => 'jwt'], function () {
         Route::get('user', [
@@ -29,15 +39,4 @@ Route::group(['as' => 'jwt.',], function () {
             'uses' => 'JWTAuthController@logout'
         ]);
     });
-
-    //socialite
-    Route::get('login/hiworks', [
-        'as' => 'login.hiworks',
-        'uses' => 'SocialiteController@redirectToProvider'
-    ]);
-
-    Route::get('hiworks/callback', [
-        'as' => 'hiworks.callback',
-        'uses' => 'SocialiteController@handleProviderCallback'
-    ]);
 });

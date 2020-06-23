@@ -48,9 +48,10 @@ class CommentRepositoryImp implements CommentRepository
         return $result;
     }
     //save에 관하여 saveByContent와 saveByDTO를 나누어 작업하는 것이 맞다고 본다.
-    public function save($content): CommentDTO
+    public function save($content,string $user_email): CommentDTO
     {
         $this->comment->fill($content);
+        $this->comment->user_id = $user_email;
         $this->comment->save();
         return $this->mapper->map($this->comment, CommentDTO::class);
     }

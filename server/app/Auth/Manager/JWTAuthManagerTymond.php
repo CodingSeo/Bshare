@@ -42,16 +42,20 @@ class JWTAuthManagerTymond implements JWTAuthManager
         $this->jwtauth = $jwtauth;
         $this->tokenProvider = $tokenProvider;
     }
-    public function getToken(Request $request) : string
+    /**
+     * @param Request
+     * @return boolean|string
+     */
+    public function getToken(Request $request)
     {
         $token = $request->bearerToken();
         return $token;
     }
     public function checkTokenValidation(string $token): bool
     {
-        try{
+        try {
             return $this->tokenValidator->check($token);
-        }catch(Exception $e){
+        } catch (Exception $e) {
             return false;
         }
     }
@@ -62,9 +66,11 @@ class JWTAuthManagerTymond implements JWTAuthManager
     public function checkPayloadValidation(string $token)
     {
         $payload = $this->getTokenPayload($token);
-        foreach($this->requiredClaims as $key){
-            if (!array_key_exists($key, $payload) ||
-                $payload[$key] ==null){
+        foreach ($this->requiredClaims as $key) {
+            if (
+                !array_key_exists($key, $payload) ||
+                $payload[$key] == null
+            ) {
                 return false;
             };
         }
@@ -72,16 +78,16 @@ class JWTAuthManagerTymond implements JWTAuthManager
     }
     public function getTokenPayload(string $token): array
     {
-        try{
+        try {
             return $this->tokenProvider->decode($token);
-        }catch(Exception $e){
+        } catch (Exception $e) {
             throw new JWTTokenException('can not decode the token');
         }
     }
-    public function checkTokenExpired(string $exp) : bool
+    public function checkTokenExpired(string $exp): bool
     {
         $exp_now = Carbon::now('UTC')->getTimestamp();
-        if((int)$exp>(int)$exp_now) return false;
+        if ((int) $exp < (int) $exp_now) return false;
         return true;
     }
     /**
@@ -95,7 +101,7 @@ class JWTAuthManagerTymond implements JWTAuthManager
     }
     public function checkPrvCode(string $token_prv): bool
     {
-        return strcmp($token_prv,sha1(AuthUser::class));
+        return strcmp($token_prv, sha1(AuthUser::class));
     }
     public function getTokenByUserDTO(UserDTO $user): string
     {

@@ -13,7 +13,7 @@ interface PostRepository
     public function updateByDTO(PostDTO $post): PostDTO;
     public function updateByContent(array $post): PostDTO;
     public function delete(PostDTO $content): bool;
-    public function save($content): PostDTO;
+    public function save($content, string $user_email): PostDTO;
 
     public function getContent(PostDTO $post): ContentDTO;
     public function getComments(PostDTO $post): array;

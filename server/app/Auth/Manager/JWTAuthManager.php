@@ -6,7 +6,11 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
 
 interface JWTAuthManager{
-    public function getToken(Request $request) : string;
+    /**
+     * @param string $token
+     * @return boolean|array
+     */
+    public function getToken(Request $request);
     public function getTokenPayload(string $token) : array;
     public function checkTokenValidation(string $token) : bool;
     /**
