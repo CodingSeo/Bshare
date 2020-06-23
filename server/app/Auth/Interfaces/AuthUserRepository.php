@@ -4,7 +4,6 @@ namespace App\Auth\Interfaces;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 
-//interface로 할 경우 Id_key, password_key, remember_token을 사용할 수 없게 된다.
 abstract class AuthUserRepository
 {
     /**

@@ -11,5 +11,5 @@ interface CommentRepository
     public function updateByDTO(CommentDTO $comment): CommentDTO;
     public function updateByContent(array $post): CommentDTO;
     public function delete(CommentDTO $comment): bool;
-    public function save($content): CommentDTO;
+    public function save($content, string $user_email): CommentDTO;
 }

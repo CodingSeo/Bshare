@@ -2,15 +2,29 @@
 namespace App\Auth\Manager;
 
 use App\DTO\UserDTO;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
 
 interface JWTAuthManager{
-    public function getToken(Request $request) : string;
+    /**
+     * @param string $token
+     * @return boolean|array
+     */
+    public function getToken(Request $request);
     public function getTokenPayload(string $token) : array;
     public function checkTokenValidation(string $token) : bool;
-    public function checkPayloadValidation(string $token): bool;
-    public function checkTokenExpired(Request $request) : bool;
-    public function checkTokenRefreshAble(Request $request) : bool;
-    public function checkAuthorizationToken(Request $requst) : bool;
+    /**
+     * @param string $token
+     * @return boolean|array
+     */
+    public function checkPayloadValidation(string $token);
+    public function checkTokenExpired(string $token) : bool;
+    /**
+     * @param string $token_user
+     * @return boolean|Authenticatable
+     */
+    public function checkAuthorizationToken(string $token_user);
+    public function checkPrvCode(string $token_prv): bool;
+
     public function getTokenByUserDTO(UserDTO $user): string;
 }

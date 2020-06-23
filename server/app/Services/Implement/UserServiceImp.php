@@ -6,7 +6,6 @@ use App\Auth\Manager\JWTAuthManager;
 use App\DTO\UserDTO;
 use App\Repositories\Interfaces\UserRepository;
 use App\Services\Interfaces\UserService;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserServiceImp implements UserService
 {
@@ -40,11 +39,11 @@ class UserServiceImp implements UserService
         $password = $user_info['password'];
         $user = $this->user_repository->getOneByEmail($email);
         if(!$user->id) throw new \App\Exceptions\ModuleNotFound('User does not exists');
-        // problem with hasing password
         if(!strcmp($user->password,bcrypt($password))) throw new \App\Exceptions\ModuleNotFound('Password Incorrect');
         $token = $this->jwtauth->getTokenByUserDTO($user);
         return $token;
     }
+
 
     public function getUserInfo()
     {
@@ -58,4 +57,7 @@ class UserServiceImp implements UserService
     {
         return auth()->logout();
     }
+
+
+
 }

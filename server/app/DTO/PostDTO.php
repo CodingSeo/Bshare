@@ -9,6 +9,10 @@ class PostDTO
      */
     public $id;
     /**
+     * @var string
+     */
+    public $user_id;
+    /**
      * @var int
      */
     public $category_id;

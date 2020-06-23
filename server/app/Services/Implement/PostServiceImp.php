@@ -2,6 +2,8 @@
 
 namespace App\Services\Implement;
 
+use App\Auth\AuthUser;
+use App\Exceptions\IllegalUserApproach;
 use App\Repositories\Interfaces\PostRepository;
 use App\Services\Interfaces\PostService;
 use Illuminate\Support\Facades\DB;
@@ -31,13 +33,13 @@ class PostServiceImp implements PostService
         ];
     }
 
-    public function storePost(array $content): array
+    public function storePost(array $content, AuthUser $user) : array
     {
         DB::beginTransaction();
-        $post = $this->post_repository->save($content);
+        $post = $this->post_repository->save($content,$user->email);
         if (!$post->id) {
             DB::rollback();
-            // throw new \App\Exceptions\ModuleNotFound('Post not saved');
+            throw new \App\Exceptions\ModuleNotFound('Post not saved');
         };
         $content = $this->post_repository->saveContent($post->id, $content);
         DB::commit();
@@ -47,10 +49,11 @@ class PostServiceImp implements PostService
         ];
     }
 
-    public function updatePost(array $content): array
+    public function updatePost(array $content, AuthUser $user) : array
     {
         $post_exit = $this->post_repository->getOne($content['post_id']);
         if (!$post_exit->id) throw new \App\Exceptions\ModuleNotFound('Post do not exist');
+        if (strcmp($post_exit->user_id,$user->email)) throw new IllegalUserApproach();
         DB::beginTransaction();
         $post = $this->post_repository->updateByContent($content);
         $content = $this->post_repository->updateContent($post, $content);
@@ -61,11 +64,12 @@ class PostServiceImp implements PostService
         ];
     }
 
-    public function deletePost(array $content): bool
+    public function deletePost(array $content, AuthUser $user) : bool
     {
-        $post = $this->post_repository->getOne($content['post_id']);
-        if (!$post->id) throw new \App\Exceptions\ModuleNotFound('Post not Found');
-        $delete_result = $this->post_repository->delete($post);
+        $post_exit = $this->post_repository->getOne($content['post_id']);
+        if (!$post_exit->id) throw new \App\Exceptions\ModuleNotFound('Post not Found');
+        if (strcmp($post_exit->user_id,$user->email)) throw new IllegalUserApproach();
+        $delete_result = $this->post_repository->delete($post_exit);
         if (!$delete_result) throw new \App\Exceptions\ModuleNotFound('delete failed');
         return true;
     }

@@ -7,7 +7,7 @@ use Exception;
 class ModuleNotFound extends Exception
 {
     protected $message;
-    public function __construct(string $message)
+    public function __construct(string $message = null)
     {
         $this->message = $message;
     }
@@ -31,7 +31,7 @@ class ModuleNotFound extends Exception
     {
         $payload = [
             'code' => 404,
-            'message' => $this->message,
+            'message' => $this->message?:'module not found',
         ];
         return response()->json($payload, 404, [], JSON_PRETTY_PRINT);
     }

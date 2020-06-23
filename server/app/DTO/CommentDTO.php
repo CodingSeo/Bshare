@@ -9,6 +9,11 @@ class CommentDTO
      */
     public $id;
     /**
+     *
+     * @var string
+     */
+    public $user_id;
+    /**
      * @var int
      */
     public $post_id;

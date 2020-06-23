@@ -15,7 +15,7 @@ class CreatePostsTable extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->increments('id');
-            // $table->string('user_id');
+            $table->string('user_id');
             $table->integer('category_id')->unsigned()->index();
             $table->boolean('active')->default(1);
             $table->string('title', 255);
@@ -23,8 +23,8 @@ class CreatePostsTable extends Migration
             $table->timestamps();
             $table->foreign('category_id')->references('id')->on('categories')
                 ->onUpdate('cascade')->onDelete('cascade');
-            // $table->foreign('user_id')->references('email')->on('users')
-            //     ->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('user_id')->references('email')->on('users')
+                ->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

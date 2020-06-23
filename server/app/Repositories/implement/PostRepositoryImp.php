@@ -21,8 +21,7 @@ class PostRepositoryImp implements PostRepository
     }
     public function getOne(int $id): PostDTO
     {
-        $post = $this->post->find($id)->where('active', 1);
-        dd($post);
+        $post = $this->post->find($id);
         return $this->mapper->map($post, PostDTO::class);
     }
     public function findAll(): array
@@ -52,9 +51,10 @@ class PostRepositoryImp implements PostRepository
         $result = $this->post->delete();
         return $result;
     }
-    public function save($content): PostDTO
+    public function save($content, string $user_email): PostDTO
     {
         $this->post->fill((array) $content);
+        $this->post->user_id = $user_email;
         $this->post->save();
         return $this->mapper->map($this->post, PostDTO::class);;
     }

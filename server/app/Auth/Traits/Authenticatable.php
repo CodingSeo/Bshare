@@ -44,4 +44,5 @@ trait Authenticatable
     {
         $this->attributes[$this->getRememberTokenName()] = $value;
     }
+
 }

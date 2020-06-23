@@ -27,40 +27,39 @@ Route::group(['as' => 'api.'], function () {
         'as' => 'category.index',
         'uses' => 'CategoriesController@index'
     ]);
+
     //post
-    Route::get('posts', [
-        'as' => 'posts.show',
-        'uses' => 'PostsController@show'
-    ]);
     Route::get('posts/{post_id}', [
         'as' => 'posts.show',
         'uses' => 'PostsController@show'
     ]);
-    Route::post('posts', [
-        'as' => 'posts.store',
-        'uses' => 'PostsController@store'
-    ]);
-    Route::put('posts/{post_id}', [
-        'as' => 'posts.update',
-        'uses' => 'PostsController@update'
-    ]);
-    Route::delete('posts/{post_id}', [
-        'as' => 'posts.delete',
-        'uses' => 'PostsController@destroy'
-    ]);
-    // //comments
-    Route::post('comments', [
-        'as' => 'posts.comments.store',
-        'uses' => 'CommentsController@store'
-    ]);
-    Route::put('comments/{comment_id}', [
-        'as' => 'comments.update',
-        'uses' => 'CommentsController@update'
-    ]);
-    Route::delete('comments/{comment_id}', [
-        'as' => 'comments.delete',
-        'uses' => 'CommentsController@destroy'
-    ]);
+    Route::group(['middleware'=>'jwt'],function(){
+        Route::post('posts', [
+            'as' => 'posts.store',
+            'uses' => 'PostsController@store'
+        ]);
+        Route::put('posts/{post_id}', [
+            'as' => 'posts.update',
+            'uses' => 'PostsController@update'
+        ]);
+        Route::delete('posts/{post_id}', [
+            'as' => 'posts.delete',
+            'uses' => 'PostsController@destroy'
+        ]);
+        ////comments
+        Route::post('comments', [
+            'as' => 'posts.comments.store',
+            'uses' => 'CommentsController@store'
+        ]);
+        Route::put('comments/{comment_id}', [
+            'as' => 'comments.update',
+            'uses' => 'CommentsController@update'
+        ]);
+        Route::delete('comments/{comment_id}', [
+            'as' => 'comments.delete',
+            'uses' => 'CommentsController@destroy'
+        ]);
+    });
 
     //file
 
