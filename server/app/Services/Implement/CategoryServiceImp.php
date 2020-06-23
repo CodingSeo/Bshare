@@ -4,7 +4,6 @@ namespace App\Services\Implement;
 
 use App\Repositories\Interfaces\CategoryRepository;
 use App\Services\Interfaces\CategoryService;
-
 class CategoryServiceImp implements CategoryService
 {
     protected $category_repository;
@@ -12,13 +11,12 @@ class CategoryServiceImp implements CategoryService
     {
         $this->category_repository = $category_repository;
     }
-    public function getPostsWithCategory($category_id)
+    public function getPostsWithCategory(array $content)
     {
-        $category = $this->category_repository->getCategoryByID($category_id);
-        if (!$category) {
-            return 'no such category';
-        }
-        $posts = $this->category_repository->getPostsByCategory($category);
-        return collect($posts);
+        $category = $this->category_repository->getCategoryByID($content['category_id']);
+        if (!$category->id) throw new \App\Exceptions\ModuleNotFound('Category not Found');
+        $page = 5;
+        $posts = $this->category_repository->getPostsByCategory($category, $page);
+        return $posts;
     }
 }

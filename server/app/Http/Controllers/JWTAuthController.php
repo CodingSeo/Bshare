@@ -11,38 +11,53 @@ use App\Transformers\UserTransformer;
 class JWTAuthController extends Controller
 {
     protected $user_service, $transform;
-    public function __construct(UserService $user_service,UserTransformer $transform)
+    public function __construct(UserService $user_service, UserTransformer $transform)
     {
         $this->user_service = $user_service;
         $this->transform = $transform;
     }
+
     public function register(JWTRegisterRequest $request)
     {
+<<<<<<< HEAD
         $user = $this->user_service->registerUser($request->all());
         return $this->transform->withUser($user);
+=======
+        $content = $request->only([
+            'name', 'email', 'password'
+        ]);
+        $user = $this->user_service->registerUser($content);
+        return response()->json($user);
+        // return $this->transform->withUser($user);
+>>>>>>> faf3e5d6d00d227d4478021ca676ae44f790cd7d
     }
+
     public function login(JWTRequest $request)
     {
-        //middleware
-        $token = $this->user_service->loginUser($request->all());
+        $content = $request->only([
+            'email', 'password'
+        ]);
+        $token = $this->user_service->loginUser($content);
         return $this->transform->respondWithToken($token);
     }
 
     public function user()
     {
-        $user_info = $this->user_service->getUserInfo();
-        return $this->transform->withUser($user_info);
+        $user = auth()->user();
+        return response()->json($user);
     }
 
+    //middleware로 갑니다.
     public function refresh()
     {
-        $refresh_info = $this->user_service->refreshToken();
+        $refresh_info = auth('api')->refresh();
         return $this->transform->respondWithToken($refresh_info);
     }
 
     public function logout()
     {
-        $this->user_service->logoutUser();
+        auth()->logout();
         return $this->transform->logout();
     }
+
 }

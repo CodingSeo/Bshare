@@ -4,6 +4,6 @@ namespace App\Repositories\Interfaces;
 
 interface CategoryRepository
 {
-    public function getCategoryByID($category_id);
-    public function getPostsByCategory($category);
+    public function getCategoryByID(int $category_id);
+    public function getPostsByCategory(object $category, int $page = 5);
 }

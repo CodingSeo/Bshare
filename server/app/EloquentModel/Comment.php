@@ -8,13 +8,11 @@ class Comment extends Model
 {
     //
     protected $fillable = [
+        'id',
         'body',
         'parent_id',
         'parent_order',
         'post_id',
-    ];
-    protected $hidden = [
-        'post_id','parent_id','parent_order'
     ];
     public function post()
     {

@@ -21,10 +21,8 @@ class JWTRequest extends ApiRequest
     public function attributes()
     {
         return [
-            'name' => 'name',
             'email'  => 'email',
             'password' => 'password',
-            'password_confirmation' => 'password_confirmation'
         ];
     }
 }

@@ -17,6 +17,8 @@ class RequestProvider extends ServiceProvider
         //
     }
 
+
+
     /**
      * Bootstrap services.
      *
@@ -24,7 +26,8 @@ class RequestProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app->resolving(APIRequest::class, function ($request, $app) {
+        $container = app();
+        $container->resolving(APIRequest::class, function ($request, $app) {
             $request->merge($request->route()->parameters());
         });
     }

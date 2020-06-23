@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use App\Http\Requests\ApiRequest;
 
-class CommentsRequest extends ApiRequest
+class CommentDestoryRequest extends ApiRequest
 {
     public function authorize()
     {
@@ -14,17 +14,13 @@ class CommentsRequest extends ApiRequest
     public function rules()
     {
         return [
-            'post_id' => ['numeric', 'required'],
-            'parent_id' => ['numeric'],
-            'body' => ['required', 'max:255'],
+            'comment_id' => ['numeric', 'required'],
         ];
     }
     public function attributes()
     {
         return [
-            'post_id' => 'post_id',
-            'body' => 'body',
-            'parent_id' => 'parent_id'
+            'comment_id' => 'comment_id',
         ];
     }
 }

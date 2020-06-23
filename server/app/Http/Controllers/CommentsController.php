@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CommentDestoryRequest;
 use App\Http\Requests\CommentsRequest;
+use App\Http\Requests\CommentsStoreRequest;
+use App\Http\Requests\CommentsUpdateRequest;
 use App\Services\Interfaces\CommentService;
 
 class CommentsController extends Controller
@@ -13,22 +16,30 @@ class CommentsController extends Controller
     {
         $this->comment_service = $comment_service;
     }
-    public function store(CommentsRequest $request)
+    public function store(CommentsStoreRequest $request)
     {
-        $parent_id = $request->input('parent_id',null);
-        $comment = $this->comment_service->storeComment($request->all());
-        return $comment;
+        $content = $request->only([
+            'body','parent_id','post_id'
+        ]);
+        $comment = $this->comment_service->storeComment($content);
+        return response()->json($comment);
     }
 
-    public function update($comment_id, CommentsRequest $request)
+    public function update(CommentsUpdateRequest $request)
     {
-        $comment = $this->comment_service->updateComment($comment_id,$request->all());
-        return $comment;
+        $content = $request->only([
+            'comment_id','post_id','parent_id','body'
+        ]);
+        $comment = $this->comment_service->updateComment($content);
+        return response()->json($comment);
     }
 
-    public function destroy($comment_id)
+    public function destroy(CommentDestoryRequest $request)
     {
-        $comment = $this->comment_service->deleteComment($comment_id);
-        return $comment;
+        $content = $request->only([
+            'comment_id'
+        ]);
+        $result = $this->comment_service->deleteComment($content);
+        return $result;
     }
 }

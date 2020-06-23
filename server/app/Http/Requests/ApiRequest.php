@@ -15,8 +15,8 @@ abstract class ApiRequest extends FormRequest
             'errors' => $validator->errors(),
             'links' => [
                 [
-                    'rel' => 'self',
-                    'href' => $this->getRedirectUrl(),
+                    'rel' => 'home',
+                    'href' => route('api.index'),
                 ],
             ]
         ], 422, [], JSON_PRETTY_PRINT));
@@ -32,6 +32,7 @@ abstract class ApiRequest extends FormRequest
             'min' => ':attribute should be no shorter than 8 length',
             'max'  => ':attribute should be no longer than 255 length',
             'confirmed' => ':attribute does not match',
+            'email' => ':attribute must be email type',
         ];
     }
 }

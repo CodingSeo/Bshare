@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['as' => 'api.'], function () {
     Route::get('/test/{test}', [
-        'as' => 'test',
+        'as' => 'home',
         'uses' => 'HomeController@test',
     ]);
     Route::get('/', [

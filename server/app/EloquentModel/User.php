@@ -2,6 +2,7 @@
 
 namespace App\EloquentModel;
 
+use Illuminate\Contracts\Auth\UserProvider;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -11,15 +12,11 @@ class User extends Authenticatable implements JWTSubject
     use Notifiable;
 
     protected $fillable = [
-        'name', 'email', 'password',
+        'id','name', 'email', 'password',
     ];
 
     protected $hidden = [
-        'password', 'password_bcrypt', 'id'
-    ];
-
-    protected $casts = [
-        'email_verified_at' => 'datetime',
+        'password_bcrypt'
     ];
 
     public function getJWTIdentifier()
@@ -30,9 +27,8 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [
-            'firstname' => $this->firstname,
-            'lastname' => $this->lastname,
-            'email' => $this->email
+            // 'name' => $this->name,
+            // 'email' => $this->email
         ];
     }
 }

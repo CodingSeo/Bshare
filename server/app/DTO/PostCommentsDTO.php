@@ -2,7 +2,7 @@
 
 namespace App\DTO;
 
-class CommentsDTO
+class PostCommentsDTO
 {
     /**
      * @var string

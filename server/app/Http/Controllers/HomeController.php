@@ -19,8 +19,24 @@ class HomeController extends Controller
             'links' => [
                 [
                     'rel' => 'self',
-                    // 'href' => route('api.index'),
+                    'href' => route('api.index'),
                 ],
+                // [
+                //     'category'=>'category 1',
+                //     'href' => route('api.category.index', 1),
+                // ],
+                // [
+                //     'category'=>'category 2',
+                //     'href' => route('api.category.index', 2),
+                // ],
+                // [
+                //     'category'=>'category 3',
+                //     'href' => route('api.category.index', 3),
+                // ],
+                // [
+                //     'category'=>'category 4',
+                //     'href' => route('api.category.index', 4),
+                // ],
             ]
         ], 200, [], JSON_PRETTY_PRINT);
     }
