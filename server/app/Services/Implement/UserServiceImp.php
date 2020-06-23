@@ -45,7 +45,6 @@ class UserServiceImp implements UserService
     }
 
 
-
     public function getUserInfo()
     {
         return auth('api')->user();

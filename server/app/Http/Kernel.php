@@ -6,6 +6,7 @@ use App\Http\Middleware\JWTmiddleware\JWTTokenChecking;
 use App\Http\Middleware\JWTmiddleware\JWTTokenValidateChecking;
 use App\Http\Middleware\JWTmiddleware\JWTPayloadValidateChecking;
 use App\Http\Middleware\JWTmiddleware\JWTTokenExpiredChecking;
+use App\Http\Middleware\JWTmiddleware\JWTAuthorizationChecking;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -53,8 +54,7 @@ class Kernel extends HttpKernel
             JWTTokenValidateChecking::class, //checking token format validate
             JWTPayloadValidateChecking::class, //checking token Payload
             JWTTokenExpiredChecking::class, //checking token expried
-
-            // JWTTokenRefreshAbleChecking::class, //checking whether it's refreshable
+            JWTAuthorizationChecking::class,
         ]
 
     ];
@@ -77,6 +77,6 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'jwt.verify' => \App\Http\Middleware\JwtMiddleware::class,
+        'jwt.verify' => \App\Http\Middleware\JWTmiddleware\JwtMiddleware::class,
     ];
 }

@@ -7,12 +7,14 @@ use App\Http\Requests\JWT\JWTRegisterRequest;
 use App\Http\Requests\JWT\JWTRequest;
 use App\Services\Interfaces\UserService;
 use App\Transformers\UserTransformer;
+use App\Auth\JWTAttemptUser as AuthUser;
 
 class JWTAuthController extends Controller
 {
-    protected $user_service, $transform;
-    public function __construct(UserService $user_service, UserTransformer $transform)
+    protected $user_service, $transform, $authUser;
+    public function __construct(AuthUser $authUser,UserService $user_service, UserTransformer $transform)
     {
+        $this->authUser = $authUser;
         $this->user_service = $user_service;
         $this->transform = $transform;
     }
@@ -42,12 +44,14 @@ class JWTAuthController extends Controller
         return response()->json($user);
     }
 
+
     //middleware로 갑니다.
     public function refresh()
     {
         $refresh_info = auth('api')->refresh();
         return $this->transform->respondWithToken($refresh_info);
     }
+
 
     public function logout()
     {

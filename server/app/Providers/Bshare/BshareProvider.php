@@ -2,6 +2,8 @@
 
 namespace App\Providers\Bshare;
 
+use App\Auth\Manager\JWTAuthManager;
+use App\Auth\Manager\JWTAuthManagerTymond;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\CommentsController;
 use App\Http\Controllers\JWTAuthController;
@@ -25,6 +27,8 @@ use App\Services\Interfaces\CommentService;
 use App\Services\Interfaces\PostService;
 use App\Services\Interfaces\UserService;
 use Illuminate\Support\ServiceProvider;
+use App\Auth\AuthUser;
+use App\Auth\JWTAttemptUser;
 
 class BshareProvider extends ServiceProvider
 {
@@ -38,6 +42,10 @@ class BshareProvider extends ServiceProvider
 
         $container = app();
         $container->singleton(MapperService::class, JSONMapperService::class);
+        $container->singleton(JWTAuthManager::class,JWTAuthManagerTymond::class);
+        $container->singleton(JWTAttemptUser::class,function(){
+            return new JWTAttemptUser(new AuthUser([],'email','password',null));
+        });
 
         $container->when(PostsController::class)->needs(PostService::class)->give(PostServiceImp::class);
         $container->when(PostServiceImp::class)->needs(PostRepository::class)->give(PostRepositoryImp::class);

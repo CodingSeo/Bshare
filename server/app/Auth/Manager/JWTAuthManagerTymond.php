@@ -6,13 +6,12 @@ use App\Auth\AuthUser;
 use Exception;
 use App\DTO\UserDTO;
 use App\Exceptions\JWTTokenException;
+use Carbon\Carbon;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
-use Tymon\JWTAuth\Claims\Collection as JWTPayloadCollection;
+use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Facades\JWTAuth;
-use Tymon\JWTAuth\Claims\Factory as JWTFactory;
 use Tymon\JWTAuth\Providers\JWT\Lcobucci;
-use Tymon\JWTAuth\Payload;
-use Tymon\JWTAuth\Token;
 use Tymon\JWTAuth\Validators\TokenValidator;
 
 class JWTAuthManagerTymond implements JWTAuthManager
@@ -30,10 +29,6 @@ class JWTAuthManagerTymond implements JWTAuthManager
      */
     private $jwtauth;
     /**
-     * @var JWTFactory
-     */
-    private $jwtfactory;
-    /**
      * @var TokenValidator
      */
     private $tokenValidator;
@@ -41,9 +36,8 @@ class JWTAuthManagerTymond implements JWTAuthManager
      * @var Lcobucci
      */
     private $tokenProvider;
-    public function __construct(JWTAuth $jwtauth, JWTFactory $jwtfactory, TokenValidator $tokenValidator, Lcobucci $tokenProvider)
+    public function __construct(JWTAuth $jwtauth, TokenValidator $tokenValidator, Lcobucci $tokenProvider)
     {
-        $this->jwtfactory = $jwtfactory;
         $this->tokenValidator = $tokenValidator;
         $this->jwtauth = $jwtauth;
         $this->tokenProvider = $tokenProvider;
@@ -52,14 +46,6 @@ class JWTAuthManagerTymond implements JWTAuthManager
     {
         $token = $request->bearerToken();
         return $token;
-    }
-    public function getTokenPayload(string $token): array
-    {
-        try{
-            return $this->tokenProvider->decode($token);
-        }catch(Exception $e){
-            throw new JWTTokenException('can not decode the token');
-        }
     }
     public function checkTokenValidation(string $token): bool
     {
@@ -71,38 +57,49 @@ class JWTAuthManagerTymond implements JWTAuthManager
     }
     /**
      * @param string $token
-     * @return boolean|string
+     * @return boolean|array
      */
     public function checkPayloadValidation(string $token)
     {
         $payload = $this->getTokenPayload($token);
         foreach($this->requiredClaims as $key){
-            if (!array_key_exists($key, $payload)){
+            if (!array_key_exists($key, $payload) ||
+                $payload[$key] ==null){
                 return false;
             };
-            if($payload[$key] ==null) return false;
         }
         return $payload;
     }
+    public function getTokenPayload(string $token): array
+    {
+        try{
+            return $this->tokenProvider->decode($token);
+        }catch(Exception $e){
+            throw new JWTTokenException('can not decode the token');
+        }
+    }
     public function checkTokenExpired(string $exp) : bool
     {
-        $exp_now = $this->jwtfactory->exp();
+        $exp_now = Carbon::now('UTC')->getTimestamp();
         if((int)$exp>(int)$exp_now) return false;
         return true;
     }
-    public function checkTokenRefreshAble(Request $request): bool
+    /**
+     * @param string $token_user
+     * @return null|Authenticatable
+     */
+    public function checkAuthorizationToken(string $token_user)
     {
-
-        return true;
+        //cache? or db access?
+        return Auth::loginUsingId($token_user);
     }
-    public function checkAuthorizationToken(Request $requst): bool
+    public function checkPrvCode(string $token_prv): bool
     {
-
-        return true;
+        return strcmp($token_prv,sha1(AuthUser::class));
     }
     public function getTokenByUserDTO(UserDTO $user): string
     {
-        $auth_user = new AuthUser((array) $user, 'email', 'password');
+        $auth_user = new AuthUser((array) $user, 'email', 'password', null);
         $token = $this->jwtauth::fromSubject($auth_user);
         return $token;
     }

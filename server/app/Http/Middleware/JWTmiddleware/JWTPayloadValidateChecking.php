@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Middleware\JWTmiddleware;
+
+use App\Auth\JWTAttemptUser;
 use App\Auth\Manager\JWTAuthManager;
 use App\Exceptions\JWTTokenException;
 use Closure;
@@ -10,10 +12,15 @@ class JWTPayloadValidateChecking
     /**
      * @var JWTAuthManager
      */
-    private $auth;
-    public function __construct(JWTAuthManager $auth)
+    private $authManager;
+    /**
+     * @var JWTAttemptUser
+     */
+    private $attemptUser;
+    public function __construct(JWTAuthManager $authManager, JWTAttemptUser $attemptUser)
     {
-        $this->auth = $auth;
+        $this->authManager = $authManager;
+        $this->attemptUser = $attemptUser;
     }
     /**
      * Handle an incoming request.
@@ -24,12 +31,10 @@ class JWTPayloadValidateChecking
      */
     public function handle($request, Closure $next)
     {
-        $token = $request['token'];
-        $payload = $this->auth->checkPayloadValidation($token);
+        $token = $this->attemptUser->getToken();
+        $payload = $this->authManager->checkPayloadValidation($token);
         if(!$payload) throw new JWTTokenException('Token Payload Format is Wrong');
-        $request->merge([
-            'payload' => $payload
-        ]);
+        $this->attemptUser->setPayload($payload);
         return $next($request);
     }
 }

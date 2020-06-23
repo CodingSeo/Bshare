@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware\JWTmiddleware;
 
+use App\Auth\JWTAttemptUser;
 use App\Auth\Manager\JWTAuthManager;
 use App\Exceptions\JWTTokenException;
 use Closure;
@@ -11,10 +12,15 @@ class JWTTokenExpiredChecking
     /**
      * @var JWTAuthManager
      */
-    private $auth;
-    public function __construct(JWTAuthManager $auth)
+    private $authManager;
+    /**
+     * @var JWTAttemptUser
+     */
+    private $attemptUser;
+    public function __construct(JWTAuthManager $authManager, JWTAttemptUser $attemptUser)
     {
-        $this->auth = $auth;
+        $this->authManager = $authManager;
+        $this->attemptUser = $attemptUser;
     }
     /**
      * Handle an incoming request.
@@ -25,7 +31,9 @@ class JWTTokenExpiredChecking
      */
     public function handle($request, Closure $next)
     {
-        if(!$this->auth->checkTokenExpired($request['payload']['exp'])) throw new JWTTokenException('Token Expired');
+        $exp = $this->attemptUser->getPayload()['exp'];
+        if(!$this->authManager->checkTokenExpired($exp))
+            throw new JWTTokenException('Token Expired');
         return $next($request);
     }
 }
