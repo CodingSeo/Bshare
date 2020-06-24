@@ -13,9 +13,9 @@ class PostDTO
      */
     public $user_id;
     /**
-     * @var int
+     * @var CategoryDTO
      */
-    public $category_id;
+    public $category;
     /**
      * @var string
      */
