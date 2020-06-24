@@ -32,7 +32,7 @@ class JWTTokenExpiredChecking
     public function handle($request, Closure $next)
     {
         $exp = $this->attemptUser->getPayload()['exp'];
-        if(!$this->authManager->checkTokenExpired($exp))
+        if (!$this->authManager->checkTokenExpired($exp))
             throw new JWTTokenException('Token Expired');
         return $next($request);
     }

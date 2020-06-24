@@ -33,7 +33,7 @@ class JWTTokenValidateChecking
     {
         $token = $this->attemptUser->getToken();
         $result = $this->authManager->checkTokenValidation($token);
-        if(!$result) throw new JWTTokenException("Token Form Error");
+        if (!$result) throw new JWTTokenException("Token Form Error");
         return $next($request);
     }
 }

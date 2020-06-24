@@ -2,16 +2,21 @@
 
 namespace App\Transformers;
 
-use App\DTO\CommentDTO;
 use App\DTO\ContentDTO;
 use App\DTO\PostCommentsDTO;
 use App\DTO\PostDTO;
-use App\EloquentModel\Content;
-use Illuminate\Support\Collection;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 class PostTransformer
 {
+    public function withArray(array $ItemArray)
+    {
+        $payload = array();
+        $payload = array_merge($payload, $this->transformPost($ItemArray['post']));
+        $payload['content'] = $this->transformContent($ItemArray['content']);
+        if (isset($ItemArray['comments']))
+            $payload['comments'] = array_map([$this, 'transformComments'], $ItemArray['comments']);
+        return response()->json($payload, 200, [], JSON_PRETTY_PRINT);
+    }
     public function withPagination($posts)
     {
         $payload = [
@@ -23,17 +28,6 @@ class PostTransformer
             'prev_page_url' => $posts->prev_page_url,
             'data' => array_map([$this, 'transformPost'], $posts->data),
         ];
-        return response()->json($payload, 200, [], JSON_PRETTY_PRINT);
-    }
-
-    public function withArray(array $ItemArray)
-    {
-        $payload = array();
-        $payload = array_merge($payload,$this->transformPost($ItemArray['post']));
-
-        $payload['content'] = $this->transformContent($ItemArray['content']);
-
-        if(isset($ItemArray['comments']))$payload['comments']= array_map([$this,'transformComments'],$ItemArray['comments']);
         return response()->json($payload, 200, [], JSON_PRETTY_PRINT);
     }
 
@@ -65,15 +59,16 @@ class PostTransformer
         return [
             'body' => $comments->body,
             'created_at' => $comments->created_at,
-            'replies'=>empty($comments->replies)?
-            []:
-            array_map([$this,'transformReplies'],$comments->replies),
+            'replies' => empty($comments->replies) ?
+                [] :
+                array_map([$this, 'transformReplies'], $comments->replies),
         ];
     }
-    public function transformReplies($replies){
-        return[
-            'body'=>$replies->body,
-            'created_at'=>$replies->created_at,
+    public function transformReplies($replies)
+    {
+        return [
+            'body' => $replies->body,
+            'created_at' => $replies->created_at,
         ];
     }
 }
