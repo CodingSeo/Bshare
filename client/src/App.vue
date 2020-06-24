@@ -1,15 +1,20 @@
 <template>
-<v-app>
-  <Bshare></Bshare>
-</v-app>
+  <v-app>
+    <Nav></Nav>
+    <Home/>
+  </v-app>
 </template>
-
 <script>
-import Bshare from './components/Bshare';
+import Nav from "./components/nav/Nav";
+import Home from "./components/Home";
+
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    Bshare
+    Nav,
+    Home
   },
+  data: () => ({}),
+  mounted() {}
 };
 </script>

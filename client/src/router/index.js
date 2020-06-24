@@ -1,28 +1,28 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Bshare from "../components/Bshare"
-import login from "../components/auth/login"
-import signup from "../components/auth/signup"
+import Login from "../components/auth/Login"
+import Signup from "../components/auth/Signup"
+import Home from "../components/Home"
 
 Vue.use(VueRouter)
 
 
 const routes = [
   {
-    path: '/',
-    name: 'Bshare',
-    component: Bshare
-  },
-  {
     path: '/login',
-    name: login,
-    component: login
+    name: Login,
+    component: Login
   },
   {
     path: '/signup',
-    name: signup,
-    component: signup
+    name: Signup,
+    component: Signup
   },
+  {
+    path: '/home',
+    name: Home,
+    component:Home
+  }
 ]
 
 const router = new VueRouter({

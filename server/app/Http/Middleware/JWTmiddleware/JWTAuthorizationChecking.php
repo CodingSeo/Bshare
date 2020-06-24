@@ -34,16 +34,7 @@ class JWTAuthorizationChecking
      */
     public function handle($request, Closure $next)
     {
-        $token_jti = $this->attemptUser->getPayload()['jti'];
         $token_user = $this->attemptUser->getPayload()['sub'];
-        $token_prv = $this->attemptUser->getPayload()['prv'];
-
-        //prv chekcing sha1() object
-        if($this->authManager->checkPrvCode($token_prv))
-            throw new JWTTokenException('Illegal Approach (prv)');
-
-        //logout -> cached?????? this is ridiculous...let's check out it can be done
-        //is there other way to do this? using jti maybe there is another option?
 
         //get the user id throw Auth
         $user_auth = $this->authManager->checkAuthorizationToken($token_user);

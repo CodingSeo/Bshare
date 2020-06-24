@@ -7,23 +7,28 @@
             <v-toolbar dark color="blue">
               <v-toolbar-title>Login form</v-toolbar-title>
             </v-toolbar>
-            <v-alert
-              color="error"
-              :value="error"
-              icon="close"
-            >
-              The username or the password are incorrect.
-            </v-alert>
             <v-card-text>
-              <v-text-field v-model="username" prepend-icon="person" name="login" label="Login" type="text"></v-text-field>
+              <v-text-field
+                v-model="username"
+                prepend-icon="person"
+                name="login"
+                label="Login"
+                type="text"
+              ></v-text-field>
 
-              <v-text-field v-model="password" prepend-icon="lock" name="password" label="Password" type="password"></v-text-field>
+              <v-text-field
+                v-model="password"
+                prepend-icon="lock"
+                name="password"
+                label="Password"
+                type="password"
+              ></v-text-field>
             </v-card-text>
             <v-divider light></v-divider>
             <v-card-actions>
-              <v-btn to="/signup" round color="indigo" dark>Sign up</v-btn>
+              <v-btn to="/signup" rounded color="indigo" dark>Sign up</v-btn>
               <v-spacer></v-spacer>
-              <v-btn round color="primary" dark @click.prevent="login()">
+              <v-btn rounded color="primary" dark @click.prevent="login()">
                 Login
                 <v-icon>keyboard_arrow_right</v-icon>
               </v-btn>
@@ -37,14 +42,11 @@
 
 <script>
 export default {
-  name: "login",
+  name: "Login",
   data: () => ({
-    username: '',
-    password: '',
-    error: false
+    username: "",
+    password: ""
   }),
-  methods: {
-    
-  }
+  mounted() {}
 };
 </script>

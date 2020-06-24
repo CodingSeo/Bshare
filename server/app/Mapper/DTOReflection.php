@@ -1,11 +1,11 @@
 <?php
 
-namespace App\DTO\Content;
+namespace App\Mapper;
 
 use ReflectionClass;
 use ReflectionProperty;
 
-abstract class DTOreflection
+abstract class DTOReflection
 {
     public function __construct(array $parameters = [])
     {

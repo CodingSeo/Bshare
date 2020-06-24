@@ -1,12 +1,6 @@
 <?php
 
 namespace App\Http;
-
-use App\Http\Middleware\JWTmiddleware\JWTTokenChecking;
-use App\Http\Middleware\JWTmiddleware\JWTTokenValidateChecking;
-use App\Http\Middleware\JWTmiddleware\JWTPayloadValidateChecking;
-use App\Http\Middleware\JWTmiddleware\JWTTokenExpiredChecking;
-use App\Http\Middleware\JWTmiddleware\JWTAuthorizationChecking;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -19,7 +13,7 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middleware = [
-        // \App\Http\Middleware\TrustHosts::class,
+        \App\Http\Middleware\TrustHosts::class,
         \App\Http\Middleware\TrustProxies::class,
         \Fruitcake\Cors\HandleCors::class,
         \App\Http\Middleware\CheckForMaintenanceMode::class,
@@ -50,11 +44,11 @@ class Kernel extends HttpKernel
         ],
         //servlet filter
         'jwt' =>[
-            JWTTokenChecking::class, //getting token from request
-            JWTTokenValidateChecking::class, //checking token format validate
-            JWTPayloadValidateChecking::class, //checking token Payload
-            JWTTokenExpiredChecking::class, //checking token expried
-            JWTAuthorizationChecking::class,
+            \App\Http\Middleware\JWTmiddleware\JWTTokenChecking::class, //getting token from request
+            \App\Http\Middleware\JWTmiddleware\JWTTokenValidateChecking::class, //checking token format validate
+            \App\Http\Middleware\JWTmiddleware\JWTPayloadValidateChecking::class, //checking token Payload
+            \App\Http\Middleware\JWTmiddleware\JWTTokenExpiredChecking::class, //checking token expried
+            \App\Http\Middleware\JWTmiddleware\JWTAuthorizationChecking::class,
         ]
 
     ];
