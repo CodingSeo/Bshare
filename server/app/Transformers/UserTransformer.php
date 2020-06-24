@@ -27,9 +27,6 @@ class UserTransformer{
             'data' => $this->withUser($user),
         ], 200);
     }
-<<<<<<< HEAD
-    public function withUser(Collection $user){
-=======
 
     public function transform($user){
         return [
@@ -40,7 +37,6 @@ class UserTransformer{
     }
 
     public function withUser($user){
->>>>>>> faf3e5d6d00d227d4478021ca676ae44f790cd7d
         return [
             'name' => $user->get('name'),
             'email' => $user->get('email'),
