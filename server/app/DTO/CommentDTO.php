@@ -5,6 +5,10 @@ namespace App\DTO;
 class CommentDTO
 {
     /**
+     * @var int
+     */
+    public $id;
+    /**
      * @var string
      */
     public $user_id;

@@ -9,6 +9,7 @@ use App\EloquentModel\Content;
 use App\EloquentModel\Post;
 use App\Mapper\MapperService;
 use App\Repositories\interfaces\PostRepository;
+use Illuminate\Support\Facades\DB;
 
 class PostRepositoryImp implements PostRepository
 {
@@ -17,9 +18,17 @@ class PostRepositoryImp implements PostRepository
     {
         $this->mapper = $mapper;
     }
-    public function getOne(int $id): PostDTO
+    public function getFullContent(int $id): PostDTO
     {
         $post = POST::with('category', 'content', 'comments')->find($id);
+        return $this->mapper->map($post, PostDTO::class);
+    }
+    public function getOne(int $id): PostDTO
+    {
+        \DB::connection()->enableQueryLog();
+        $post = POST::find($id);
+        // $post = POST::find($id)->content();
+        $queries = \DB::getQueryLog();
         return $this->mapper->map($post, PostDTO::class);
     }
     //*
@@ -28,29 +37,25 @@ class PostRepositoryImp implements PostRepository
         $posts = Post::all();
         return  $this->mapper->mapArray($posts, PostDTO::class);
     }
-    public function updateByDTO(PostDTO $post): bool
+    public function updateByDTO(PostDTO $postDTO): bool
     {
-        $post = new Post();
-        $post->fill((array) $post);
-        $post->category_id = $post->category->id;
-        $post->exists = true;
-        return $post->update();
+        $postModel = new Post();
+        $postModel->fill((array) $postDTO);
+        $postModel->exists=true;
+        return $postModel->update();
     }
     public function updateByContent(array $content): bool
     {
-        $post = new Post();
-        $post->fill($content);
-        $post->id = $content['post_id'];
-        // $post->exists = true;
-        return $post->update();
+        $postModel = new Post();
+        $postModel->id = $content['post_id'];
+        $postModel->title = $content['title'];
+        return $postModel->update();
     }
-    public function delete(PostDTO $content): bool
+    public function delete(PostDTO $postDTO): bool
     {
-        $post = new Post();
-        $post->fill((array) $content);
-        $post->exists = true;
-        $result = $post->delete();
-        return $result;
+        Post::where('id', $postDTO->id)
+            ->delete();
+        return true;
     }
     public function save($content, string $user_email): PostDTO
     {

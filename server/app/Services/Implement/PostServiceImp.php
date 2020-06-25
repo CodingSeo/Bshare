@@ -23,13 +23,13 @@ class PostServiceImp implements PostService
 
     public function getPost(array $content): PostDTO
     {
-        $post = $this->postRepository->getOne($content['post_id']);
+        $post = $this->postRepository->getFullContent($content['post_id']);
         if (!$post->id) throw new \App\Exceptions\ModuleNotFound('Post not Found');
         // better way?
         $post->view_count++;
         $result = $this->postRepository->updateByDTO($post);
-
         if (!$result) throw new \App\Exceptions\ModuleNotFound('Post not updated');
+        dd($post);
         return $post;
     }
 
@@ -39,9 +39,13 @@ class PostServiceImp implements PostService
         $this->checkCategoryAvaliable($category);
         DB::beginTransaction();
         $post = $this->postRepository->save($content, $user->email);
-        if (!$post->id) throw new \App\Exceptions\ModuleNotFound('Post not saved');
+        if (!$post->id){
+            throw new \App\Exceptions\ModuleNotFound('Post not saved');
+            DB::rollBack();
+        }
         $postContent = $this->postRepository->saveContent($post->id, $content);
         DB::commit();
+        $post->category = $category;
         $post->content = $postContent;
         return $post;
     }
@@ -54,10 +58,12 @@ class PostServiceImp implements PostService
         if (strcmp($post_exit->user_id, $user->email))
             throw new IllegalUserApproach();
         $this->checkCategoryAvaliable($post_exit->category);
+        //update join?
         DB::beginTransaction();
         $this->postRepository->updateByContent($content);
         $this->postRepository->updateContent($post_exit, $content);
         DB::commit();
+
         return true;
     }
 
