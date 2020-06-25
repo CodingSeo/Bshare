@@ -13,11 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
-Route::get('/test/{test}', [
-    'as' => 'home',
-    'uses' => 'HomeController@test',
-]);
 Route::get('/', [
     'as' => 'index',
     'uses' => 'HomeController@index',
@@ -33,7 +28,7 @@ Route::get('category/{category_id}/posts', [
 Route::get('posts/{post_id}', [
     'as' => 'posts.show',
     'uses' => 'PostsController@show'
-])->middleware('jwt');
+]);
 
 Route::post('posts', [
     'as' => 'posts.store',

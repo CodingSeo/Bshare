@@ -11,13 +11,13 @@ class CategoryDTO
     /**
      * @var int
      */
-    public $trade_info;
+    public $writable;
     /**
      * @var int
      */
-    public $book_info;
+    public $use_trade;
     /**
-     * @var string
+     * @var int
      */
-    public $category;
+    public $use_book;
 }

@@ -29,8 +29,8 @@ class PostsController extends Controller
         $content = $request->only([
             'post_id'
         ]);
-        $post_content_comments_array = $this->service->getPost($content);
-        return $this->transform->withArray($post_content_comments_array);
+        $post = $this->service->getPost($content);
+        return response()->json($post);
     }
 
     public function store(PostsRequestStore $request): JsonResponse
@@ -39,27 +39,30 @@ class PostsController extends Controller
         $content = $request->only([
             'title', 'body', 'category_id'
         ]);
-        $post_content_array = $this->service->storePost($content, $user);
-        return $this->transform->withArray($post_content_array);
+        $post = $this->service->storePost($content, $user);
+        return response()->json($post);
+        // return $this->transform->withArray($post);
     }
 
     public function update(PostsRequestUpdate $request): JsonResponse
     {
         $user = $this->authUser->getAuthUser();
         $content = $request->only([
-            'post_id', 'title', 'body', 'category_id',
+            'post_id', 'title', 'body'
         ]);
-        $post_content_array = $this->service->updatePost($content,$user);
-        return $this->transform->withArray($post_content_array);
+        $result = $this->service->updatePost($content, $user);
+        //success or fail
+        return response()->json($result);
+        // return $this->transform->withArray($post_content_array);
     }
 
-    public function destroy(PostsRequestIndex $request)
+    public function destroy(PostsRequestIndex $request): JsonResponse
     {
         $user = $this->authUser->getAuthUser();
         $content = $request->only([
             'post_id'
         ]);
-        $result = $this->service->deletePost($content,$user);
-        return $result;
+        $result = $this->service->deletePost($content, $user);
+        return response()->json($result);
     }
 }

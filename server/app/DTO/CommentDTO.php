@@ -5,26 +5,17 @@ namespace App\DTO;
 class CommentDTO
 {
     /**
-     * @var int
-     */
-    public $id;
-    /**
-     *
      * @var string
      */
     public $user_id;
-    /**
-     * @var int
-     */
-    public $post_id;
     /**
      * @var string
      */
     public $body;
     /**
-     * @var int
+     * @var RepliesDTO[]
      */
-    public $parent_id;
+    public $replies;
     /**
      * @var string
      */

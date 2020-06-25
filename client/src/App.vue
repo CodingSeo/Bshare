@@ -1,12 +1,14 @@
 <template>
   <v-app>
-    <Nav></Nav>
-    <Home/>
+    <Nav/>
+    <v-content>
+      <router-view></router-view>
+    </v-content>
   </v-app>
 </template>
 <script>
-import Nav from "./components/nav/Nav";
-import Home from "./components/Home";
+import NavBar from "@/components/NavBar";
+import Home from "@/pages/Home";
 
 export default {
   name: "App",
@@ -14,7 +16,5 @@ export default {
     Nav,
     Home
   },
-  data: () => ({}),
-  mounted() {}
 };
 </script>
