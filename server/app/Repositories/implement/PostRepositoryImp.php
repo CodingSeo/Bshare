@@ -20,15 +20,12 @@ class PostRepositoryImp implements PostRepository
     }
     public function getFullContent(int $id): PostDTO
     {
-        $post = POST::with('category', 'content', 'comments')->find($id);
+        $post = POST::with('category','content', 'comments')->find($id);
         return $this->mapper->map($post, PostDTO::class);
     }
     public function getOne(int $id): PostDTO
     {
-        \DB::connection()->enableQueryLog();
         $post = POST::find($id);
-        // $post = POST::find($id)->content();
-        $queries = \DB::getQueryLog();
         return $this->mapper->map($post, PostDTO::class);
     }
     //*

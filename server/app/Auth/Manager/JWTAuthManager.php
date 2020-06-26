@@ -25,6 +25,5 @@ interface JWTAuthManager{
      */
     public function checkAuthorizationToken(string $token_user);
     public function checkPrvCode(string $token_prv): bool;
-
     public function getTokenByUserDTO(UserDTO $user): string;
 }

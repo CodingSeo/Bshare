@@ -20,7 +20,7 @@ trait JWTSubject
      */
     public function getJWTCustomClaims(){
         return [
-
+            'role' => $this->attributes[$this->getAuthIdentifierName()],
         ];
     }
 }

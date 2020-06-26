@@ -6,6 +6,6 @@ use App\DTO\CommentDTO;
 
 interface CommentService{
     public function storeComment(array $content, AuthUser $user): CommentDTO;
-    public function updateComment(array $content, AuthUser $user): CommentDTO;
-    public function deleteComment(array $content, AuthUser $user): bool;
+    public function updateComment(array $content, AuthUser $user): void;
+    public function deleteComment(array $content, AuthUser $user): void;
 }

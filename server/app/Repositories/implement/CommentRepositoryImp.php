@@ -10,14 +10,13 @@ use App\Repositories\interfaces\CommentRepository;
 class CommentRepositoryImp implements CommentRepository
 {
     protected $comment, $mapper;
-    public function __construct(Comment $comment, MapperService $mapper)
+    public function __construct( MapperService $mapper)
     {
-        $this->comment = $comment;
         $this->mapper = $mapper;
     }
     public function getOne(int $id): CommentDTO
     {
-        $comment = $this->comment->find($id);
+        $comment = Comment::find($id);
         return $this->mapper->map($comment, CommentDTO::class);
     }
     public function findAll(): array
@@ -32,13 +31,12 @@ class CommentRepositoryImp implements CommentRepository
         $this->comment->update();
         return $this->mapper->map($this->comment, CommentDTO::class);
     }
-    public function updateByContent(array $content): CommentDTO
+    public function updateByContent(array $content): bool
     {
         $this->comment->fill($content);
         $this->comment->id = $content['comment_id'];
         $this->comment->exists = true;
-        $this->comment->update();
-        return $this->mapper->map($this->comment, CommentDTO::class);
+        return $this->comment->update();
     }
     public function delete(CommentDTO $comment): bool
     {

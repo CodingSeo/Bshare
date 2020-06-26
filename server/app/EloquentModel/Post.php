@@ -2,12 +2,18 @@
 
 namespace App\EloquentModel;
 
+use Carbon\Carbon;
+use DateTime;
 use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
-    protected $fillable = ['category_id', 'title','id',
-    'view_count','created_at','updated_at'];
+    protected $fillable = [
+        'title', 'id',
+        'view_count', 'created_at', 'updated_at'
+    ];
+
+
 
     public function category()
     {

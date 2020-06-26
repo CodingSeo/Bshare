@@ -94,8 +94,9 @@ class JWTAuthManagerTymond implements JWTAuthManager
      * @return null|Authenticatable
      */
     public function checkAuthorizationToken(string $token_user)
-    {
+    {   
         //cache? or db access?
+        
         return Auth::loginUsingId($token_user);
     }
     public function checkPrvCode(string $token_prv): bool

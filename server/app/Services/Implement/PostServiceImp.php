@@ -9,6 +9,7 @@ use App\Exceptions\IllegalUserApproach;
 use App\Repositories\Interfaces\CategoryRepository;
 use App\Repositories\Interfaces\PostRepository;
 use App\Services\Interfaces\PostService;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class PostServiceImp implements PostService
@@ -25,11 +26,9 @@ class PostServiceImp implements PostService
     {
         $post = $this->postRepository->getFullContent($content['post_id']);
         if (!$post->id) throw new \App\Exceptions\ModuleNotFound('Post not Found');
-        // better way?
         $post->view_count++;
         $result = $this->postRepository->updateByDTO($post);
         if (!$result) throw new \App\Exceptions\ModuleNotFound('Post not updated');
-        dd($post);
         return $post;
     }
 
@@ -50,31 +49,27 @@ class PostServiceImp implements PostService
         return $post;
     }
 
-    public function updatePost(array $content, AuthUser $user): bool
+    public function updatePost(array $content, AuthUser $user): void
     {
-        $post_exit = $this->postRepository->getOne($content['post_id']);
+        $post_exit = $this->postRepository->getFullContent($content['post_id']);
         if (!$post_exit->id)
             throw new \App\Exceptions\ModuleNotFound('Post do not exist');
         if (strcmp($post_exit->user_id, $user->email))
             throw new IllegalUserApproach();
         $this->checkCategoryAvaliable($post_exit->category);
-        //update join?
         DB::beginTransaction();
         $this->postRepository->updateByContent($content);
         $this->postRepository->updateContent($post_exit, $content);
         DB::commit();
-
-        return true;
     }
 
-    public function deletePost(array $content, AuthUser $user): bool
+    public function deletePost(array $content, AuthUser $user): void
     {
         $post_exit = $this->postRepository->getOne($content['post_id']);
         if (!$post_exit->id) throw new \App\Exceptions\ModuleNotFound('Post not Found');
         if (strcmp($post_exit->user_id, $user->email)) throw new IllegalUserApproach();
         $delete_result = $this->postRepository->delete($post_exit);
         if (!$delete_result) throw new \App\Exceptions\ModuleNotFound('delete failed');
-        return true;
     }
 
     public function checkCategoryAvaliable(CategoryDTO $category)

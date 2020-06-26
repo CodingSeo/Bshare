@@ -9,6 +9,6 @@ interface PostService
 {
     public function getPost(array $content): PostDTO;
     public function storePost(array $content, AuthUser $user): PostDTO;
-    public function updatePost(array $content, AuthUser $user): bool;
-    public function deletePost(array $content, AuthUser $user): bool;
+    public function updatePost(array $content, AuthUser $user): void;
+    public function deletePost(array $content, AuthUser $user): void;
 }

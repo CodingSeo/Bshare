@@ -16,16 +16,19 @@ class CategoryRepositoryImp implements CategoryRepository
     {
         $this->mapper = $mapper;
     }
-    public function getCategoryByID(int $category_id)
+    public function getCategoryByID(int $category_id): CategoryDTO
     {
         $category = Category::find($category_id);
         return $this->mapper->map($category, CategoryDTO::class);
     }
-    public function getPostsByCategory(object $category, int $page = 5): PostPaginateDTO
+    public function getPostsByCategory(CategoryDTO $categoryDTO, int $page = 5): PostPaginateDTO
     {
-        $category = new Category();
-        $category->fill((array) $category);
-        $posts = $this->category->posts()->latest()->paginate($page);
-        return $this->mapper->mapPaginate(collect($posts), PostPaginateDTO::class, PostDTO::class);
+        
+        // $category->fill((array) $category);
+        // $posts = $this->category->posts()->latest()->paginate($page);
+        $categoryModel = new Category();
+        $categoryModel->id = $categoryDTO->id;
+        $postPaginate = $categoryModel->posts()->latest()->paginate($page);
+        return $this->mapper->mapPaginate($postPaginate, PostPaginateDTO::class, PostDTO::class);
     }
 }

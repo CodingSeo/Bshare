@@ -33,7 +33,7 @@ class JSONMapperService implements MapperService
     }
     public function mapPaginate($object, string $path, string $data)
     {
-        $paginateDTO = $this->map($object,$path);
+        $paginateDTO = $this->map(collect($object),$path);
         $paginateDTO->data = $this->mapArray($paginateDTO->data,$data);
         return $paginateDTO;
     }

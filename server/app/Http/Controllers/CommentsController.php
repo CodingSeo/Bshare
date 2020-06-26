@@ -9,14 +9,17 @@ use App\Http\Requests\CommentsRequest;
 use App\Http\Requests\CommentsStoreRequest;
 use App\Http\Requests\CommentsUpdateRequest;
 use App\Services\Interfaces\CommentService;
+use App\Transformers\PostTransformer;
+
 
 class CommentsController extends Controller
 {
-    protected $comment_service, $authUser;
-    public function __construct(CommentService $comment_service, JWTAttemptUser $authUser)
+    protected $comment_service, $authUser, $transform;
+    public function __construct(CommentService $comment_service, JWTAttemptUser $authUser, PostTransformer $transform)
     {
         $this->authUser = $authUser;
         $this->comment_service = $comment_service;
+        $this->transform = $transform;
     }
     public function store(CommentsStoreRequest $request)
     {
@@ -25,7 +28,7 @@ class CommentsController extends Controller
             'body','parent_id','post_id'
         ]);
         $comment = $this->comment_service->storeComment($content,$user);
-        return response()->json($comment);
+        return $this->transform->transformComment($comment);
     }
 
     public function update(CommentsUpdateRequest $request)
@@ -34,8 +37,8 @@ class CommentsController extends Controller
         $content = $request->only([
             'comment_id','post_id','parent_id','body'
         ]);
-        $comment = $this->comment_service->updateComment($content,$user);
-        return response()->json($comment);
+        $this->comment_service->updateComment($content,$user);
+        return response('success');
     }
 
     public function destroy(CommentDestoryRequest $request)
@@ -44,7 +47,7 @@ class CommentsController extends Controller
         $content = $request->only([
             'comment_id','post_id',
         ]);
-        $result = $this->comment_service->deleteComment($content,$user);
-        return $result;
+        $this->comment_service->deleteComment($content,$user);
+        return response('success');
     }
 }
