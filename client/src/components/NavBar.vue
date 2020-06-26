@@ -1,6 +1,6 @@
 <template>
   <nav>
-    <v-toolbar>
+    <v-app-bar app>
       <v-app-bar-nav-icon
         @click="drawer = !drawer"
         class="grey--text"
@@ -11,34 +11,39 @@
           <span class="font-weight-light">Share</span>
         </v-toolbar-title>
       </router-link>
-
       <v-spacer></v-spacer>
 
+    <router-link class="routerLink" to="/login">
       <v-btn text color="grey">
         <span>Login</span>
         <v-icon right>login</v-icon>
       </v-btn>
+    </router-link>
 
+    <router-link class="routerLink" to="/signup">
       <v-btn text color="grey">
         <span>Legister</span>
         <v-icon right>face</v-icon>
       </v-btn>
-    </v-toolbar>
-    <v-navigation-drawer app v-model="drawer" class="grey">
+    </router-link>
+
+    </v-app-bar>
+
+    <v-navigation-drawer nav app v-model="drawer" class="indigo">
+      <v-subheader mb5 left class="white--text mb-3" style="font-size:1em">Menu</v-subheader>
       <v-list>
-        <v-list-item-group v-model="links">
-          <v-list-item
-            v-for="link in links"
-            :key="link.code"
-            router
-            :to="link.router"
-          >
-            <v-list-item-icon>
-              <v-icon class="white--text">{{ link.icon }}</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>{{ link.title }} </v-list-item-content>
-          </v-list-item>
-        </v-list-item-group>
+        <v-list-item
+        class="d-flex mb-6"
+          v-for="link in links"
+          :key="link.code"
+          router
+          :to="link.router"
+        >
+          <v-list-item-icon>
+            <v-icon class="white--text">{{ link.icon }}</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content class="white--text">{{ link.title }} </v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
   </nav>
@@ -51,8 +56,13 @@ export default {
   data() {
     return {
       drawer: false,
-      link: 1,
       links: [
+        {
+          icon: "home",
+          title: "Home",
+          code: null,
+          router: "/"
+        },
         {
           icon: "rate_review",
           title: "Book Review",
@@ -73,8 +83,3 @@ export default {
 };
 </script>
 
-<style>
-.routerLink {
-  text-decoration: none;
-}
-</style>

@@ -1,7 +1,7 @@
 <template>
-  <v-app>
-    <NavBar/>
-    <v-content>
+  <v-app class="grey lighten-4">
+    <NavBar />
+    <v-content class="mx-4 mb-4">
       <router-view></router-view>
     </v-content>
   </v-app>
@@ -12,7 +12,13 @@ import NavBar from "@/components/NavBar";
 export default {
   name: "App",
   components: {
-    NavBar,
-  },
+    NavBar
+  }
 };
 </script>
+
+<style>
+.routerLink {
+  text-decoration: none;
+}
+</style>
