@@ -9,6 +9,10 @@ class CategoryDTO
      */
     public $id;
     /**
+     * @var string
+     */
+    public $category;
+    /**
      * @var int
      */
     public $writable;

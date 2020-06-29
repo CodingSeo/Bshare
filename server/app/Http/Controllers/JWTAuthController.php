@@ -12,7 +12,7 @@ use App\Auth\JWTAttemptUser as AuthUser;
 class JWTAuthController extends Controller
 {
     protected $user_service, $transform, $authUser;
-    public function __construct(AuthUser $authUser,UserService $user_service, UserTransformer $transform)
+    public function __construct(AuthUser $authUser, UserService $user_service, UserTransformer $transform)
     {
         $this->authUser = $authUser;
         $this->user_service = $user_service;
@@ -34,8 +34,8 @@ class JWTAuthController extends Controller
         $content = $request->only([
             'email', 'password'
         ]);
-        $token = $this->user_service->loginUser($content);
-        return $this->transform->respondWithToken($token);
+        $authUser = $this->user_service->loginUser($content);
+        return $this->transform->respondWithToken($authUser);
     }
 
     public function user()
@@ -58,5 +58,4 @@ class JWTAuthController extends Controller
         auth()->logout();
         return $this->transform->logout();
     }
-
 }

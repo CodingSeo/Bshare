@@ -16,6 +16,7 @@ class CreateCategoriesTable extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->increments('id');
             $table->string('category')->unique();
+            $table->string('icon');
             $table->boolean('writable');
             $table->boolean('use_comments');
             $table->boolean('use_trade');

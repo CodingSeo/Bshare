@@ -8,68 +8,64 @@
         <v-flex shrink>
           <!-- setting router to review making -->
           <router-link class="routerLink" to="/">
-          <v-btn text>
-            <span>Write</span>
-            <v-icon right>create</v-icon>
-          </v-btn>
+            <v-btn text>
+              <span>Write</span>
+              <v-icon right>create</v-icon>
+            </v-btn>
           </router-link>
         </v-flex>
       </v-layout>
-
       <v-divider></v-divider>
-      <!-- pagenate -->
-      <v-simple-table fixed-header>
-        <template v-slot:default>
-          <thead>
-            <tr>
-              <th class="text-left">Name</th>
-              <th class="text-left">Calories</th>
-              <th class="text-left">Calories</th>
-              <th class="text-left">Calories</th>
-            </tr>
-          </thead>
-        </template>
-      </v-simple-table>
+      <!-- list -->
       <v-list text>
-        <v-list-item-group v-model="item" color="indigo" class='mt-3 mb-3'>
-          <v-list-item v-for="(item, i) in items" :key="i">
+        <v-list-item-group color="indigo" class="mt-3 mb-3">
+          <v-list-item v-for="post in posts" :key="post.id">
             <v-list-item-content>
-              <v-list-item-title v-text="item.text"></v-list-item-title>
-              <v-list-item-subtitle v-text="item.text"></v-list-item-subtitle>
+              <!-- id,user_id,title,view_count,created,link,href -->
+              <v-list-item-title>{{post.id}}</v-list-item-title>
+              <v-list-item-subtitle>{{post.user_id}}</v-list-item-subtitle>
+              <v-list-item-subtitle>{{post.title}}</v-list-item-subtitle>
+              <v-list-item-subtitle>{{post.view_count}}</v-list-item-subtitle>
+              <v-list-item-subtitle>{{post.created}}</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
         </v-list-item-group>
       </v-list>
       <v-divider></v-divider>
+      <!-- pagenate -->
       <div class="text-center mt-3">
-        <v-pagination v-model="item" :length="6" color="indigo"></v-pagination>
+        <v-pagination :length="last_page" color="indigo"></v-pagination>
       </div>
-
-      
     </v-container>
   </div>
 </template>
 
 <script>
-import axios from "axios";
 export default {
   name: "Review",
+  created() {
+    this.loading = true;
+    this.$http.get(`/category/${this.category_id}/posts`).then(result => {
+      let content = result.data;
+      this.category_id = content.category_id;
+      this.current_page = content.current_page;
+      this.last_page = content.last_page;
+      this.next_page_url = content.next_page_url;
+      this.posts = content.data;
+      console.log(content);
+      console.log(this.posts[1].links);
+    });
+  },
   data: () => ({
-    item: 1,
-    items: [
-      { text: "Real-Time", icon: "mdi-clock" },
-      { text: "Audience", icon: "mdi-account" },
-      { text: "Conversions", icon: "mdi-flag" },
-      { text: "Conversions", icon: "mdi-flag" },
-      { text: "Conversions", icon: "mdi-flag" },
-      { text: "Conversions", icon: "mdi-flag" },
-      { text: "Conversions", icon: "mdi-flag" },
-      { text: "Conversions", icon: "mdi-flag" },
-      { text: "Conversions", icon: "mdi-flag" }
-    ]
-  }),
-  computed: {},
-  created() {}
+    category_id: 1,
+    per_page: "",
+    current_page: "",
+    last_page: 0,
+    next_page_url: "",
+    total: "",
+    //id,user_id,title,view_count,created,link,href
+    posts: []
+  })
 };
 </script>
 

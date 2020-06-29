@@ -13,10 +13,9 @@ interface PostRepository
     public function findAll(): array;
     public function updateByDTO(PostDTO $postDTO): bool;
     public function updateByContent(array $post): bool;
-    public function delete(PostDTO $content): bool;
-    public function save($content, string $user_email): PostDTO;
+    public function delete(PostDTO $requestContent): bool;
+    public function save($requestContent, string $user_email): PostDTO;
 
-    public function saveContent(int $postID, array $content): ContentDTO;
-    public function updateContent(PostDTO $post, array $content) : bool;
-
+    public function saveContent(int $postID, array $requestContent): ContentDTO;
+    public function updateContent(PostDTO $post, array $requestContent): bool;
 }

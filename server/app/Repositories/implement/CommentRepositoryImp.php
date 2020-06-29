@@ -10,7 +10,7 @@ use App\Repositories\interfaces\CommentRepository;
 class CommentRepositoryImp implements CommentRepository
 {
     protected $comment, $mapper;
-    public function __construct( MapperService $mapper)
+    public function __construct(MapperService $mapper)
     {
         $this->mapper = $mapper;
     }
@@ -24,12 +24,11 @@ class CommentRepositoryImp implements CommentRepository
         $comments = $this->comment->all();
         return $this->mapper->mapArray($comments, CommentDTO::class);
     }
-    public function updateByDTO(CommentDTO $comment): CommentDTO
+    public function updateByDTO(CommentDTO $comment): bool
     {
         $this->comment->fill((array) $comment);
         $this->comment->exists = true;
-        $this->comment->update();
-        return $this->mapper->map($this->comment, CommentDTO::class);
+        return $this->comment->update();
     }
     public function updateByContent(array $content): bool
     {
@@ -46,7 +45,7 @@ class CommentRepositoryImp implements CommentRepository
         return $result;
     }
     //save에 관하여 saveByContent와 saveByDTO를 나누어 작업하는 것이 맞다고 본다.
-    public function save($content,string $user_email): CommentDTO
+    public function save($content, string $user_email): CommentDTO
     {
         $this->comment->fill($content);
         $this->comment->user_id = $user_email;

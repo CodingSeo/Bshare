@@ -1,16 +1,16 @@
 <template>
-<!-- https://vuetifyjs.com/en/components/forms/#forms -->
   <v-container fill-height>
     <v-layout align-center justify-center>
       <v-flex xs12 sm8 md8>
         <template>
           <v-card class="elevation-12">
-            <v-toolbar dark color="indigo">
-              <v-toolbar-title>Legister</v-toolbar-title>
+            <v-toolbar dark flat color="indigo">
+              <v-toolbar-title>SIGN UP</v-toolbar-title>
             </v-toolbar>
-            <v-form ref="form" v-model="valid" lazy-validation>
+            <v-form class="px-3" ref="form">
               <v-card-text>
                 <v-text-field
+                  prepend-icon="person"
                   v-model="name"
                   :counter="10"
                   :rules="nameRules"
@@ -20,6 +20,7 @@
               </v-card-text>
               <v-card-text>
                 <v-text-field
+                  prepend-icon="alternate_email"
                   v-model="email"
                   :rules="emailRules"
                   label="email"
@@ -29,10 +30,10 @@
               <v-card-text>
                 <v-text-field
                   v-model="password"
+                  prepend-icon="lock"
                   :append-icon="passwordShow ? 'mdi-eye' : 'mdi-eye-off'"
                   :type="passwordShow ? 'text' : 'password'"
                   :rules="passwordRules"
-                  :counter="10"
                   label="password"
                   @click:append="passwordShow = !passwordShow"
                 ></v-text-field>
@@ -40,6 +41,7 @@
               <v-card-text>
                 <v-text-field
                   v-model="password_confirmed"
+                  prepend-icon="lock"
                   :append-icon="
                     password_confirmedShow ? 'mdi-eye' : 'mdi-eye-off'
                   "
@@ -53,19 +55,9 @@
               </v-card-text>
               <v-divider light></v-divider>
               <v-card-actions>
-                <v-btn
-                  rounded
-                  color="indigo"
-                  dark
-                  :disabled="!valid"
-                  @click="validate"
-                >
-                  Validate
-                </v-btn>
+                <v-btn rounded color="indigo" dark @click="signup" :loading="loading">sign up</v-btn>
                 <v-spacer></v-spacer>
-                <v-btn rounded color="primary" dark @click="reset">
-                  Reset Form
-                </v-btn>
+                <v-btn rounded color="primary" dark @click="reset">Reset Form</v-btn>
               </v-card-actions>
             </v-form>
           </v-card>
@@ -77,45 +69,53 @@
 
 <script>
 export default {
-  data: () => ({
-    valid: false,
-    name: "",
-    nameRules: [
-      v => !!v || "Name is required",
-      v => (v && v.length <= 10) || "Name must be less than 10 characters"
-    ],
-    email: "",
-    emailRules: [
-      v => !!v || "E-mail is required",
-      v => /.+@.+\..+/.test(v) || "E-mail must be valid"
-    ],
-    password: "",
-    passwordShow: false,
-    passwordRules: [
-      v => !!v || "password is required",
-      v => (v && v.length >= 10) || "password must be longer than 20 characters"
-    ],
-    password_confirmed: "",
-    password_confirmedShow: false,
-    password_confirmedRules: [
-      v => !!v || "password_confirmed is required",
-      v =>
-        v.equal(this.password) || "Password_confirmed must be equal to Password"
-    ],
-    lazy: false
-  }),
+  data() {
+    return {
+      loading: false,
+      name: "",
+      nameRules: [
+        v => !!v || "Name is required",
+        v => (v && v.length <= 10) || "Name must be less than 10 characters"
+      ],
+      email: "",
+      emailRules: [
+        v => !!v || "E-mail is required",
+        v => /.+@.+\..+/.test(v) || "E-mail must be valid"
+      ],
+      password: "",
+      passwordShow: false,
+      passwordRules: [
+        v => !!v || "password is required",
+        v =>
+          (v && v.length >= 10) || "password must be longer than 10 characters"
+      ],
+      password_confirmed: "",
+      password_confirmedShow: false,
+      password_confirmedRules: [
+        v => !!v || "password_confirmed is required",
+        v =>
+          v === this.password || "Password_confirmed must be equal to Password"
+      ],
+      lazy: false
+    };
+  },
   methods: {
-    validate() {
-      this.$refs.form.validate();
-    },
     reset() {
       this.$refs.form.reset();
+    },
+    signup() {
+      if (this.$refs.form.validate()) {
+        this.loading = true;
+        console.log(
+          this.password,
+          this.email,
+          this.password_confirmed,
+          this.name
+        );
+        this.loading = false;
+        // this.$router.push('/');
+      }
     }
   }
 };
 </script>
-<style>
-button.v-btn[disabled] {
-  opacity: 1;
-}
-</style>

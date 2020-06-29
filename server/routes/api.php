@@ -23,6 +23,10 @@ Route::get('category/{category_id}/posts', [
     'as' => 'category.index',
     'uses' => 'CategoriesController@index'
 ]);
+Route::get('category', [
+    'as' => 'category',
+    'uses' => 'CategoriesController@show'
+]);
 
 //post routers
 Route::get('posts/{post_id}', [

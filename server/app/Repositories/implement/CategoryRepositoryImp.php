@@ -16,6 +16,11 @@ class CategoryRepositoryImp implements CategoryRepository
     {
         $this->mapper = $mapper;
     }
+    public function getAllCategory(): array
+    {
+        $categories = Category::get();
+        return $this->mapper->mapArray($categories, CategoryDTO::class);
+    }
     public function getCategoryByID(int $category_id): CategoryDTO
     {
         $category = Category::find($category_id);
@@ -23,12 +28,12 @@ class CategoryRepositoryImp implements CategoryRepository
     }
     public function getPostsByCategory(CategoryDTO $categoryDTO, int $page = 5): PostPaginateDTO
     {
-        
+
         // $category->fill((array) $category);
         // $posts = $this->category->posts()->latest()->paginate($page);
         $categoryModel = new Category();
         $categoryModel->id = $categoryDTO->id;
         $postPaginate = $categoryModel->posts()->latest()->paginate($page);
-        return $this->mapper->mapPaginate($postPaginate, PostPaginateDTO::class, PostDTO::class);
+        return $this->mapper->map(collect($postPaginate), PostPaginateDTO::class);
     }
 }

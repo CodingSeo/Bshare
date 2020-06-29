@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http;
+
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -43,12 +44,12 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
         //servlet filter
-        'jwt' =>[
+        'jwt' => [
             \App\Http\Middleware\JWTmiddleware\JWTTokenChecking::class, //getting token from request
             \App\Http\Middleware\JWTmiddleware\JWTTokenValidateChecking::class, //checking token format validate
             \App\Http\Middleware\JWTmiddleware\JWTPayloadValidateChecking::class, //checking token Payload
             \App\Http\Middleware\JWTmiddleware\JWTTokenExpiredChecking::class, //checking token expried
-            \App\Http\Middleware\JWTmiddleware\JWTAuthorizationChecking::class,
+            \App\Http\Middleware\JWTmiddleware\JWTAuthorizationSetting::class, //
         ]
 
     ];

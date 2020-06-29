@@ -21,16 +21,18 @@ class PostTransformer
         return response()->json($payload, 200, [], JSON_PRETTY_PRINT);
     }
 
-    public function transformPost(PostDTO $post){
+    public function transformPost(PostDTO $post)
+    {
         $post->created_at = $this->changeDateTime($post->created_at);
         $post->updated_at = $this->changeDateTime($post->updated_at);
-        $post->comments = empty($post->comments)?[]:array_map([$this, 'transformComments'], $post->comments);
+        $post->comments = empty($post->comments) ? [] : array_map([$this, 'transformComments'], $post->comments);
         $post->content = $this->transformContent($post->content);
         return response()->json($post, 200, [], JSON_PRETTY_PRINT);
     }
 
     public function withPagination(PostPaginateDTO $posts)
     {
+        if (!$posts->data) $posts->data = [];
         $payload = [
             'total' => $posts->total,
             'per_page' => $posts->per_page,
@@ -66,29 +68,29 @@ class PostTransformer
             'body' => $content->body,
         ];
     }
-    
+
     public function transformComments($comments)
     {
 
         return [
-            'id'=>$comments->id,
-            'user_id'=>$comments->user_id,
+            'id' => $comments->id,
+            'user_id' => $comments->user_id,
             'body' => $comments->body,
             'created_at' => $this->changeDateTime($comments->created_at),
-            'replies' => empty($comments->replies)?[]:array_map([$this, 'transformComments'], $comments->replies),
+            'replies' => empty($comments->replies) ? [] : array_map([$this, 'transformComments'], $comments->replies),
         ];
     }
     public function transformComment(CommentDTO $comments)
     {
 
         $payload =  [
-            'id'=>$comments->id,
-            'user_id'=>$comments->user_id,
+            'id' => $comments->id,
+            'user_id' => $comments->user_id,
             'body' => $comments->body,
             'created_at' => $this->changeDateTime($comments->created_at),
-            'replies' => empty($comments->replies)?[]:array_map([$this, 'transformComments'], $comments->replies),
+            'replies' => empty($comments->replies) ? [] : array_map([$this, 'transformComments'], $comments->replies),
         ];
-        return response()->json($payload, 200, [], JSON_PRETTY_PRINT); 
+        return response()->json($payload, 200, [], JSON_PRETTY_PRINT);
     }
 
     public function changeDateTime($value)
@@ -96,11 +98,11 @@ class PostTransformer
         return  Carbon::parse($value)->toDateTimeString();
     }
     //hellper
-    public function success($message,...$option){
+    public function success($message, ...$option)
+    {
         $payload = [
-            'message'=>$message,
+            'message' => $message,
         ];
         return response()->json($payload, 200, [], JSON_PRETTY_PRINT);
     }
-
 }

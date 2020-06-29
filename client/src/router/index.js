@@ -8,8 +8,8 @@ import Selling from "../pages/post/Selling"
 import Purchase from "../pages/post/Purchase"
 import Help from "../pages/post/Help"
 Vue.use(VueRouter)
-const routes = [
-  {
+
+const routes = [{
     path: '/',
     name: 'Home',
     component: Home
@@ -32,19 +32,22 @@ const routes = [
   {
     path: '/purchase',
     name: 'purchase',
-    component: Purchase
+    component: Purchase,
   },
   {
     path: '/selling',
     name: 'selling',
-    component: Selling
+    component: Selling,
   },
   {
     path: '/help',
     name: 'help',
     component: Help
+  },
+  {
+    path: '*',
+    redirect: '/'
   }
-  
 ]
 
 const router = new VueRouter({

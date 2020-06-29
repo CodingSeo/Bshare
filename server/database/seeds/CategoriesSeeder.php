@@ -14,7 +14,7 @@ class CategoriesSeeder extends Seeder
     {
         DB::table('categories')->insert([
             'category' => 'BookSelling',
-            'id' => 1,
+            'id' => 3,
             'use_trade' => 1,
             'use_comments' => 1,
             'use_book' => 1,
@@ -30,7 +30,7 @@ class CategoriesSeeder extends Seeder
         ]);
         DB::table('categories')->insert([
             'category' => 'BookReview',
-            'id' => 3,
+            'id' => 1,
             'use_trade' => 0,
             'use_comments' => 1,
             'use_book' => 1,

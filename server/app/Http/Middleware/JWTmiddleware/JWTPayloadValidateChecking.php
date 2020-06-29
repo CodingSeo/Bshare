@@ -33,10 +33,10 @@ class JWTPayloadValidateChecking
     {
         $token = $this->attemptUser->getToken();
         $payload = $this->authManager->checkPayloadValidation($token);
-        if(!$payload) throw new JWTTokenException('Token Payload Format is Wrong');
+        if (!$payload) throw new JWTTokenException('Token Payload Format is Wrong');
         $token_prv = $payload['prv'];
         //prv chekcing sha1() object
-        if($this->authManager->checkPrvCode($token_prv))
+        if ($this->authManager->checkPrvCode($token_prv))
             throw new JWTTokenException('Illegal Approach (prv)');
 
         // $token_jti = $payload['jti'];
