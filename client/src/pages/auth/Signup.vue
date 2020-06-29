@@ -11,7 +11,7 @@
               <v-card-text>
                 <v-text-field
                   prepend-icon="person"
-                  v-model="name"
+                  v-model="user.name"
                   :counter="10"
                   :rules="nameRules"
                   label="name"
@@ -21,7 +21,7 @@
               <v-card-text>
                 <v-text-field
                   prepend-icon="alternate_email"
-                  v-model="email"
+                  v-model="user.email"
                   :rules="emailRules"
                   label="email"
                   required
@@ -29,7 +29,7 @@
               </v-card-text>
               <v-card-text>
                 <v-text-field
-                  v-model="password"
+                  v-model="user.password"
                   prepend-icon="lock"
                   :append-icon="passwordShow ? 'mdi-eye' : 'mdi-eye-off'"
                   :type="passwordShow ? 'text' : 'password'"
@@ -40,24 +40,24 @@
               </v-card-text>
               <v-card-text>
                 <v-text-field
-                  v-model="password_confirmed"
+                  v-model="user.password_confirmation"
                   prepend-icon="lock"
                   :append-icon="
-                    password_confirmedShow ? 'mdi-eye' : 'mdi-eye-off'
+                    password_confirmationShow ? 'mdi-eye' : 'mdi-eye-off'
                   "
-                  :type="password_confirmedShow ? 'text' : 'password'"
-                  :rules="password_confirmedRules"
-                  label="password_confirmed"
+                  :type="password_confirmationShow ? 'text' : 'password'"
+                  :rules="password_confirmationRules"
+                  label="password_confirmation"
                   @click:append="
-                    password_confirmedShow = !password_confirmedShow
+                    password_confirmationShow = !password_confirmationShow
                   "
                 ></v-text-field>
               </v-card-text>
               <v-divider light></v-divider>
               <v-card-actions>
-                <v-btn rounded color="indigo" dark @click="signup" :loading="loading">sign up</v-btn>
-                <v-spacer></v-spacer>
                 <v-btn rounded color="primary" dark @click="reset">Reset Form</v-btn>
+                <v-spacer></v-spacer>
+                <v-btn rounded color="indigo" dark @click="signup" :loading="loading">sign up</v-btn>
               </v-card-actions>
             </v-form>
           </v-card>
@@ -69,35 +69,39 @@
 
 <script>
 export default {
+  props: ["login", "user"],
   data() {
     return {
       loading: false,
-      name: "",
       nameRules: [
         v => !!v || "Name is required",
         v => (v && v.length <= 10) || "Name must be less than 10 characters"
       ],
-      email: "",
       emailRules: [
         v => !!v || "E-mail is required",
         v => /.+@.+\..+/.test(v) || "E-mail must be valid"
       ],
-      password: "",
       passwordShow: false,
       passwordRules: [
         v => !!v || "password is required",
         v =>
-          (v && v.length >= 10) || "password must be longer than 10 characters"
-      ],
-      password_confirmed: "",
-      password_confirmedShow: false,
-      password_confirmedRules: [
-        v => !!v || "password_confirmed is required",
+          (v && v.length >= 10) || "password must be longer than 10 characters",
         v =>
-          v === this.password || "Password_confirmed must be equal to Password"
+          (v && v.length < 20) || "password must be shorter than 20 characters"
       ],
-      lazy: false
+      password_confirmationShow: false,
+      password_confirmationRules: [
+        v => !!v || "password_confirmation is required",
+        v =>
+          v === this.user.password ||
+          "password_confirmation must be equal to Password"
+      ]
     };
+  },
+  created() {
+    if (this.login) {
+      this.$router.push("/");
+    }
   },
   methods: {
     reset() {
@@ -106,16 +110,38 @@ export default {
     signup() {
       if (this.$refs.form.validate()) {
         this.loading = true;
-        console.log(
-          this.password,
-          this.email,
-          this.password_confirmed,
-          this.name
+        this.$store.dispatch("auth/register", this.user).then(
+          () => {
+            this.$router.push("/");
+          },
+          error => {
+            this.loading = false;
+            this.message =
+              (error.response && error.response.data) ||
+              error.message ||
+              error.toString();
+          }
         );
-        this.loading = false;
-        // this.$router.push('/');
       }
     }
   }
+  //   console.log(
+  //           this.password,
+  //           this.email,
+  //           this.password_confirmed,
+  //           this.name
+  //         );
+  //   this.$http
+  //           .post(`/auth/register`, {
+  //             name: this.name,
+  //             email: this.email,
+  //             password: this.password,
+  //             password_confirmation: this.password_confirmed
+  //           })
+  //           .then(result => {
+  //             console.log(result);
+  //             this.loading = false;
+  //             this.$router.push("/");
+  //           });
 };
 </script>

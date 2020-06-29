@@ -27,17 +27,17 @@ Route::get('hiworks/callback', [
 
 //+ should it be the
 
-Route::get('user', [
-    'as' => 'user',
-    'uses' => 'JWTAuthController@user'
-])->middleware('jwt');
+// Route::get('user', [
+//     'as' => 'user',
+//     'uses' => 'JWTAuthController@user'
+// ])->middleware('jwt');
 
-Route::get('refresh', [
-    'as' => 'refresh',
-    'uses' => 'JWTAuthController@refresh'
-])->middleware('jwt');
+// Route::get('refresh', [
+//     'as' => 'refresh',
+//     'uses' => 'JWTAuthController@refresh'
+// ])->middleware('jwt');
 
-Route::get('logout', [
-    'as' => 'logout',
-    'uses' => 'JWTAuthController@logout'
-])->middleware('jwt');
+// Route::get('logout', [
+//     'as' => 'logout',
+//     'uses' => 'JWTAuthController@logout'
+// ])->middleware('jwt');

@@ -9,22 +9,27 @@
         </v-toolbar-title>
       </router-link>
       <v-spacer></v-spacer>
-
-      <router-link class="routerLink" to="/login">
-        <v-btn text color="grey">
-          <span>Login</span>
-          <v-icon right>login</v-icon>
+      <div v-if="!login">
+        <router-link class="routerLink" v-bind:login="login" v-bind:user="user" to="/login">
+          <v-btn text color="grey">
+            <span>Login</span>
+            <v-icon right>login</v-icon>
+          </v-btn>
+        </router-link>
+        <router-link class="routerLink" v-bind:login="login" v-bind:user="user" to="/signup">
+          <v-btn text color="grey">
+            <span>Legister</span>
+            <v-icon right>face</v-icon>
+          </v-btn>
+        </router-link>
+      </div>
+      <div v-else>
+        <v-btn text color="grey" @click="logout">
+          <span>Logout</span>
+          <v-icon right>clear</v-icon>
         </v-btn>
-      </router-link>
-
-      <router-link class="routerLink" to="/signup">
-        <v-btn text color="grey">
-          <span>Legister</span>
-          <v-icon right>face</v-icon>
-        </v-btn>
-      </router-link>
+      </div>
     </v-app-bar>
-
     <v-navigation-drawer nav app v-model="drawer" class="indigo">
       <v-subheader mb5 left class="white--text mb-3" style="font-size:1em">Menu</v-subheader>
 
@@ -49,14 +54,8 @@
 <script>
 export default {
   name: "NavBar",
+  props: ["login", "user"],
   components: {},
-  created() {
-    // using JSONPlaceholder
-    // this.$http.get("/category").then(result => {
-    //   console.log(result.data);
-    //   this.links = result.data;
-    // });
-  },
   data() {
     return {
       result: [],
@@ -94,6 +93,13 @@ export default {
         }
       ]
     };
+  },
+  methods: {
+    logout() {
+      //if
+      this.$store.dispatch("auth/logout");
+      this.$router.go(0);
+    }
   }
 };
 </script>

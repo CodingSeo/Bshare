@@ -7,31 +7,52 @@
       <v-layout row wrap justify-end>
         <v-flex shrink>
           <!-- setting router to review making -->
-          <router-link class="routerLink" to="/">
-            <v-btn text>
-              <span>Write</span>
-              <v-icon right>create</v-icon>
-            </v-btn>
-          </router-link>
+          <div v-if="!login">
+            <router-link class="routerLink" to="/login">
+              <v-btn text>
+                <span>Write</span>
+                <v-icon right>create</v-icon>
+              </v-btn>
+            </router-link>
+          </div>
+          <div v-else>
+            <PostCreate
+              v-bind:user="user"
+              v-bind:category="category"
+              v-bind:category_id="category_id"
+            />
+          </div>
         </v-flex>
       </v-layout>
       <v-divider></v-divider>
       <!-- list -->
-      <v-list text>
-        <v-list-item-group color="indigo" class="mt-3 mb-3">
-          <v-list-item v-for="post in posts" :key="post.id">
-            <v-list-item-content>
-              <!-- id,user_id,title,view_count,created,link,href -->
-              <v-list-item-title>{{post.id}}</v-list-item-title>
-              <v-list-item-subtitle>{{post.user_id}}</v-list-item-subtitle>
-              <v-list-item-subtitle>{{post.title}}</v-list-item-subtitle>
-              <v-list-item-subtitle>{{post.view_count}}</v-list-item-subtitle>
-              <v-list-item-subtitle>{{post.created}}</v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list-item-group>
-      </v-list>
-      <v-divider></v-divider>
+      <!-- id,user_id,title,view_count,created,link,href -->
+      <v-card class="pl-3 mb-2" flat v-for="post in posts" :key="post.id" router to="/review">
+        <v-layout row wrap :class="`pa-3 post review`">
+          <v-flex xs12 md6>
+            <div class="caption grey--text">postName</div>
+            <div>{{post.title}}</div>
+          </v-flex>
+          <v-flex xs6 sm4 md2>
+            <div class="caption grey--text">Writer</div>
+            <div>{{post.user_id}}</div>
+          </v-flex>
+          <v-flex xs6 sm4 md2>
+            <div class="caption grey--text">Create At</div>
+            <div>{{post.created}}</div>
+          </v-flex>
+          <v-flex xs2 sm2 md2>
+            <div class="caption grey--text">View Count</div>
+            <div>{{post.view_count}}</div>
+          </v-flex>
+          <!-- <v-flex xs2 sm2 md1>
+            <div class="text-right pr-5">
+              <v-chip small :class="`${post.status} white--text caption my-2`">{{post.status}}</v-chip>
+            </div>
+          </v-flex>-->
+        </v-layout>
+        <v-divider></v-divider>
+      </v-card>
       <!-- pagenate -->
       <div class="text-center mt-3">
         <v-pagination :length="last_page" color="indigo"></v-pagination>
@@ -41,11 +62,17 @@
 </template>
 
 <script>
+import PostCreate from "@/pages/post/popups/PostCreate.vue";
 export default {
   name: "Review",
+  components: {
+    PostCreate
+  },
+  props: ["login", "user"],
   created() {
     this.loading = true;
-    this.$http.get(`/category/${this.category_id}/posts`).then(result => {
+    //organize?
+    this.$http.get(`api/category/${this.category_id}/posts`).then(result => {
       let content = result.data;
       this.category_id = content.category_id;
       this.current_page = content.current_page;
@@ -53,10 +80,10 @@ export default {
       this.next_page_url = content.next_page_url;
       this.posts = content.data;
       console.log(content);
-      console.log(this.posts[1].links);
     });
   },
   data: () => ({
+    category: "review",
     category_id: 1,
     per_page: "",
     current_page: "",
@@ -68,5 +95,3 @@ export default {
   })
 };
 </script>
-
-<style>
