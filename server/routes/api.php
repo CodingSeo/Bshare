@@ -13,54 +13,52 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['as' => 'api.'], function () {
-    Route::get('/test/{test}', [
-        'as' => 'home',
-        'uses' => 'HomeController@test',
-    ]);
-    Route::get('/', [
-        'as' => 'index',
-        'uses' => 'HomeController@index',
-    ]);
-    //category
-    Route::get('category/{category_id}/posts', [
-        'as' => 'category.index',
-        'uses' => 'CategoriesController@index'
-    ]);
+Route::get('/', [
+    'as' => 'index',
+    'uses' => 'HomeController@index',
+]);
 
-    //post
-    Route::get('posts/{post_id}', [
-        'as' => 'posts.show',
-        'uses' => 'PostsController@show'
-    ]);
-    Route::group(['middleware'=>'jwt'],function(){
-        Route::post('posts', [
-            'as' => 'posts.store',
-            'uses' => 'PostsController@store'
-        ]);
-        Route::put('posts/{post_id}', [
-            'as' => 'posts.update',
-            'uses' => 'PostsController@update'
-        ]);
-        Route::delete('posts/{post_id}', [
-            'as' => 'posts.delete',
-            'uses' => 'PostsController@destroy'
-        ]);
-        ////comments
-        Route::post('comments', [
-            'as' => 'posts.comments.store',
-            'uses' => 'CommentsController@store'
-        ]);
-        Route::put('comments/{comment_id}', [
-            'as' => 'comments.update',
-            'uses' => 'CommentsController@update'
-        ]);
-        Route::delete('comments/{comment_id}', [
-            'as' => 'comments.delete',
-            'uses' => 'CommentsController@destroy'
-        ]);
-    });
+//category routers
+Route::get('category/{category_id}/posts', [
+    'as' => 'category.index',
+    'uses' => 'CategoriesController@index'
+]);
+Route::get('category', [
+    'as' => 'category',
+    'uses' => 'CategoriesController@show'
+]);
 
-    //file
+//post routers
+Route::get('posts/{post_id}', [
+    'as' => 'posts.show',
+    'uses' => 'PostsController@show'
+]);
 
-});
+Route::post('posts', [
+    'as' => 'posts.store',
+    'uses' => 'PostsController@store'
+])->middleware('jwt');
+
+Route::put('posts/{post_id}', [
+    'as' => 'posts.update',
+    'uses' => 'PostsController@update'
+])->middleware('jwt');
+
+Route::delete('posts/{post_id}', [
+    'as' => 'posts.delete',
+    'uses' => 'PostsController@destroy'
+])->middleware('jwt');
+
+//comments routers
+Route::post('comments', [
+    'as' => 'posts.comments.store',
+    'uses' => 'CommentsController@store'
+])->middleware('jwt');
+Route::put('comments/{comment_id}', [
+    'as' => 'comments.update',
+    'uses' => 'CommentsController@update'
+])->middleware('jwt');
+Route::delete('comments/{comment_id}', [
+    'as' => 'comments.delete',
+    'uses' => 'CommentsController@destroy'
+])->middleware('jwt');

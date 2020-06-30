@@ -2,8 +2,8 @@
 
 namespace App\Repositories\Implement;
 
+use App\DTO\CommentDTO;
 use App\DTO\ContentDTO;
-use App\DTO\PostCommentsDTO;
 use App\DTO\PostDTO;
 use App\EloquentModel\Content;
 use App\EloquentModel\Post;
@@ -12,77 +12,82 @@ use App\Repositories\interfaces\PostRepository;
 
 class PostRepositoryImp implements PostRepository
 {
-    protected $post, $content, $mapper;
-    public function __construct(Post $post, Content $content, MapperService $mapper)
+    protected $mapper;
+    public function __construct(MapperService $mapper)
     {
-        $this->post = $post;
-        $this->content = $content;
         $this->mapper = $mapper;
+    }
+    public function getFullContent(int $id): PostDTO
+    {
+        $post = POST::with('content', 'comments')->find($id);
+        $post->comments = json_decode($post->comments()->with('replies')->whereNull('parent_id')->latest()->get());
+        $postDTO = $this->mapper->map($post, PostDTO::class);
+        $postDTO->comments = $this->mapper->mapArray($post->comments,CommentDTO::class);
+        return $postDTO;
     }
     public function getOne(int $id): PostDTO
     {
-        $post = $this->post->with('category')->find($id);
+        $post = POST::find($id);
         return $this->mapper->map($post, PostDTO::class);
     }
+    public function getOneWithCategory(int $id): PostDTO
+    {
+        $post = POST::with('category')->find($id);
+        return $this->mapper->map($post, PostDTO::class);
+    }
+    //*
     public function findAll(): array
     {
-        $posts = $this->post->all();
+        $posts = Post::all();
         return  $this->mapper->mapArray($posts, PostDTO::class);
     }
-    public function updateByDTO(PostDTO $post): PostDTO
+    public function updateByDTO(PostDTO $postDTO): bool
     {
-        $this->post->fill((array) $post);
-        $this->post->category_id = $post->category->id;
-        $this->post->exists = true;
-        $this->post->update();
-        return $this->mapper->map($this->post, PostDTO::class);
+        return Post::where('id', $postDTO->id)
+          ->update([
+              'title' => $postDTO->title,
+              'view_count'=>$postDTO->view_count,
+              ]);
     }
-    public function updateByContent(array $content): PostDTO
+    public function updateByContent(array $requestContent): bool
     {
-        $this->post->fill($content);
-        $this->post->id = $content['post_id'];
-        $this->post->exists = true;
-        $this->post->update();
-        return $this->mapper->map($this->post, PostDTO::class);
+        return Post::where('id', $requestContent['post_id'])
+          ->update(['title' => $requestContent['title']]);
     }
-    public function delete(PostDTO $content): bool
+    public function delete(PostDTO $postDTO): bool
     {
-        $this->post->fill((array) $content);
-        $this->post->exists = true;
-        $result = $this->post->delete();
-        return $result;
+        Post::where('id', $postDTO->id)
+            ->delete();
+        return true;
     }
-    public function save($content, string $user_email): PostDTO
+    public function save($requestContent, string $user_email): PostDTO
     {
-        $this->post->fill((array) $content);
-        $this->post->user_id = $user_email;
-        $this->post->save();
-        return $this->mapper->map($this->post, PostDTO::class);;
+        $post = new Post();
+        $post->user_id = $user_email;
+        $post->title = $requestContent['title'];
+        $post->category_id = $requestContent['category_id'];
+        $post->save();
+        return $this->mapper->map($post, PostDTO::class);
+    }
+
+    public function saveContent(int $postID, array $requestContent): ContentDTO
+    {
+        $postContent = new Content();
+        $postContent->post_id = $postID;
+        $postContent->body = $requestContent['body'];
+        $postContent->save();
+        return $this->mapper->map($postContent, ContentDTO::class);
     }
     public function getContent(PostDTO $post): ContentDTO
     {
-        $this->post->fill((array) $post);
-        $content = $this->post->content()->first();
-        return $this->mapper->map($content, ContentDTO::class);
+        $post = new Post();
+        $post->fill((array) $post);
+        $requestContent = $post->content()->first();
+        return $this->mapper->map($requestContent, ContentDTO::class);
     }
-    public function getComments(PostDTO $post): array
+    public function updateContent(PostDTO $post, array $requestContent): bool
     {
-        $this->post->fill((array) $post);
-        $comments = $this->post->comments()->with('replies')->whereNull('parent_id')
-            ->latest()->get();
-        return $this->mapper->mapArray($comments, PostCommentsDTO::class);
-    }
-    public function saveContent(int $post_id, array $content): ContentDTO
-    {
-        $this->content->post_id = $post_id;
-        $this->content->fill($content);
-        $this->content->save();
-        return $this->mapper->map($this->content, ContentDTO::class);
-    }
-    public function updateContent(PostDTO $post, array $content): ContentDTO
-    {
-        $post_content = $this->content->where('post_id', $post->id)->first();
-        $post_content->update($content);
-        return $this->mapper->map($post_content, ContentDTO::class);
+        return Content::where('post_id', $post->id)
+          ->update(['body' => $requestContent['body']]);
     }
 }

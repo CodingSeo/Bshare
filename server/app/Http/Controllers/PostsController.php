@@ -26,40 +26,40 @@ class PostsController extends Controller
 
     public function show(PostsRequestIndex $request): JsonResponse
     {
-        $content = $request->only([
+        $requstContent = $request->only([
             'post_id'
         ]);
-        $post_content_comments_array = $this->service->getPost($content);
-        return $this->transform->withArray($post_content_comments_array);
+        $post = $this->service->getPost($requstContent);
+        return $this->transform->transformPost($post);
     }
 
     public function store(PostsRequestStore $request): JsonResponse
     {
         $user = $this->authUser->getAuthUser();
-        $content = $request->only([
+        $requstContent = $request->only([
             'title', 'body', 'category_id'
         ]);
-        $post_content_array = $this->service->storePost($content, $user);
-        return $this->transform->withArray($post_content_array);
+        $post = $this->service->storePost($requstContent, $user);
+        return $this->transform->transformPost($post);
     }
 
-    public function update(PostsRequestUpdate $request): JsonResponse
+    public function update(PostsRequestUpdate $request)
     {
         $user = $this->authUser->getAuthUser();
-        $content = $request->only([
-            'post_id', 'title', 'body', 'category_id',
+        $requstContent = $request->only([
+            'post_id', 'title', 'body'
         ]);
-        $post_content_array = $this->service->updatePost($content,$user);
-        return $this->transform->withArray($post_content_array);
+        $this->service->updatePost($requstContent, $user);
+        return response('success');
     }
 
     public function destroy(PostsRequestIndex $request)
     {
         $user = $this->authUser->getAuthUser();
-        $content = $request->only([
+        $requstContent = $request->only([
             'post_id'
         ]);
-        $result = $this->service->deletePost($content,$user);
-        return $result;
+        $this->service->deletePost($requstContent, $user);
+        return response('success');
     }
 }

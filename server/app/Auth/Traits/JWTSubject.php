@@ -9,7 +9,8 @@ trait JWTSubject
      *
      * @return mixed
      */
-    public function getJWTIdentifier(){
+    public function getJWTIdentifier()
+    {
         return $this->attributes[$this->getAuthIdentifierName()];
     }
 
@@ -18,9 +19,8 @@ trait JWTSubject
      *
      * @return array
      */
-    public function getJWTCustomClaims(){
-        return [
-
-        ];
+    public function getJWTCustomClaims()
+    {
+        return [];
     }
 }

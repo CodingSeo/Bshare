@@ -29,8 +29,8 @@ abstract class ApiRequest extends FormRequest
             'string' => ':attribute should be string',
             'unique' => ':attribute is already taken',
             'numeric' => ':attribute should be numeric',
-            'min' => ':attribute should be no shorter than 8 length',
-            'max'  => ':attribute should be no longer than 255 length',
+            'min' => ':attribute should be no longer than length',
+            'max'  => ':attribute should be no shorter than length',
             'confirmed' => ':attribute does not match',
             'email' => ':attribute must be email type',
         ];

@@ -14,10 +14,10 @@ class JWTRegisterRequest extends ApiRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'string', 'max:100'],
+            'name' => ['required', 'string', 'max:10'],
             'email' => ['required', 'email', 'max:255'],
-            'password' => ['required', 'string', 'min:8', 'max:255', 'confirmed'],
-            'password_confirmation' => ['required', 'string', 'min:8', 'max:255'],
+            'password' => ['required', 'string', 'min:10', 'max:20', 'confirmed'],
+            'password_confirmation' => ['required', 'string', 'min:10', 'max:20'],
         ];
     }
     public function attributes()

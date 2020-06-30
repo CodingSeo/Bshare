@@ -1,10 +1,8 @@
 <?php
 
-namespace App\DTO;
+namespace App\Mapper;
 
-use App\DTO\DTO;
-
-class EloquentDTO implements DTO
+class EloquentDTO
 {
     private $data;
     public static function map($model)

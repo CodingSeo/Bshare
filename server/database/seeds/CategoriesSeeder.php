@@ -14,23 +14,35 @@ class CategoriesSeeder extends Seeder
     {
         DB::table('categories')->insert([
             'category' => 'BookSelling',
-            'trade_info' => 1,
-            'book_info' => 1,
+            'id' => 3,
+            'use_trade' => 1,
+            'use_comments' => 1,
+            'use_book' => 1,
+            'writable' => 1,
         ]);
         DB::table('categories')->insert([
             'category' => 'BookBuying',
-            'trade_info' => 1,
-            'book_info' => 1,
+            'id' => 2,
+            'use_trade' => 1,
+            'use_comments' => 1,
+            'use_book' => 1,
+            'writable' => 1,
         ]);
         DB::table('categories')->insert([
             'category' => 'BookReview',
-            'trade_info' => 0,
-            'book_info' => 1,
+            'id' => 1,
+            'use_trade' => 0,
+            'use_comments' => 1,
+            'use_book' => 1,
+            'writable' => 1,
         ]);
         DB::table('categories')->insert([
             'category' => 'QnA',
-            'trade_info' => 0,
-            'book_info' => 0,
+            'id' => 4,
+            'use_comments' => 0,
+            'use_trade' => 0,
+            'use_book' => 0,
+            'writable' => 0,
         ]);
     }
 }

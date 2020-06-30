@@ -16,7 +16,6 @@ class PostsRequestUpdate extends ApiRequest
             'post_id' => ['required', 'numeric'],
             'title' => ['required', 'max:255'],
             'body' => ['required'],
-            'category_id' => ['required'],
         ];
     }
     public function attributes()

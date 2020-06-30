@@ -21,6 +21,14 @@ class PostDTO
      */
     public $title;
     /**
+     * @var ContentDTO
+     */
+    public $content;
+    /**
+     * @var CommentDTO[]
+     */
+    public $comments;
+    /**
      * @var int
      */
     public $view_count;

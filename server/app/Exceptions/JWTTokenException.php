@@ -31,7 +31,7 @@ class JWTTokenException extends Exception
     {
         $payload = [
             'code' => 404,
-            'message' => $this->message?:'Token not Found',
+            'message' => $this->message ?: 'Token not Found',
         ];
         return response()->json($payload, 404, [], JSON_PRETTY_PRINT);
     }

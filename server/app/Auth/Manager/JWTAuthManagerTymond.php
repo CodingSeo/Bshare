@@ -87,25 +87,27 @@ class JWTAuthManagerTymond implements JWTAuthManager
     public function checkTokenExpired(string $exp): bool
     {
         $exp_now = Carbon::now('UTC')->getTimestamp();
-        return ((int) $exp < (int) $exp_now)? false : true;
+        return ((int) $exp < (int) $exp_now) ? false : true;
     }
-    /**
-     * @param string $token_user
-     * @return null|Authenticatable
-     */
-    public function checkAuthorizationToken(string $token_user)
-    {
-        //cache? or db access?
-        return Auth::loginUsingId($token_user);
-    }
+
     public function checkPrvCode(string $token_prv): bool
     {
         return strcmp($token_prv, sha1(AuthUser::class));
     }
-    public function getTokenByUserDTO(UserDTO $user): string
+    public function getAuthUserByUserDTO(UserDTO $user): AuthUser
     {
         $auth_user = new AuthUser((array) $user, 'email', 'password', null);
         $token = $this->jwtauth::fromSubject($auth_user);
-        return $token;
+        $auth_user->token = $token;
+        return $auth_user;
     }
+    // /**
+    //  * @param string $token_user
+    //  * @return null|Authenticatable
+    //  */
+    // public function checkAuthorizationToken(string $token_user)
+    // {
+    //     //cache? or db access?
+    //     return Auth::loginUsingId($token_user);
+    // }
 }

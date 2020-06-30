@@ -2,15 +2,10 @@
 
 namespace App\EloquentModel;
 
-use Illuminate\Contracts\Auth\UserProvider;
-use Tymon\JWTAuth\Contracts\JWTSubject;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 
-class User extends Authenticatable implements JWTSubject
+class User extends Model
 {
-    use Notifiable;
-
     protected $fillable = [
         'id','name', 'email', 'password',
     ];
@@ -18,17 +13,4 @@ class User extends Authenticatable implements JWTSubject
     protected $hidden = [
         'password_bcrypt'
     ];
-
-    public function getJWTIdentifier()
-    {
-        return $this->getKey();
-    }
-
-    public function getJWTCustomClaims()
-    {
-        return [
-            // 'name' => $this->name,
-            // 'email' => $this->email
-        ];
-    }
 }

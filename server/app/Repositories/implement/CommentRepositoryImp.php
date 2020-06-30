@@ -10,14 +10,13 @@ use App\Repositories\interfaces\CommentRepository;
 class CommentRepositoryImp implements CommentRepository
 {
     protected $comment, $mapper;
-    public function __construct(Comment $comment, MapperService $mapper)
+    public function __construct(MapperService $mapper)
     {
-        $this->comment = $comment;
         $this->mapper = $mapper;
     }
     public function getOne(int $id): CommentDTO
     {
-        $comment = $this->comment->find($id);
+        $comment = Comment::find($id);
         return $this->mapper->map($comment, CommentDTO::class);
     }
     public function findAll(): array
@@ -25,20 +24,18 @@ class CommentRepositoryImp implements CommentRepository
         $comments = $this->comment->all();
         return $this->mapper->mapArray($comments, CommentDTO::class);
     }
-    public function updateByDTO(CommentDTO $comment): CommentDTO
+    public function updateByDTO(CommentDTO $comment): bool
     {
         $this->comment->fill((array) $comment);
         $this->comment->exists = true;
-        $this->comment->update();
-        return $this->mapper->map($this->comment, CommentDTO::class);
+        return $this->comment->update();
     }
-    public function updateByContent(array $content): CommentDTO
+    public function updateByContent(array $content): bool
     {
         $this->comment->fill($content);
         $this->comment->id = $content['comment_id'];
         $this->comment->exists = true;
-        $this->comment->update();
-        return $this->mapper->map($this->comment, CommentDTO::class);
+        return $this->comment->update();
     }
     public function delete(CommentDTO $comment): bool
     {
@@ -48,11 +45,12 @@ class CommentRepositoryImp implements CommentRepository
         return $result;
     }
     //save에 관하여 saveByContent와 saveByDTO를 나누어 작업하는 것이 맞다고 본다.
-    public function save($content,string $user_email): CommentDTO
+    public function save($content, string $user_email): CommentDTO
     {
-        $this->comment->fill($content);
-        $this->comment->user_id = $user_email;
-        $this->comment->save();
-        return $this->mapper->map($this->comment, CommentDTO::class);
+        $comment = new Comment();
+        $comment->fill($content);
+        $comment->user_id = $user_email;
+        $comment->save();
+        return $this->mapper->map($comment, CommentDTO::class);
     }
 }

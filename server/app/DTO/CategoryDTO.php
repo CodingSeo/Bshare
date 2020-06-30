@@ -9,15 +9,19 @@ class CategoryDTO
      */
     public $id;
     /**
-     * @var int
-     */
-    public $trade_info;
-    /**
-     * @var int
-     */
-    public $book_info;
-    /**
      * @var string
      */
     public $category;
+    /**
+     * @var int
+     */
+    public $writable;
+    /**
+     * @var int
+     */
+    public $use_trade;
+    /**
+     * @var int
+     */
+    public $use_book;
 }

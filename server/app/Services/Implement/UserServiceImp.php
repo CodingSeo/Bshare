@@ -2,6 +2,7 @@
 
 namespace App\Services\Implement;
 
+use App\Auth\AuthUser;
 use App\Auth\Manager\JWTAuthManager;
 use App\DTO\UserDTO;
 use App\Repositories\Interfaces\UserRepository;
@@ -32,16 +33,16 @@ class UserServiceImp implements UserService
         $user = $this->user_repository->save($content);
         return $user;
     }
-
-    public function loginUser(array $user_info) : string
+    //gaurd part???
+    public function loginUser(array $user_info): AuthUser
     {
         $email = $user_info['email'];
         $password = $user_info['password'];
         $user = $this->user_repository->getOneByEmail($email);
-        if(!$user->id) throw new \App\Exceptions\ModuleNotFound('User does not exists');
-        if(!strcmp($user->password,bcrypt($password))) throw new \App\Exceptions\ModuleNotFound('Password Incorrect');
-        $token = $this->jwtauth->getTokenByUserDTO($user);
-        return $token;
+        if (!$user->id) throw new \App\Exceptions\ModuleNotFound('User does not exists');
+        if (!strcmp($user->password, bcrypt($password))) throw new \App\Exceptions\ModuleNotFound('Password Incorrect');
+        $authUser = $this->jwtauth->getAuthUserByUserDTO($user);
+        return $authUser;
     }
 
 
@@ -57,7 +58,4 @@ class UserServiceImp implements UserService
     {
         return auth()->logout();
     }
-
-
-
 }

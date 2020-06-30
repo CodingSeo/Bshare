@@ -2,8 +2,10 @@
 
 namespace App\Services\Implement;
 
+use App\DTO\PostPaginateDTO;
 use App\Repositories\Interfaces\CategoryRepository;
 use App\Services\Interfaces\CategoryService;
+
 class CategoryServiceImp implements CategoryService
 {
     protected $category_repository;
@@ -11,7 +13,11 @@ class CategoryServiceImp implements CategoryService
     {
         $this->category_repository = $category_repository;
     }
-    public function getPostsWithCategory(array $content)
+    public function getAllCategory(): array
+    {
+        return $this->category_repository->getAllCategory();
+    }
+    public function getPostsWithCategory(array $content): PostPaginateDTO
     {
         $category = $this->category_repository->getCategoryByID($content['category_id']);
         if (!$category->id) throw new \App\Exceptions\ModuleNotFound('Category not Found');

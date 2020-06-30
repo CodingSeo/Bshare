@@ -11,21 +11,29 @@ use App\Repositories\interfaces\CategoryRepository;
 
 class CategoryRepositoryImp implements CategoryRepository
 {
-    protected $category, $mapper;
-    public function __construct(Category $category, MapperService $mapper)
+    protected $mapper;
+    public function __construct(MapperService $mapper)
     {
-        $this->category = $category;
         $this->mapper = $mapper;
     }
-    public function getCategoryByID(int $category_id)
+    public function getAllCategory(): array
     {
-        $category  = $this->category->find($category_id);
+        $categories = Category::get();
+        return $this->mapper->mapArray($categories, CategoryDTO::class);
+    }
+    public function getCategoryByID(int $category_id): CategoryDTO
+    {
+        $category = Category::find($category_id);
         return $this->mapper->map($category, CategoryDTO::class);
     }
-    public function getPostsByCategory(object $category, int $page = 5) : PostPaginateDTO
+    public function getPostsByCategory(CategoryDTO $categoryDTO, int $page = 5): PostPaginateDTO
     {
-        $this->category->fill((array) $category);
-        $posts = $this->category->posts()->latest()->paginate($page);
-        return $this->mapper->mapPaginate(collect($posts), PostPaginateDTO::class, PostDTO::class);
+
+        // $category->fill((array) $category);
+        // $posts = $this->category->posts()->latest()->paginate($page);
+        $categoryModel = new Category();
+        $categoryModel->id = $categoryDTO->id;
+        $postPaginate = $categoryModel->posts()->latest()->paginate($page);
+        return $this->mapper->map(collect($postPaginate), PostPaginateDTO::class);
     }
 }
