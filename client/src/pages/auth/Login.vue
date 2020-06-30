@@ -39,7 +39,7 @@
                 <v-icon>person</v-icon>Sign up
               </v-btn>
               <v-spacer></v-spacer>
-              <v-btn rounded color="primary" dark @click="loginAccount">
+              <v-btn rounded color="primary" dark @click="loginAccount" :loading="loading">
                 Login
                 <v-icon>keyboard_arrow_right</v-icon>
               </v-btn>
@@ -56,6 +56,7 @@ export default {
   name: "Login",
   props: ["login", "user"],
   data: () => ({
+    loading: false,
     emailRules: [
       v => !!v || "E-mail is required",
       v => /.+@.+\..+/.test(v) || "E-mail must be valid"

@@ -17,9 +17,9 @@
           </div>
           <div v-else>
             <PostCreate
-              v-bind:user="user"
-              v-bind:category="category"
-              v-bind:category_id="category_id"
+              :user="user"
+              :category="category"
+              :category_id="category_id"
             />
           </div>
         </v-flex>
@@ -27,7 +27,7 @@
       <v-divider></v-divider>
       <!-- list -->
       <!-- id,user_id,title,view_count,created,link,href -->
-      <v-card class="pl-3 mb-2" flat v-for="post in posts" :key="post.id" router to="/review">
+      <v-card class="pl-3 mb-2" flat v-for="post in posts" :key="post.id" router :to="`/review/${post.id}`">
         <v-layout row wrap :class="`pa-3 post review`">
           <v-flex xs12 md6>
             <div class="caption grey--text">postName</div>
@@ -70,11 +70,9 @@ export default {
   },
   props: ["login", "user"],
   created() {
-    this.loading = true;
     //organize?
     this.$http.get(`api/category/${this.category_id}/posts`).then(result => {
       let content = result.data;
-      this.category_id = content.category_id;
       this.current_page = content.current_page;
       this.last_page = content.last_page;
       this.next_page_url = content.next_page_url;

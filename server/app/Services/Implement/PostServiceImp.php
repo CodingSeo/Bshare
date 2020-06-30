@@ -50,7 +50,7 @@ class PostServiceImp implements PostService
 
     public function updatePost(array $requestContent, AuthUser $user): void
     {
-        $post_exit = $this->postRepository->getFullContent($requestContent['post_id']);
+        $post_exit = $this->postRepository->getOneWithCategory($requestContent['post_id']);
         if (!$post_exit->id)
             throw new \App\Exceptions\ModuleNotFound('Post do not exist');
         if (strcmp($post_exit->user_id, $user->email))

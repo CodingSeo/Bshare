@@ -26,40 +26,40 @@ class PostsController extends Controller
 
     public function show(PostsRequestIndex $request): JsonResponse
     {
-        $reequstContent = $request->only([
+        $requstContent = $request->only([
             'post_id'
         ]);
-        $post = $this->service->getPost($reequstContent);
+        $post = $this->service->getPost($requstContent);
         return $this->transform->transformPost($post);
     }
 
     public function store(PostsRequestStore $request): JsonResponse
     {
         $user = $this->authUser->getAuthUser();
-        $reequstContent = $request->only([
+        $requstContent = $request->only([
             'title', 'body', 'category_id'
         ]);
-        $post = $this->service->storePost($reequstContent, $user);
+        $post = $this->service->storePost($requstContent, $user);
         return $this->transform->transformPost($post);
     }
 
     public function update(PostsRequestUpdate $request)
     {
         $user = $this->authUser->getAuthUser();
-        $reequstContent = $request->only([
+        $requstContent = $request->only([
             'post_id', 'title', 'body'
         ]);
-        $this->service->updatePost($reequstContent, $user);
+        $this->service->updatePost($requstContent, $user);
         return response('success');
     }
 
     public function destroy(PostsRequestIndex $request)
     {
         $user = $this->authUser->getAuthUser();
-        $reequstContent = $request->only([
+        $requstContent = $request->only([
             'post_id'
         ]);
-        $this->service->deletePost($reequstContent, $user);
+        $this->service->deletePost($requstContent, $user);
         return response('success');
     }
 }

@@ -15,6 +15,7 @@ interface PostRepository
     public function updateByContent(array $post): bool;
     public function delete(PostDTO $requestContent): bool;
     public function save($requestContent, string $user_email): PostDTO;
+    public function getOneWithCategory(int $id): PostDTO;
 
     public function saveContent(int $postID, array $requestContent): ContentDTO;
     public function updateContent(PostDTO $post, array $requestContent): bool;

@@ -41,7 +41,7 @@ export default {
   commponents: {},
   data() {
     return {
-      post: new Post("", "", this.category_id),
+      post: new Post("","","",this.category_id),
       dialog: false,
       titleRules: [
         v => !!v || "title is required",

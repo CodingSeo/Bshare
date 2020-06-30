@@ -1,8 +1,8 @@
 <template>
   <v-app class="grey lighten-4">
-    <NavBar v-bind:login="login" v-bind:user="user" />
+    <NavBar :login="login" :user="user" />
     <v-content class="mx-4 mb-4">
-      <router-view v-bind:login="login" v-bind:user="user"></router-view>
+      <router-view :login="login" :user="user"></router-view>
     </v-content>
   </v-app>
 </template>
@@ -40,7 +40,7 @@ export default {
   text-decoration: none;
 }
 .post.review {
-  border-left: 4px solid indigo;
+  border-left: 4px solid rgb(65, 75, 221);
 }
 .post.complete {
   border-left: 4px solid tomato;

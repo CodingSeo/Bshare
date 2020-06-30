@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Implement;
 
+use App\DTO\CommentDTO;
 use App\DTO\ContentDTO;
 use App\DTO\PostDTO;
 use App\EloquentModel\Content;
@@ -18,12 +19,20 @@ class PostRepositoryImp implements PostRepository
     }
     public function getFullContent(int $id): PostDTO
     {
-        $post = POST::with('category', 'content', 'comments')->find($id);
-        return $this->mapper->map($post, PostDTO::class);
+        $post = POST::with('content', 'comments')->find($id);
+        $post->comments = json_decode($post->comments()->with('replies')->whereNull('parent_id')->latest()->get());
+        $postDTO = $this->mapper->map($post, PostDTO::class);
+        $postDTO->comments = $this->mapper->mapArray($post->comments,CommentDTO::class);
+        return $postDTO;
     }
     public function getOne(int $id): PostDTO
     {
         $post = POST::find($id);
+        return $this->mapper->map($post, PostDTO::class);
+    }
+    public function getOneWithCategory(int $id): PostDTO
+    {
+        $post = POST::with('category')->find($id);
         return $this->mapper->map($post, PostDTO::class);
     }
     //*
@@ -34,17 +43,16 @@ class PostRepositoryImp implements PostRepository
     }
     public function updateByDTO(PostDTO $postDTO): bool
     {
-        $postModel = new Post();
-        $postModel->fill((array) $postDTO);
-        $postModel->exists = true;
-        return $postModel->update();
+        return Post::where('id', $postDTO->id)
+          ->update([
+              'title' => $postDTO->title,
+              'view_count'=>$postDTO->view_count,
+              ]);
     }
     public function updateByContent(array $requestContent): bool
     {
-        $postModel = new Post();
-        $postModel->id = $requestContent['post_id'];
-        $postModel->title = $requestContent['title'];
-        return $postModel->update();
+        return Post::where('id', $requestContent['post_id'])
+          ->update(['title' => $requestContent['title']]);
     }
     public function delete(PostDTO $postDTO): bool
     {
@@ -79,9 +87,7 @@ class PostRepositoryImp implements PostRepository
     }
     public function updateContent(PostDTO $post, array $requestContent): bool
     {
-        $postContent = new Content();
-        $postContent = $postContent->where('post_id', $post->id)->first();
-        $result = $postContent->update($requestContent);
-        return $result;
+        return Content::where('post_id', $post->id)
+          ->update(['body' => $requestContent['body']]);
     }
 }
