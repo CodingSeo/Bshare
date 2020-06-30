@@ -1,5 +1,5 @@
 import axios from 'axios';
-const API_URL = 'http://localhost:8000/dev/auth/';
+const API_URL = '/dev/auth/';
 
 class AuthService {
     login(user) {
@@ -8,8 +8,6 @@ class AuthService {
             password: user.password
         }).then(res => {
             if (res.data.access_token) {
-                //change to cookie
-                console.log(JSON.stringify(res.data));
                 localStorage.setItem('user', JSON.stringify(res.data));
             }
             return res.data;

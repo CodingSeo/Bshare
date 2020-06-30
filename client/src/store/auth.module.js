@@ -1,5 +1,5 @@
 import AuthService from '@/services/auth.service';
-
+import User from "@/models/user";
 const user = JSON.parse(localStorage.getItem('user'));
 const initialState = user ? {
     status: {
@@ -10,7 +10,7 @@ const initialState = user ? {
     status: {
         loggedIn: false
     },
-    user: null
+    user: null,
 };
 
 export const auth = {

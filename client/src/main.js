@@ -6,7 +6,7 @@ import vuetify from './plugins/vuetify'
 import axios from "axios"
 
 
-axios.defaults.baseURL = "http://localhost:8000/dev/";
+axios.defaults.baseURL = "/dev/";
 axios.defaults.withCredentials = true;
 Vue.prototype.$http = axios;
 

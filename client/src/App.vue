@@ -9,25 +9,23 @@
 <script>
 import NavBar from "@/components/NavBar";
 import User from "@/models/user";
+import {mapState} from 'vuex'
 export default {
   name: "App",
   components: {
     NavBar
   },
   computed: {
-    loggedIn() {
-      return this.$store.state.auth.status.loggedIn;
-    }
+    ...mapState([
+      login => state.auth.status.loggedIn,
+      user => (state.auth.user.user_info)?
+          state.auth.user.user_info:new User()
+    ]),
   },
-  created() {
-    if (this.loggedIn) {
-      this.login = true;
-      this.user = this.$store.state.auth.user.user_info;
-    }
+  created(){
+    console.log(this.user);
   },
   data: () => ({
-    login: false,
-    user: new User()
   })
 };
 </script>

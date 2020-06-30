@@ -2,7 +2,7 @@
 import axios from 'axios';
 import authHeader from './auth-header';
 
-const API_URL = 'http://localhost:8000/dev/api/';
+const API_URL = '/dev/api/';
 //geting userservice
 class UserService {
     savePost(post) {
