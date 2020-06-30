@@ -4,28 +4,26 @@ namespace App\Http\Controllers;
 
 use App\EloquentModel\User;
 use App\Http\Controllers\Controller;
+use App\Services\Interfaces\UserService;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 
 class SocialiteController extends Controller
 {
+    private $userService;
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
     public function redirectToProvider()
     {
-        Socialite::driver('hiworks')->stateless()->redirect()->getTargetUrl();
-        return $test;
+        return Socialite::driver('hiworks')->stateless()->redirect()->getTargetUrl();
     }
 
     public function handleProviderCallback(Request $request)
     {
-        if($request->has('code')){
-
-        }
         $user = Socialite::driver('hiworks')->user();
-        $user = User::firstOrCreate([
-            'name'  => $user->getName(),
-            'email' => $user->getEmail(),
-        ]);
-        auth()->login($user, true);
+        dd($user);
     }
     public function handleRedirect(){
 

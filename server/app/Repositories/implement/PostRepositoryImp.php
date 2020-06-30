@@ -21,7 +21,7 @@ class PostRepositoryImp implements PostRepository
     }
     public function getOne(int $id): PostDTO
     {
-        $post = $this->post->find($id);
+        $post = $this->post->with('category')->find($id);
         return $this->mapper->map($post, PostDTO::class);
     }
     public function findAll(): array
@@ -32,6 +32,7 @@ class PostRepositoryImp implements PostRepository
     public function updateByDTO(PostDTO $post): PostDTO
     {
         $this->post->fill((array) $post);
+        $this->post->category_id = $post->category->id;
         $this->post->exists = true;
         $this->post->update();
         return $this->mapper->map($this->post, PostDTO::class);

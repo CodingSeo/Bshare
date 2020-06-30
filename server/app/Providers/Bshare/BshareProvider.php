@@ -29,6 +29,7 @@ use App\Services\Interfaces\UserService;
 use Illuminate\Support\ServiceProvider;
 use App\Auth\AuthUser;
 use App\Auth\JWTAttemptUser;
+use App\Http\Controllers\SocialiteController;
 
 class BshareProvider extends ServiceProvider
 {
@@ -60,6 +61,7 @@ class BshareProvider extends ServiceProvider
 
         $container->when(UserServiceImp::class)->needs(UserRepository::class)->give(UserRepositoryImp::class);
         $container->when(JWTAuthController::class)->needs(UserService::class)->give(UserServiceImp::class);
+        $container->when(SocialiteController::class)->needs(UserService::class)->give(UserServiceImp::class);
 
     }
 

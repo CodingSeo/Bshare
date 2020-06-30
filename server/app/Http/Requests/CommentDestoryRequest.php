@@ -15,12 +15,14 @@ class CommentDestoryRequest extends ApiRequest
     {
         return [
             'comment_id' => ['numeric', 'required'],
+            'post_id' =>['numeric','required']
         ];
     }
     public function attributes()
     {
         return [
             'comment_id' => 'comment_id',
+            'post_id' => 'post_id'
         ];
     }
 }
