@@ -56,9 +56,8 @@ class PostRepositoryImp implements PostRepository
     }
     public function delete(PostDTO $postDTO): bool
     {
-        Post::where('id', $postDTO->id)
-            ->delete();
-        return true;
+        return Post::where('id', $postDTO->id)
+        ->delete();
     }
     public function save($requestContent, string $user_email): PostDTO
     {

@@ -28,6 +28,11 @@ Route::get('category', [
     'uses' => 'CategoriesController@show'
 ]);
 
+Route::get('posts/test', [
+    'as' => 'posts.test',
+    'uses' => 'PostsController@test'
+])->middleware('jwt');
+
 //post routers
 Route::get('posts/{post_id}', [
     'as' => 'posts.show',
@@ -48,6 +53,9 @@ Route::delete('posts/{post_id}', [
     'as' => 'posts.delete',
     'uses' => 'PostsController@destroy'
 ])->middleware('jwt');
+
+
+
 
 //comments routers
 Route::post('comments', [

@@ -63,4 +63,7 @@ class PostsController extends Controller
         $this->service->deletePost($requstContent, $user);
         return response('success');
     }
+    public function test(){
+        return response()->json($this->authUser);
+    }
 }

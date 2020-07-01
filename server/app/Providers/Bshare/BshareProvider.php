@@ -62,8 +62,9 @@ class BshareProvider extends ServiceProvider
 
         //mapper
         $container->singleton(MapperService::class, JSONMapperService::class);
-        $container->singleton(JWTAuthManager::class,JWTAuthManagerTymond::class);
+
         //auth
+        $container->singleton(JWTAuthManager::class,JWTAuthManagerTymond::class);
         $container->singleton(JWTAttemptUser::class,function(){
             return new JWTAttemptUser(new AuthUser([],'email','password',null));
         });
@@ -75,7 +76,6 @@ class BshareProvider extends ServiceProvider
         $container->when(CommentsController::class)->needs(CommentService::class)->give(CommentServiceImp::class);
         $container->when(CommentServiceImp::class)->needs(PostRepository::class)->give(PostRepositoryImp::class);
         $container->when(CommentServiceImp::class)->needs(CommentRepository::class)->give(CommentRepositoryImp::class);
-
 
         $container->when(CategoriesController::class)->needs(CategoryService::class)->give(CategoryServiceImp::class);
         $container->when(CategoryServiceImp::class)->needs(CategoryRepository::class)->give(CategoryRepositoryImp::class);

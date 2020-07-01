@@ -23,7 +23,7 @@ interface JWTAuthManager
     public function checkTokenExpired(string $token): bool;
     public function checkPrvCode(string $token_prv): bool;
     public function getAuthUserByUserDTO(UserDTO $user): AuthUser;
-    // public function checkPayloadValidation(string $token);
+    public function checkPayloadValidation(string $token);
     // /**
     //  * @param string $token_user
     //  * @return boolean|Authenticatable
