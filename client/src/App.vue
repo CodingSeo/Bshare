@@ -9,7 +9,10 @@
 <script>
 import NavBar from "@/components/NavBar";
 import User from "@/models/user";
+<<<<<<< HEAD
 import {mapState} from 'vuex';
+=======
+>>>>>>> e717b340196c96b3b7f6538e0d9670f96d8795a3
 export default {
   name: "App",
   components: {

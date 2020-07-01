@@ -26,6 +26,7 @@ class PostsController extends Controller
 
     public function show(PostsRequestIndex $request): JsonResponse
     {
+        // dd(request_content($request,['post_id']));
         $requstContent = $request->only([
             'post_id'
         ]);
@@ -61,5 +62,8 @@ class PostsController extends Controller
         ]);
         $this->service->deletePost($requstContent, $user);
         return response('success');
+    }
+    public function test(){
+        return response()->json($this->authUser);
     }
 }

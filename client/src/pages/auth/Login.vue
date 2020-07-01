@@ -77,7 +77,11 @@ export default {
         this.loading = true;
         this.$store.dispatch("auth/login", this.user).then(
           response => {
+<<<<<<< HEAD
             this.$router.push("/home");
+=======
+            this.$router.go("/home");
+>>>>>>> e717b340196c96b3b7f6538e0d9670f96d8795a3
           },
           error => {
             this.loading = false;

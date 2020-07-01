@@ -111,7 +111,7 @@ export default {
       if (this.$refs.form.validate()) {
         this.loading = true;
         this.$store.dispatch("auth/register", this.user).then(
-          () => {
+          response => {
             this.$router.push("/");
           },
           error => {

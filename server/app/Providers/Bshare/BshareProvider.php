@@ -29,7 +29,12 @@ use App\Services\Interfaces\UserService;
 use Illuminate\Support\ServiceProvider;
 use App\Auth\AuthUser;
 use App\Auth\JWTAttemptUser;
+use App\Cache\CacheContract;
+use App\Cache\FileCache;
+use App\Cache\MemcachedCache;
+use App\Cache\NoneCache;
 use App\Http\Controllers\SocialiteController;
+use Exception;
 
 class BshareProvider extends ServiceProvider
 {
@@ -42,7 +47,23 @@ class BshareProvider extends ServiceProvider
     {
 
         $container = app();
+        //cache
+        if(in_array(config('cache.default'), ['memcached'], true)){
+            $cacheService = new MemcachedCache(
+                env('MECACHED_HOST','127.0.0.1'), env('MECACHED_PORT',11211)
+            );
+        }
+        else{
+            $cacheService = new NoneCache();//file cache로 변경
+        }
+        $container->singleton(CacheContract::class,function()use($cacheService){
+            return $cacheService;
+        });
+
+        //mapper
         $container->singleton(MapperService::class, JSONMapperService::class);
+
+        //auth
         $container->singleton(JWTAuthManager::class,JWTAuthManagerTymond::class);
         $container->singleton(JWTAttemptUser::class,function(){
             return new JWTAttemptUser(new AuthUser([],'email','password',null));
@@ -55,7 +76,6 @@ class BshareProvider extends ServiceProvider
         $container->when(CommentsController::class)->needs(CommentService::class)->give(CommentServiceImp::class);
         $container->when(CommentServiceImp::class)->needs(PostRepository::class)->give(PostRepositoryImp::class);
         $container->when(CommentServiceImp::class)->needs(CommentRepository::class)->give(CommentRepositoryImp::class);
-
 
         $container->when(CategoriesController::class)->needs(CategoryService::class)->give(CategoryServiceImp::class);
         $container->when(CategoryServiceImp::class)->needs(CategoryRepository::class)->give(CategoryRepositoryImp::class);

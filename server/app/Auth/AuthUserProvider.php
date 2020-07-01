@@ -83,7 +83,6 @@ class AuthUserProvider implements UserProvider
         $id_key = $this->auth->id_key;
         $password_key = $this->auth->password_key;
         $rememberToken = $this->auth->rememberToken;
-
         if (!is_null($user) && !empty($user)) {
             return new AuthUser((array) $user ,$id_key, $password_key, $rememberToken);
         }
