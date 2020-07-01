@@ -64,7 +64,11 @@ export default {
         console.log(this.post);
         UserService.savePost(this.post).then(
           response => {
+<<<<<<< HEAD
+            this.$router.push("/review");
+=======
             this.$router.go("/home");
+>>>>>>> e717b340196c96b3b7f6538e0d9670f96d8795a3
           },
           error => {
             console.log(error.response);

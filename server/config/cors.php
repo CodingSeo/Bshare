@@ -1,3 +1,4 @@
+
 <?php
 
 return [
@@ -30,5 +31,21 @@ return [
     'max_age' => 0,
 
     'supports_credentials' => true,
+
+    // 'paths' => ['api/*','auth/*','dev/*'],
+
+    // 'allowed_methods' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+
+    // 'allowed_origins' => ['http://localhost:80','http://localhost:8080'],
+
+    // 'allowed_origins_patterns' => [],
+
+    // 'allowed_headers' => ['Content-Type, Authorization'],
+
+    // 'exposed_headers' => [],
+
+    // 'max_age' => 0,
+
+    // 'supports_credentials' => true,
 
 ];

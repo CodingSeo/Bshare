@@ -15,6 +15,11 @@ Route::post('login', [
 ]);
 
 //Hiworks
+Route::get('auth/hiworks', [
+    'as' => 'auth.hiworks',
+    'uses' => 'SocialiteController@authorizedUser'
+]);
+
 Route::get('login/hiworks', [
     'as' => 'login.hiworks',
     'uses' => 'SocialiteController@redirectToProvider'
