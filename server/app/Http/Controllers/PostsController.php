@@ -26,7 +26,6 @@ class PostsController extends Controller
 
     public function show(PostsRequestIndex $request): JsonResponse
     {
-        // dd(request_content($request,['post_id']));
         $requstContent = $request->only([
             'post_id'
         ]);
