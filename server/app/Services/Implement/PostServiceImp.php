@@ -29,10 +29,10 @@ class PostServiceImp implements PostService
     public function getPost(array $requestContent): PostDTO
     {
         $cacheKey = cache_key('post.index'); //route->name
-        // $posts = $this->cache->remember($cacheKey, 5, function() use($query, $request) {
-        //     return $post = $this->postRepository->getFullContent($requestContent['post_id']);
-        // });
-        $post = $this->postRepository->getFullContent($requestContent['post_id']);
+        $post = $this->cache->remember($cacheKey, 5, function() use($requestContent) {
+            return $post = $this->postRepository->getFullContent($requestContent['post_id']);
+        });
+        // $post = $this->postRepository->getFullContent($requestContent['post_id']);
         if (!$post->id) throw new \App\Exceptions\ModuleNotFound('Post not Found');
         $post->view_count++;
         $result = $this->postRepository->updateByDTO($post);
