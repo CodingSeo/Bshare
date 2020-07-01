@@ -31,7 +31,7 @@
             <v-divider light></v-divider>
             <v-card-actions>
               <!-- hiworks button should be to the full scaling -->
-              <v-btn to="/hiwork_redirect" width="100%" color="blue" dark>Hiworks Login</v-btn>
+              <v-btn to="/hiwork_redirect" width="100%" color="blue" dark @click='hiwork_login'>Hiworks Login</v-btn>
             </v-card-actions>
             <v-divider light></v-divider>
             <v-card-actions>
@@ -67,7 +67,7 @@ export default {
   //checking whether it's loggined or not
   created() {
     if (this.login) {
-      this.$router.push("/");
+      this.$router.push("/home");
     }
   },
   //
@@ -76,8 +76,8 @@ export default {
       if (this.$refs.form.validate()) {
         this.loading = true;
         this.$store.dispatch("auth/login", this.user).then(
-          () => {
-            this.$router.push('/');
+          response => {
+            this.$router.push("/home");
           },
           error => {
             this.loading = false;
@@ -88,6 +88,11 @@ export default {
           }
         );
       }
+    },
+    hiwork_login(){
+      this.$http.get('auth/login/hiworks').then(result=>{
+        console.log(result.data);
+      });
     }
   }
 };
