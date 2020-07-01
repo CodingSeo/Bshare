@@ -3,26 +3,35 @@
 namespace App\Services\Implement;
 
 use App\Auth\AuthUser;
+use App\Cache\CacheContract;
 use App\DTO\CategoryDTO;
 use App\DTO\PostDTO;
 use App\Exceptions\IllegalUserApproach;
 use App\Repositories\Interfaces\CategoryRepository;
 use App\Repositories\Interfaces\PostRepository;
 use App\Services\Interfaces\PostService;
+use Illuminate\Filesystem\Cache;
 use Illuminate\Support\Facades\DB;
 
 class PostServiceImp implements PostService
 {
     protected $postRepository;
     protected $categoryRepository;
-    public function __construct(PostRepository $postRepository, CategoryRepository $categoryRepository)
+    protected $cache;
+    public function __construct(PostRepository $postRepository, CategoryRepository $categoryRepository, CacheContract $cache)
     {
+        // $this->cache = $cache; // tag 설정
+        $this->cache = app('cache'); // tag 설정
         $this->postRepository = $postRepository;
         $this->categoryRepository = $categoryRepository;
     }
 
     public function getPost(array $requestContent): PostDTO
     {
+        $cacheKey = cache_key('post.index'); //route->name
+        // $posts = $this->cache->remember($cacheKey, 5, function() use($query, $request) {
+        //     return $post = $this->postRepository->getFullContent($requestContent['post_id']);
+        // });
         $post = $this->postRepository->getFullContent($requestContent['post_id']);
         if (!$post->id) throw new \App\Exceptions\ModuleNotFound('Post not Found');
         $post->view_count++;

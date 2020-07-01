@@ -67,7 +67,7 @@ export default {
   //checking whether it's loggined or not
   created() {
     if (this.login) {
-      this.$router.push("/");
+      this.$router.push("/home");
     }
   },
   //
@@ -76,8 +76,8 @@ export default {
       if (this.$refs.form.validate()) {
         this.loading = true;
         this.$store.dispatch("auth/login", this.user).then(
-          () => {
-            this.$router.push('/');
+          response => {
+            this.$router.go("/home");
           },
           error => {
             this.loading = false;

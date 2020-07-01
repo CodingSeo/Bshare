@@ -56,7 +56,6 @@ export default {
   },
   methods: {
     close() {
-      // this.$refs.form.reset();
       this.dialog = false;
     },
     submit() {
@@ -65,7 +64,7 @@ export default {
         console.log(this.post);
         UserService.savePost(this.post).then(
           response => {
-            this.$router.go("/review");
+            this.$router.go("/home");
           },
           error => {
             console.log(error.response);

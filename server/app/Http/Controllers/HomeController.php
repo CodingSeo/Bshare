@@ -14,12 +14,12 @@ class HomeController extends Controller
     public function index()
     {
         return response()->json([
-            // 'name' => config('project.name') . ' API',
+            'name' => config('project.name') . ' API',
             'massage' => 'This is a base endpoint of Bshare API.',
             'links' => [
                 [
                     'rel' => 'self',
-                    // 'href' => route('api.index'),
+                    'href' => route('api.index'),
                 ],
                 // [
                 //     'category'=>'category 1',

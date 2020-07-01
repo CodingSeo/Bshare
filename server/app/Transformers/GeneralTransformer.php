@@ -14,11 +14,7 @@ class GeneralTransformer{
 
     }
 // 200 - Ok                                // 성공
-<<<<<<< HEAD
-// 201 - Created                           // 새로운 리소스 생성 요청에 대한 응답                     
-=======
 // 201 - Created                           // 새로운 리소스 생성 요청에 대한 응답
->>>>>>> faf3e5d6d00d227d4478021ca676ae44f790cd7d
 // 204 - No Content                        // 리소스 삭제 요청 성공 등에 사용
 // 304 - Not Modified                      // 클라이언트에 캐시된 리소스 대비 서버 리소스의 변경이 없을 때
 // 400 - Bad Request                       // 클라이언트 쪽에서 뭔가 잘못했을 때

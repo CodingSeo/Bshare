@@ -4,10 +4,10 @@ import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
 import axios from "axios"
-
-
-axios.defaults.baseURL = "/dev/";
+// axios.defaults.baseURL = "/dev/";
+axios.defaults.baseURL = "http://localhost:8000/dev/";
 axios.defaults.withCredentials = true;
+
 Vue.prototype.$http = axios;
 
 Vue.config.productionTip = false

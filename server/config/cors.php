@@ -15,19 +15,15 @@ return [
     |
     */
 
-    'paths' => ['api/*','auth/*','dev/*'],
+    'paths' => ['*'],
 
-    'allowed_methods' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    'allowed_methods' => ['*'],
 
-<<<<<<< HEAD
-    'allowed_origins' => ['http://localhost:80','http://localhost:8080'],
-=======
     'allowed_origins' => ['*'],
->>>>>>> 163c4d0158d07c8277583907a58d32e155bfc2de
 
     'allowed_origins_patterns' => [],
 
-    'allowed_headers' => ['Content-Type, Authorization'],
+    'allowed_headers' => ['*'],
 
     'exposed_headers' => [],
 

@@ -1,8 +1,8 @@
-
 import axios from 'axios';
 import authHeader from './auth-header';
 
-const API_URL = '/dev/api/';
+const API_URL = 'api/';
+
 //geting userservice
 class UserService {
     savePost(post) {
