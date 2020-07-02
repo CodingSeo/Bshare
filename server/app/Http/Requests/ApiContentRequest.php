@@ -6,10 +6,11 @@ use App\Http\Requests\ApiRequest;
 
 class ApiContentRequest extends ApiRequest
 {
+    
     public function rules()
     {
-    }
-    public function attributes()
-    {
+        return [
+          
+        ];
     }
 }
