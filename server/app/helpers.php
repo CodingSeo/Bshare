@@ -11,6 +11,7 @@ if (!function_exists('taggable')) {
         return in_array(config('cache.default'), ['memcached', 'redis'], true);
     }
 }
+
 if (! function_exists('cache_key')) {
     /**
      * @param $base
@@ -26,13 +27,17 @@ if (! function_exists('cache_key')) {
     }
 }
 
-if (!function_exists('request_content')) {
-
-    function request_content(Request $request, array $param): array
+if (!function_exists('onlyContent')) {
+    /**
+     * @param array $base
+     */
+    function onlyContent(Request $request, $param=[]): array
     {
+        $key ='';
+        if($query = request()->getQueryString()) $key = '.' . urlencode($query);
         return array_merge([
             "cache_tag"=>($request->route()->getName()),
-            "cache_key"=>($request->route()->getName().'.'.$request->getQueryString()),
+            "cache_key"=>($request->route()->getName().$key),
         ], $request->only($param));
     }
 }

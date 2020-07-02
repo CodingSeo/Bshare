@@ -45,7 +45,6 @@ class BshareProvider extends ServiceProvider
      */
     public function register()
     {
-
         $container = app();
         //cache
         if(in_array(config('cache.default'), ['memcached'], true)){

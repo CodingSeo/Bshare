@@ -62,11 +62,29 @@ Route::post('comments', [
     'as' => 'posts.comments.store',
     'uses' => 'CommentsController@store'
 ])->middleware('jwt');
+
 Route::put('comments/{comment_id}', [
-    'as' => 'comments.update',
+    'as' => 'posts.comments.update',
     'uses' => 'CommentsController@update'
 ])->middleware('jwt');
+
 Route::delete('comments/{comment_id}', [
-    'as' => 'comments.delete',
+    'as' => 'posts.comments.delete',
     'uses' => 'CommentsController@destroy'
+])->middleware('jwt');
+
+//today's mission to implement this part
+Route::post('file', [
+    'as' => 'posts.file.store',
+    'uses' => 'FilesController@store'
+])->middleware('jwt');
+
+Route::put('file/{comment_id}', [
+    'as' => 'posts.file.update',
+    'uses' => 'FilesController@update'
+])->middleware('jwt');
+
+Route::delete('file/{comment_id}', [
+    'as' => 'posts.file.delete',
+    'uses' => 'FilesController@destroy'
 ])->middleware('jwt');

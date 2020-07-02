@@ -21,28 +21,27 @@ class CommentRepositoryImp implements CommentRepository
     }
     public function findAll(): array
     {
-        $comments = $this->comment->all();
+        $comments = Comment::all();
         return $this->mapper->mapArray($comments, CommentDTO::class);
     }
     public function updateByDTO(CommentDTO $comment): bool
     {
-        $this->comment->fill((array) $comment);
-        $this->comment->exists = true;
-        return $this->comment->update();
+        return Comment::where('id',$comment->comment_id)
+            ->update([
+                'body'=>$comment->body
+            ]);
     }
     public function updateByContent(array $content): bool
     {
-        $this->comment->fill($content);
-        $this->comment->id = $content['comment_id'];
-        $this->comment->exists = true;
-        return $this->comment->update();
+        return Comment::where('id',$content['comment_id'])
+            ->update([
+                'body'=>$content['body']
+            ]);
     }
     public function delete(CommentDTO $comment): bool
     {
-        $this->comment->fill((array) $comment);
-        $this->comment->exists = true;
-        $result = $this->comment->delete();
-        return $result;
+        return Comment::where('id', $comment->id)
+        ->delete();
     }
     //save에 관하여 saveByContent와 saveByDTO를 나누어 작업하는 것이 맞다고 본다.
     public function save($content, string $user_email): CommentDTO

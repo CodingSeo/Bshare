@@ -2,6 +2,8 @@
 
 namespace App\Cache;
 
+use Closure;
+
 class MemcachedCache implements CacheContract
 {
 
@@ -16,7 +18,7 @@ class MemcachedCache implements CacheContract
      */
     public function __construct($con, $port)
     {
-        $this->mcd = new \Illuminate\Cache\MemcachedStore();
+        $this->mcd = new \Memcached();
         $this->mcd->setOption(\Memcached::OPT_LIBKETAMA_COMPATIBLE, true);
         $this->mcd->addServer($con,$port);
     }
@@ -27,7 +29,7 @@ class MemcachedCache implements CacheContract
      *
      * @return void
      */
-    public function add($key, $value, $minutes){
+    public function put($key, $value, $minutes){
         $this->mcd->set($key, $value, $minutes);
     }
 
@@ -65,5 +67,21 @@ class MemcachedCache implements CacheContract
      */
     public function flush(){
         $this->mcd->flush();
+    }
+
+    /**
+     * @param  string  $key
+     * @param  \DateTimeInterface|\DateInterval|int|null  $ttl
+     * @param  \Closure  $callback
+     * @return mixed
+     */
+    public function remember($key, $ttl, Closure $callback)
+    {
+        $value = $this->get($key);
+        if (! is_null($value)) {
+            return $value;
+        }
+        $this->put($key, $value = $callback(), $ttl);
+        return $value;
     }
 }

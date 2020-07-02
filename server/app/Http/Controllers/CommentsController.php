@@ -35,7 +35,7 @@ class CommentsController extends Controller
     {
         $user = $this->authUser->getAuthUser();
         $content = $request->only([
-            'comment_id','post_id','parent_id','body'
+            'comment_id','parent_id','body'
         ]);
         $this->comment_service->updateComment($content,$user);
         return response('success');
@@ -45,7 +45,7 @@ class CommentsController extends Controller
     {
         $user = $this->authUser->getAuthUser();
         $content = $request->only([
-            'comment_id','post_id',
+            'comment_id'
         ]);
         $this->comment_service->deleteComment($content,$user);
         return response('success');

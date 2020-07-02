@@ -2,6 +2,8 @@
 
 namespace App\Cache;
 
+use Closure;
+
 class NoneCache implements CacheContract
 {
 
@@ -51,5 +53,14 @@ class NoneCache implements CacheContract
      */
     public function flush(){
 
+    }
+    /**
+     * @param  string  $key
+     * @param  \DateTimeInterface|\DateInterval|int|null  $ttl
+     * @param  \Closure  $callback
+     * @return mixed
+     */
+    public function remember($key, $ttl, Closure $callback){
+        return null;
     }
 }

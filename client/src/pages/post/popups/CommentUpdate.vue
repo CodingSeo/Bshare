@@ -8,16 +8,15 @@
         </v-btn>
       </template>
       <v-card>
-        <v-card-title class="headline grey lighten-2" primary-title>{{title}} update post</v-card-title>
+        <v-card-title class="headline lighten-2" primary-title></v-card-title>
         <v-card-text>
           <v-form class="px-3" ref="form">
             <v-text-field
-              label="title"
-              v-model="post.title"
-              prepend-icon="folder"
-              :rules="titleRules"
+              label="comment"
+              v-model="commentModel.body"
+              prepend-icon="create"
+              :rules="bodyRules"
             ></v-text-field>
-            <v-textarea label="body" v-model="post.body" prepend-icon="create" :rules="bodyRules"></v-textarea>
           </v-form>
         </v-card-text>
         <v-divider></v-divider>
@@ -32,22 +31,21 @@
 </template>
 
 <script>
-import Post from "@/models/post";
+import CommentModel from "@/models/commentmodel";
 import UserService from "@/services/user.service";
 export default {
-  props: ["post_id", "title","content"],
+  props: ["comment_id", "body","postid"],
   commponents: {},
   data() {
     return {
-      post: new Post("", "", this.category_id),
+      // this.postid=postid;
+      //   this.body = body;
+      //   this.user_id = user_id;
+      //   this.parent_id = parent_id;
+      commentModel: new CommentModel(this.comment_id, this.postid, this.body,"",""),
       dialog: false,
-      titleRules: [
-        v => !!v || "title is required",
-        v => v.length >= 10 || "must be longer then 10"
-      ],
       bodyRules: [
         v => !!v || "body is required",
-        v => v.length >= 10 || "must be longer then 10"
       ],
       loading: false
     };
@@ -60,10 +58,9 @@ export default {
     submit() {
       if (this.$refs.form.validate()) {
         this.loading = true;
-        console.log(this.post);
-        UserService.savePost(this.post).then(
+        UserService.updatePost(this.commentModel).then(
           response => {
-            this.$router.go("/review");
+            this.$router.go(`/review/${this.postid}`);
           },
           error => {
             console.log(error.response);

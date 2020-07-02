@@ -10,7 +10,7 @@ use App\Exceptions\IllegalUserApproach;
 use App\Repositories\Interfaces\CategoryRepository;
 use App\Repositories\Interfaces\PostRepository;
 use App\Services\Interfaces\PostService;
-use Illuminate\Filesystem\Cache;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class PostServiceImp implements PostService
@@ -20,15 +20,13 @@ class PostServiceImp implements PostService
     protected $cache;
     public function __construct(PostRepository $postRepository, CategoryRepository $categoryRepository, CacheContract $cache)
     {
-        // $this->cache = $cache; // tag 설정
-        $this->cache = app('cache'); // tag 설정
+        $this->cache = $cache;
         $this->postRepository = $postRepository;
         $this->categoryRepository = $categoryRepository;
     }
 
     public function getPost(array $requestContent): PostDTO
     {
-        $cacheKey = cache_key('post.index'); //route->name
         $post = $this->cache->remember($cacheKey, 5, function() use($requestContent) {
             return $this->postRepository->getFullContent($requestContent['post_id']);
         });
