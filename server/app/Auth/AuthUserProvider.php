@@ -3,6 +3,7 @@
 namespace App\Auth;
 
 use App\Auth\Interfaces\AuthUserRepository;
+use Illuminate\Auth\DatabaseUserProvider;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider;
 

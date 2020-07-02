@@ -44,13 +44,14 @@ class Kernel extends HttpKernel
             // 'throttle:60,1',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
+
         //servlet filter
         'jwt' => [
-            // \App\Http\Middleware\JWTmiddleware\JWTTokenChecking::class, //getting token from request
-            // \App\Http\Middleware\JWTmiddleware\JWTTokenValidateChecking::class, //checking token format validate
-            // \App\Http\Middleware\JWTmiddleware\JWTPayloadValidateChecking::class, //checking token Payload
-            // \App\Http\Middleware\JWTmiddleware\JWTTokenExpiredChecking::class, //checking token expried
-            // \App\Http\Middleware\JWTmiddleware\JWTAuthorizationSetting::class, //
+            \App\Http\Middleware\JWTmiddleware\JWTTokenChecking::class, //getting token from request
+            \App\Http\Middleware\JWTmiddleware\JWTTokenValidateChecking::class, //checking token format validate
+            \App\Http\Middleware\JWTmiddleware\JWTPayloadValidateChecking::class, //checking token Payload
+            \App\Http\Middleware\JWTmiddleware\JWTTokenExpiredChecking::class, //checking token expried
+            \App\Http\Middleware\JWTmiddleware\JWTAuthorizationSetting::class, //
         ]
 
     ];

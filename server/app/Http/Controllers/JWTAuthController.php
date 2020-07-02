@@ -37,24 +37,10 @@ class JWTAuthController extends Controller
         return $this->transform->respondWithToken($authUser);
     }
 
-    // public function user()
-    // {
-    //     $user = auth()->user();
-    //     return response()->json($user);
-    // }
-
-
     // //middleware로 갑니다.
     // public function refresh()
     // {
     //     $refresh_info = auth('api')->refresh();
     //     return $this->transform->respondWithToken($refresh_info);
-    // }
-
-
-    // public function logout()
-    // {
-    //     auth()->logout();
-    //     return $this->transform->logout();
     // }
 }
