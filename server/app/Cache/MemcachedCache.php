@@ -13,35 +13,30 @@ class MemcachedCache implements CacheContract
      */
     private $mcd;
     /**
+     * @var int
+     */
+    private $expired_time;
+    /**
      * @param string $con
      * @param int $port
      */
     public function __construct($con, $port)
     {
-        $this->mcd = new \Memcached();
+        $this->mcd = new \Memcached;
         $this->mcd->setOption(\Memcached::OPT_LIBKETAMA_COMPATIBLE, true);
         $this->mcd->addServer($con,$port);
+        $this->expired_time = 120;
     }
     /**
      * @param  string  $key
      * @param  mixed  $value
-     * @param  int  $minutes
+     * @param  \DateTimeInterface|\DateInterval|int|null  $ttl
      *
-     * @return void
+     * @return bool
      */
-    public function put($key, $value, $minutes){
-        $this->mcd->set($key, $value, $minutes);
-    }
-
-    /**
-     * @param  string  $key
-     * @param  mixed  $value
-     *
-     * @return void
-     */
-    public function forever($key, $value){
-        $infitiy = 1;
-        $this->mcd->set($key, $value, $infitiy);
+    public function put($key, $value, $ttl = null){
+        $ttl = $this->check_time($ttl);
+        return $this->mcd->set($key, $value, $ttl);
     }
 
     /**
@@ -75,13 +70,24 @@ class MemcachedCache implements CacheContract
      * @param  \Closure  $callback
      * @return mixed
      */
-    public function remember($key, $ttl, Closure $callback)
+    public function remember($key, Closure $callback, $ttl = null)
     {
+        $ttl = $this->check_time($ttl);
         $value = $this->get($key);
-        if (! is_null($value)) {
+        if ($value) {
             return $value;
         }
         $this->put($key, $value = $callback(), $ttl);
         return $value;
+    }
+
+    /**
+     * setting expired_time to default
+     *
+     * @param int|null $time
+     * @return int
+     */
+    private function check_time($time){
+        return (is_null($time))? $this->expired_time : $time;
     }
 }

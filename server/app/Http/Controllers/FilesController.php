@@ -19,30 +19,25 @@ class FilesController extends Controller
     public function store(Request $request)
     {
         $user = $this->authUser->getAuthUser();
-        $content = $request->only([
-
-        ]);
-        $comment = $this->comment_service->storeComment($content,$user);
-        return $this->transform->transformComment($comment);
-    }
-
-    public function update(Request $request)
-    {
-        $user = $this->authUser->getAuthUser();
-        $content = $request->only([
-
-        ]);
-        $this->comment_service->updateComment($content,$user);
-        return response('success');
+        if ($request->has('attachments')) {
+            $attachments = \App\Attachment::whereIn('id', $request->input('attachments'))->get();
+            $attachments->each(function($attachment) use($article) {
+                $attachment->article()->associate($article);
+                $attachment->save();
+            });
+        }
+        $file->move(attachment_path(), $name);
+        $articleId = $request->input('articleId');
+        $attachment = $articleId
+            ? \App\Article::findOrFail($articleId)->attachments()->create(['name' => $name])
+            : \App\Attachment::create(['name' => $name]);
     }
 
     public function destroy(Request $request)
     {
         $user = $this->authUser->getAuthUser();
-        $content = $request->only([
-
-        ]);
-        $this->comment_service->deleteComment($content,$user);
+        $content = $request->only([]);
+        $this->comment_service->deleteComment($content, $user);
         return response('success');
     }
 }

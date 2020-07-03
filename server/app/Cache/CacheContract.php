@@ -11,16 +11,9 @@ interface CacheContract
      * @param  mixed  $value
      * @param  \DateTimeInterface|\DateInterval|int|null  $ttl
      *
-     * @return void
+     * @return bool
      */
-    public function add($key, $value, $ttl);
-    /**
-     * @param  string  $key
-     * @param  mixed  $value
-     *
-     * @return void
-     */
-    public function forever($key, $value);
+    public function put($key, $value, $ttl=null);
 
     /**
      * @param  string  $key
@@ -36,7 +29,7 @@ interface CacheContract
      */
     public function destroy($key);
     /**
-     * @return void
+     * @return bool
      */
     public function flush();
     /**
@@ -45,5 +38,5 @@ interface CacheContract
      * @param  \Closure  $callback
      * @return mixed
      */
-    public function remember($key, $ttl, Closure $callback);
+    public function remember($key, Closure $callback, $ttl=null);
 }

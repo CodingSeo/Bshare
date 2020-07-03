@@ -9,11 +9,12 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ApiContentRequest;
 use Laravel\Socialite\Facades\Socialite;
 use Config;
+use GuzzleHttp\Client;
 
 class SocialiteController extends Controller
 {
     private $userService;
-    public function __construct(UserService $userService)
+    public function __construct(UserService $userService, )
     {
         $this->userService = $userService;
     }
@@ -35,6 +36,9 @@ class SocialiteController extends Controller
         $response = curl_exec($curl);
         curl_close($curl);
         echo($response);
+        $client = new Client();
+        $client->request('get','');
+
     }
 
     public function handleProviderCallback(ApiContentRequest $request)

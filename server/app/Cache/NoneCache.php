@@ -15,19 +15,10 @@ class NoneCache implements CacheContract
      * @param  mixed  $value
      * @param  int  $minutes
      *
-     * @return void
+     * @return bool
      */
-    public function add($key, $value, $minutes){
-
-    }
-
-    /**
-     * @param  string  $key
-     * @param  mixed  $value
-     *
-     * @return void
-     */
-    public function forever($key, $value){
+    public function put($key, $value, $minutes){
+        return false;
     }
 
     /**
@@ -36,7 +27,7 @@ class NoneCache implements CacheContract
      * @return mixed
      */
     public function get($key){
-        return null;
+        return false;
     }
 
     /**
@@ -49,10 +40,10 @@ class NoneCache implements CacheContract
     }
 
     /**
-     * @return void
+     * @return bool
      */
     public function flush(){
-
+        return false;
     }
     /**
      * @param  string  $key
@@ -60,7 +51,8 @@ class NoneCache implements CacheContract
      * @param  \Closure  $callback
      * @return mixed
      */
-    public function remember($key, $ttl, Closure $callback){
-        return null;
+    public function remember($key, Closure $callback, $ttl){
+        $this->put($key, $value = $callback(), $ttl);
+        return $value;
     }
 }
