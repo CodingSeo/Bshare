@@ -18,7 +18,7 @@
         </router-link>
         <router-link class="routerLink" v-bind:login="login" v-bind:user="user" to="/signup">
           <v-btn text color="grey">
-            <span>Legister</span>
+            <span>Register</span>
             <v-icon right>face</v-icon>
           </v-btn>
         </router-link>
@@ -98,7 +98,7 @@ export default {
     logout() {
       //if
       this.$store.dispatch("auth/logout");
-      this.$router.go('/');
+      this.$router.go("/");
     }
   }
 };

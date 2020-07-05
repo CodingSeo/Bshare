@@ -51,7 +51,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\JWTmiddleware\JWTTokenValidateChecking::class, //checking token format validate
             \App\Http\Middleware\JWTmiddleware\JWTPayloadValidateChecking::class, //checking token Payload
             \App\Http\Middleware\JWTmiddleware\JWTTokenExpiredChecking::class, //checking token expried
-            \App\Http\Middleware\JWTmiddleware\JWTAuthorizationSetting::class, //
+            \App\Http\Middleware\JWTmiddleware\JWTAuthorizationSetting::class, // checking whehter id exists in the DB
         ]
 
     ];

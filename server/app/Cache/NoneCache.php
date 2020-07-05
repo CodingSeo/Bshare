@@ -13,11 +13,12 @@ class NoneCache implements CacheContract
     /**
      * @param  string  $key
      * @param  mixed  $value
-     * @param  int  $minutes
+     * @param  \DateTimeInterface|\DateInterval|int|null  $ttl
      *
      * @return bool
      */
-    public function put($key, $value, $minutes){
+    public function put($key, $value, $ttl = null)
+    {
         return false;
     }
 
@@ -26,7 +27,8 @@ class NoneCache implements CacheContract
      *
      * @return mixed
      */
-    public function get($key){
+    public function get($key)
+    {
         return false;
     }
 
@@ -35,14 +37,16 @@ class NoneCache implements CacheContract
      *
      * @return bool
      */
-    public function destroy($key){
+    public function destroy($key)
+    {
         return false;
     }
 
     /**
      * @return bool
      */
-    public function flush(){
+    public function flush()
+    {
         return false;
     }
     /**
@@ -51,7 +55,8 @@ class NoneCache implements CacheContract
      * @param  \Closure  $callback
      * @return mixed
      */
-    public function remember($key, Closure $callback, $ttl){
+    public function remember($key, Closure $callback, $ttl = null)
+    {
         $this->put($key, $value = $callback(), $ttl);
         return $value;
     }

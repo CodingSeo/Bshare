@@ -7,14 +7,12 @@ use App\Http\Requests\JWT\JWTRegisterRequest;
 use App\Http\Requests\JWT\JWTRequest;
 use App\Services\Interfaces\UserService;
 use App\Transformers\UserTransformer;
-use App\Auth\JWTAttemptUser as AuthUser;
 
 class JWTAuthController extends Controller
 {
-    protected $user_service, $transform, $authUser;
-    public function __construct(AuthUser $authUser, UserService $user_service, UserTransformer $transform)
+    protected $user_service, $transform;
+    public function __construct(UserService $user_service, UserTransformer $transform)
     {
-        $this->authUser = $authUser;
         $this->user_service = $user_service;
         $this->transform = $transform;
     }

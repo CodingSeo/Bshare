@@ -30,8 +30,12 @@
             </v-form>
             <v-divider light></v-divider>
             <v-card-actions>
-              <!-- hiworks button should be to the full scaling -->
-              <v-btn to="/hiwork_redirect" width="100%" color="blue" dark @click='hiwork_login'>Hiworks Login</v-btn>
+              <v-btn
+                width="100%"
+                color="blue"
+                dark
+                @click="hiwork_login"
+              >Hiworks Login</v-btn>
             </v-card-actions>
             <v-divider light></v-divider>
             <v-card-actions>
@@ -89,10 +93,11 @@ export default {
         );
       }
     },
-    hiwork_login(){
-      this.$http.get('auth/login/hiworks').then(result=>{
-        console.log(result.data);
-      });
+    hiwork_login() {
+      var url ='http://localhost:8000/dev/auth/login/hiworks';
+      // var url ='http://localhost/dev/auth/login/hiworks';
+      this.$router.push('/home');
+      window.open(url,"_blank");
     }
   }
 };
