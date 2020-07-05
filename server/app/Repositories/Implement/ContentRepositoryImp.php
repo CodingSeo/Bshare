@@ -4,7 +4,7 @@ namespace App\Repositories\Implement;
 
 use App\EloquentModel\Content;
 use App\EloquentModel\Post;
-use App\Repositories\interfaces\ContentRepository;
+use App\Repositories\Interfaces\ContentRepository;
 
 class ContentRepositoryImp implements ContentRepository
 {

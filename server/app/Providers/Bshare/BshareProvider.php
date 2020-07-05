@@ -72,7 +72,7 @@ class BshareProvider extends ServiceProvider
         //hiworks
         $container->singleton(OauthLoginService::class, function () {
             return new HiworksLoginService(
-                'https://api.hiworks.com/open/auth/',
+                'https://api.hiworks.com/',
                 config('social.hiwork_client'),
                 config('social.hiwork_client_secret')
             );

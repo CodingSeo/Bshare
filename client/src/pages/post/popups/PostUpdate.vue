@@ -1,8 +1,8 @@
 <template>
   <div class="text-center">
     <v-dialog v-model="dialog" width="80%">
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn text v-bind="attrs" v-on="on">
+      <template v-slot:activator="{ on, attrss }">
+        <v-btn text v-bind="attrss" v-on="on">
           <span>Update</span>
           <v-icon right>update</v-icon>
         </v-btn>
@@ -24,7 +24,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="red" text @click="close">close</v-btn>
-          <v-btn color="indigo" text @click="submit" :loading="loading">submit</v-btn>
+          <v-btn color="indigo" text @click="PostUpdatesubmit" :loading="loading">submit</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -56,7 +56,7 @@ export default {
     close() {
       this.dialog = false;
     },
-    submit() {
+    PostUpdatesubmit() {
       if (this.$refs.form.validate()) {
         this.loading = true;
         UserService.updatePost(this.post).then(

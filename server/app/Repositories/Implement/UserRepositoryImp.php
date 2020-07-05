@@ -5,7 +5,7 @@ namespace App\Repositories\Implement;
 use App\DTO\UserDTO;
 use App\EloquentModel\User;
 use App\Mapper\MapperService;
-use App\Repositories\interfaces\UserRepository;
+use App\Repositories\Interfaces\UserRepository;
 
 class UserRepositoryImp implements UserRepository
 {
