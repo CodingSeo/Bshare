@@ -29,6 +29,8 @@ use App\Services\Interfaces\UserService;
 use Illuminate\Support\ServiceProvider;
 use App\Auth\AuthUser;
 use App\Auth\JWTAttemptUser;
+use App\Auth\Oauth\HiworksLoginService;
+use App\Auth\Oauth\OauthLoginService;
 use App\Cache\CacheContract;
 use App\Cache\FileCache;
 use App\Cache\MemcachedCache;
@@ -45,18 +47,17 @@ class BshareProvider extends ServiceProvider
      */
     public function register()
     {
-
         $container = app();
-        //cache
-        if(in_array(config('cache.default'), ['memcached'], true)){
+        if (in_array(config('cache.default'), ['memcached'], true)) {
             $cacheService = new MemcachedCache(
-                env('MECACHED_HOST','127.0.0.1'), env('MECACHED_PORT',11211)
+                config('memcached.server'),
+                config(('memcached.port'))
             );
+        } else {
+            $cacheService = new NoneCache(); //file cache로 변경
         }
-        else{
-            $cacheService = new NoneCache();//file cache로 변경
-        }
-        $container->singleton(CacheContract::class,function()use($cacheService){
+
+        $container->singleton(CacheContract::class, function () use ($cacheService) {
             return $cacheService;
         });
 
@@ -64,11 +65,18 @@ class BshareProvider extends ServiceProvider
         $container->singleton(MapperService::class, JSONMapperService::class);
 
         //auth
-        $container->singleton(JWTAuthManager::class,JWTAuthManagerTymond::class);
-        $container->singleton(JWTAttemptUser::class,function(){
-            return new JWTAttemptUser(new AuthUser([],'email','password',null));
+        $container->singleton(JWTAuthManager::class, JWTAuthManagerTymond::class);
+        $container->singleton(JWTAttemptUser::class, function () {
+            return new JWTAttemptUser(new AuthUser([], 'email', 'password', null));
         });
-
+        //hiworks
+        $container->singleton(OauthLoginService::class, function () {
+            return new HiworksLoginService(
+                'https://api.hiworks.com/open/auth/',
+                config('social.hiwork_client'),
+                config('social.hiwork_client_secret')
+            );
+        });
         $container->when(PostsController::class)->needs(PostService::class)->give(PostServiceImp::class);
         $container->when(PostServiceImp::class)->needs(PostRepository::class)->give(PostRepositoryImp::class);
         $container->when(PostServiceImp::class)->needs(CategoryRepository::class)->give(CategoryRepositoryImp::class);
@@ -83,7 +91,6 @@ class BshareProvider extends ServiceProvider
         $container->when(UserServiceImp::class)->needs(UserRepository::class)->give(UserRepositoryImp::class);
         $container->when(JWTAuthController::class)->needs(UserService::class)->give(UserServiceImp::class);
         $container->when(SocialiteController::class)->needs(UserService::class)->give(UserServiceImp::class);
-
     }
 
     /**

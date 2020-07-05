@@ -11,28 +11,24 @@ if (!function_exists('taggable')) {
         return in_array(config('cache.default'), ['memcached', 'redis'], true);
     }
 }
-if (! function_exists('cache_key')) {
+
+
+if (!function_exists('onlyContent')) {
     /**
-     * @param $base
-     * @return string
+     * @param array $base
      */
-    function cache_key($base)
+    function onlyContent(Request $request, $param=[]): array
     {
-        $key = ($query = request()->getQueryString())
-            ? $base . '.' . urlencode($query)
-            : $base;
-
-        return md5($key);
-    }
-}
-
-if (!function_exists('request_content')) {
-
-    function request_content(Request $request, array $param): array
-    {
+        $cachekey ='';
+        $router = $request->route();
+        $router_name = $router->getName();
+        foreach($router->parameters() as $key=>$value) $cachekey .= ".".$value;
+        if($query = $request->getQueryString()) $cachekey .= ".". urlencode($query);
         return array_merge([
-            "cache_tag"=>($request->route()->getName()),
-            "cache_key"=>($request->route()->getName().'.'.$request->getQueryString()),
+
+            "cache_key"=>($router_name.$cachekey),
+
         ], $request->only($param));
     }
+
 }

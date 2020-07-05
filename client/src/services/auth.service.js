@@ -1,8 +1,4 @@
 import axios from 'axios';
-<<<<<<< HEAD
-=======
-
->>>>>>> e717b340196c96b3b7f6538e0d9670f96d8795a3
 const API_URL = 'auth/';
 
 class AuthService {

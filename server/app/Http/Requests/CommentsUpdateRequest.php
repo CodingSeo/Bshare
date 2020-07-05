@@ -15,7 +15,6 @@ class CommentsUpdateRequest extends ApiRequest
     {
         return [
             'comment_id'=>['numeric','required'],
-            'post_id' => ['numeric', 'required'],
             'parent_id' => ['nullable','numeric'],
             'body' => ['required', 'string', 'max:255'],
         ];
@@ -24,7 +23,6 @@ class CommentsUpdateRequest extends ApiRequest
     {
         return [
             'comment_id'=>'comment_id',
-            'post_id' => 'post_id',
             'body' => 'body',
             'parent_id' => 'parent_id'
         ];

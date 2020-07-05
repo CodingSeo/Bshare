@@ -14,13 +14,16 @@ use Config;
 class SocialiteController extends Controller
 {
     private $userService;
-    public function __construct(UserService $userService)
+    private $oauthLoginService;
+    public function __construct(UserService $userService, OauthLoginService $oauthLoginService)
     {
         $this->userService = $userService;
+        $this->oauthLoginService = $oauthLoginService;
     }
 
     public function redirectToProvider()
     {
+<<<<<<< HEAD
         // return $this->oauthLoginService->getAccessToken();
         $hiworks_client_id = config('social.hiwork_client');
         $curl = curl_init();
@@ -37,11 +40,20 @@ class SocialiteController extends Controller
         $response = curl_exec($curl);
         curl_close($curl);
         return $response;
+=======
+        return $this->oauthLoginService->getAuthCode();
+>>>>>>> 15632f79bf9145a9b4aafae4c356ff2f889ec220
     }
 
     public function handleProviderCallback(ApiContentRequest $request)
     {
+<<<<<<< HEAD
         if ($request->auth_code) {
+=======
+
+        if ($request->auth_code) {
+            $this->oauthLoginService->getAccessCode($request->auth_code);
+>>>>>>> 15632f79bf9145a9b4aafae4c356ff2f889ec220
             $hiworks_auth_code = $request->auth_code;
             $hiworks_client_id = config('social.hiwork_client');
             $hiworks_client_secret = config('social.hiwork_client_secret');

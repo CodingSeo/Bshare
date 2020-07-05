@@ -16,7 +16,7 @@
             <v-icon right>delete</v-icon>
           </v-btn>
           <PostUpdate
-            :post_id="post_id"
+            :postid="postid"
             :content="content"
             :title="title"
           ></PostUpdate>
@@ -29,9 +29,30 @@
         </v-card>
       </div>
       <v-divider></v-divider>
-      <v-flex>
-        <p>where comment input goes</p>
-      </v-flex>
+      <v-layout row wrap justify-space-around>
+        <v-flex xs10>
+          <v-form ref="commentform">
+            <v-text-field
+              class="ml-5"
+              v-model="commentModel.body"
+              label="comment"
+              :rules="commentRules"
+            ></v-text-field>
+          </v-form>
+        </v-flex>
+        <v-flex xs2>
+          <template v-if="!login">
+            <v-btn text class="mt-5 ml-2" router to="/login">
+              <v-icon>create</v-icon>
+            </v-btn>
+          </template>
+          <template v-else>
+            <v-btn @click="createComment(commentModel)" text class="mt-5 ml-2">
+              <v-icon>create</v-icon>
+            </v-btn>
+          </template>
+        </v-flex>
+      </v-layout>
       <v-divider></v-divider>
       <v-card
         class="pl-3 mb-2"
@@ -40,25 +61,35 @@
         :key="comment.id"
       >
         <v-layout row wrap class="pa-2">
-          <v-flex xs12 md6>
+          <v-flex xs12>
             <div class="caption grey--text">content</div>
             <div>{{ comment.body }}</div>
           </v-flex>
-          <v-flex xs4 sm3 md2>
+          <v-flex xs3>
             <div class="caption grey--text">Writer</div>
             <div>{{ comment.user_id }}</div>
           </v-flex>
-          <v-flex xs4 sm3 md2>
+          <v-flex xs3>
             <div class="caption grey--text">Create At</div>
             <div>{{ comment.created_at }}</div>
           </v-flex>
-          <!-- where i need to change -->
-          <v-flex xs1 sm1 md1 v-if="isYours(user.email, user_id)">
-            <v-btn small text>
+          <v-flex xs3 v-if="login">
+            <CommentReplies
+              :postid="postid"
+              :comment_id="comment.id"
+              :body="comment.body"
+            />
+          </v-flex>
+          <v-flex xs1 v-if="isYours(user.email, comment.user_id)">
+            <v-btn small text @click="deleteComment(comment.id)">
               <span>Delete</span>
               <v-icon right>delete</v-icon>
             </v-btn>
-            <CommentUpdate />
+            <CommentUpdate
+              :postid="postid"
+              :comment_id="comment.id"
+              :body="comment.body"
+            />
           </v-flex>
         </v-layout>
         <v-divider></v-divider>
@@ -69,25 +100,31 @@
           :key="replie.id"
         >
           <v-layout row wrap class="pa-2">
-            <v-flex xs12 md6>
-              <div class="caption grey--text">content</div>
-              <div>{{ replie.body }}</div>
+            <v-flex xs12>
+              <div class="caption grey--text">
+                <v-icon small>subdirectory_arrow_right</v-icon>
+                content
+              </div>
+              <div class="ml-5">{{ replie.body }}</div>
             </v-flex>
-            <v-flex xs6 sm4 md2>
+            <v-flex xs4>
               <div class="caption grey--text">Writer</div>
               <div>{{ replie.user_id }}</div>
             </v-flex>
-            <v-flex xs6 sm4 md2>
+            <v-flex xs4>
               <div class="caption grey--text">Create At</div>
               <div>{{ replie.created_at }}</div>
             </v-flex>
-            <!-- where i need to change -->
-            <v-flex xs1 sm1 md1 v-if="isYours(user.email, user_id)">
-              <v-btn small text>
+            <v-flex xs1 v-if="isYours(user.email, replie.user_id)" class="flex-column">
+              <v-btn small text @click="deleteComment(replie.id)">
                 <span>Delete</span>
                 <v-icon right>delete</v-icon>
               </v-btn>
-              <CommentUpdate />
+              <CommentUpdate
+                :postid="postid"
+                :comment_id="replie.id"
+                :body="replie.body"
+              />
             </v-flex>
           </v-layout>
           <v-divider></v-divider>
@@ -100,36 +137,40 @@
 <script>
 import PostUpdate from "@/pages/post/popups/PostUpdate.vue";
 import CommentUpdate from "@/pages/post/popups/CommentUpdate.vue";
+import CommentReplies from "@/pages/post/popups/CommentReplies.vue";
 import UserService from "@/services/user.service";
+import CommentModel from "@/models/commentmodel";
 export default {
   name: "reviewpost",
   components: {
     PostUpdate,
-    CommentUpdate
+    CommentUpdate,
+    CommentReplies
   },
   props: ["login", "user", "postid"],
   created() {
     this.$http.get(`api/posts/${this.postid}`).then(result => {
       let content = result.data;
-      this.post_id = content.id;
       this.title = content.title;
       this.content = content.content.body;
       this.comments = content.comments;
       this.created_at = content.created_at;
       this.user_id = content.user_id;
       this.view_count = content.view_count;
+      this.commentModel.postid = content.id;
       console.log(content);
     });
   },
   data() {
     return {
-      post_id: "",
       title: "",
       content: "",
       created_at: "",
       user_id: "",
       view_count: "",
-      comments: []
+      comments: [],
+      commentModel: new CommentModel("", "","", this.user.email),
+      commentRules: [v => !!v || "comment is required"]
     };
   },
   methods: {
@@ -137,9 +178,31 @@ export default {
       return userid === writerid;
     },
     deletePost() {
-      UserService.deletePost(this.post_id).then(
+      UserService.deletePost(this.postid).then(
         response => {
           this.$router.push("/review");
+        },
+        error => {
+          console.log(error.response);
+        }
+      );
+    },
+    createComment(commentModel) {
+      if (this.$refs.commentform.validate()) {
+        UserService.createComment(commentModel).then(
+          response => {
+            this.$router.go(`/review/${this.postid}`);
+          },
+          error => {
+            console.log(error.response);
+          }
+        );
+      }
+    },
+    deleteComment(commentid) {
+      UserService.deleteComment(commentid).then(
+        response => {
+          this.$router.go(`/review/${this.postid}`);
         },
         error => {
           console.log(error.response);
