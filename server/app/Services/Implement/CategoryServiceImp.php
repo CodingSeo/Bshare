@@ -2,6 +2,7 @@
 
 namespace App\Services\Implement;
 
+use App\Cache\CacheContract;
 use App\DTO\PostPaginateDTO;
 use App\Repositories\Interfaces\CategoryRepository;
 use App\Services\Interfaces\CategoryService;
@@ -9,9 +10,11 @@ use App\Services\Interfaces\CategoryService;
 class CategoryServiceImp implements CategoryService
 {
     protected $category_repository;
-    public function __construct(CategoryRepository $category_repository)
+    protected $cache;
+    public function __construct(CategoryRepository $category_repository, CacheContract $cache)
     {
         $this->category_repository = $category_repository;
+        $this->cache = $cache;
     }
     public function getAllCategory(): array
     {

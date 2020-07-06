@@ -18,4 +18,6 @@ interface PostRepository
     public function getOneWithCategory(int $id): PostDTO;
     public function saveContent(int $postID, array $requestContent): ContentDTO;
     public function updateContent(PostDTO $post, array $requestContent): bool;
+    public function getMostViewedPost(string $amount): array;
+    public function getMostRecentPost(string $amount): array;
 }

@@ -22,14 +22,37 @@ class PostRepositoryImp implements PostRepository
     }
     public function getFullContent(int $id): PostDTO
     {
-        // $post = $this->cache->remember($requestContent['cache_key'], function () use ($requestContent) {
-        // });
-        $post = POST::with('content')->find($id);
-        $post->comments = json_decode($post->comments()->with('replies')->whereNull('parent_id')->latest()->get());
+        $post = $this->cache->remember("api.post.".$id, function () use ($id) {
+            $post = POST::with('content')->find($id);
+            $post->comments = $post->comments()->with('replies')->whereNull('parent_id')->latest()->get();
+            return $post;
+        });
         $postDTO = $this->mapper->map($post, PostDTO::class);
-        $postDTO->comments = $this->mapper->mapArray($post->comments, CommentDTO::class);
+        $postDTO->comments = $this->mapper->mapArray(json_decode($post->comments), CommentDTO::class);
         return $postDTO;
     }
+    // public function getFullContent(int $id): PostDTO
+    // {
+    //     // $post = $this->cache->remember($requestContent['cache_key'], function () use ($requestContent) {
+    //     // });
+    //     $cache_required = array();
+    //     $cached_post = $this->cache->getMulti([`api.posts.$id`,`api.comments.$id`,`api.content.$id`]);
+    //     $post_model = new Post();
+    //     if($cached_post[`api.posts.$id`]){
+    //         $post_model->where('id',$id);
+    //     }
+    //     if($cached_post[`api.comments.$id`]){
+    //         $post_model->with('content');
+    //     }
+    //     if($cached_post[`api.content.$id`]){
+    //         $comments = json_decode($post_model->comments()->with('replies')->whereNull('parent_id')->latest()->get());
+    //     }
+    //     $post = POST::with('content')->find($id);
+    //     $comments = json_decode($post->comments()->with('replies')->whereNull('parent_id')->latest()->get());
+    //     $postDTO = $this->mapper->map($post, PostDTO::class);
+    //     $postDTO->comments = $this->mapper->mapArray($comments, CommentDTO::class);
+    //     return $postDTO;
+    // }
     public function getOne(int $id): PostDTO
     {
         $post = POST::find($id);
@@ -80,18 +103,31 @@ class PostRepositoryImp implements PostRepository
         $postContent->post_id = $postID;
         $postContent->body = $requestContent['body'];
         $postContent->save();
+        $this->cache->destroy('api.posts'.$postID);
         return $this->mapper->map($postContent, ContentDTO::class);
-    }
-    public function getContent(PostDTO $post): ContentDTO
-    {
-        $post = new Post();
-        $post->fill((array) $post);
-        $requestContent = $post->content()->first();
-        return $this->mapper->map($requestContent, ContentDTO::class);
     }
     public function updateContent(PostDTO $post, array $requestContent): bool
     {
+        $this->cache->destroy('api.posts'.$post->id);
         return Content::where('post_id', $post->id)
             ->update(['body' => $requestContent['body']]);
+    }
+    public function getMostViewedPost(string $amount): array
+    {
+        $posts = $this->cache->remember('api.posts.mostviewed', function () use ($amount) {
+            return Post::orderBy('view_count', 'desc')
+                ->take($amount++)
+                ->get();
+        },600);
+        return $this->mapper->mapArray($posts, PostDTO::class);
+    }
+    public function getMostRecentPost(string $amount): array
+    {
+        $posts = $this->cache->remember('api.posts.mostrecent', function () use ($amount) {
+            return Post::latest()
+                ->take($amount)
+                ->get();
+        },600);
+        return $this->mapper->mapArray($posts, PostDTO::class);
     }
 }

@@ -96,7 +96,7 @@ export default {
     hiwork_login() {
       var url ='http://45.115.155.76/dev/auth/login/hiworks';
       this.$router.push('/home');
-      this.window.open(url,"_blank");
+      window.open(url,"_blank");
     }
   }
 };

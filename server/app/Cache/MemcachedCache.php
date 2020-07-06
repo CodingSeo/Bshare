@@ -24,8 +24,8 @@ class MemcachedCache implements CacheContract
     {
         $this->mcd = new \Memcached;
         $this->mcd->setOption(\Memcached::OPT_LIBKETAMA_COMPATIBLE, true);
-        $this->mcd->addServer($con,$port);
-        $this->expired_time = 120;
+        $this->mcd->addServer($con, $port);
+        $this->expired_time = 1800;
     }
     /**
      * @param  string  $key
@@ -34,7 +34,8 @@ class MemcachedCache implements CacheContract
      *
      * @return bool
      */
-    public function put($key, $value, $ttl = null){
+    public function put($key, $value, $ttl = null)
+    {
         $ttl = $this->check_time($ttl);
         return $this->mcd->set($key, $value, $ttl);
     }
@@ -44,7 +45,8 @@ class MemcachedCache implements CacheContract
      *
      * @return mixed
      */
-    public function get($key){
+    public function get($key)
+    {
         return $this->mcd->get($key);
     }
 
@@ -53,14 +55,16 @@ class MemcachedCache implements CacheContract
      *
      * @return bool
      */
-    public function destroy($key){
+    public function destroy($key)
+    {
         return $this->mcd->delete($key);
     }
 
     /**
      * @return void
      */
-    public function flush(){
+    public function flush()
+    {
         $this->mcd->flush();
     }
 
@@ -80,6 +84,22 @@ class MemcachedCache implements CacheContract
         $this->put($key, $value = $callback(), $ttl);
         return $value;
     }
+    /**
+     * @param  string  $key
+     * @return mixed
+     */
+    public function getMulti($keys)
+    {
+        return $this->mcd->getMulti($keys);
+    }
+    /**
+     * @param  string  $key
+     * @param  \DateTimeInterface|\DateInterval|int|null  $ttl
+     * @return mixed
+     */
+    public function setMulti($keys,$ttl){
+        $this->mcd->getMulti($keys,$ttl);
+    }
 
     /**
      * setting expired_time to default
@@ -87,7 +107,8 @@ class MemcachedCache implements CacheContract
      * @param int|null $time
      * @return int
      */
-    private function check_time($time){
-        return (is_null($time))? $this->expired_time : $time;
+    private function check_time($time)
+    {
+        return (is_null($time)) ? $this->expired_time : $time;
     }
 }
