@@ -7,7 +7,7 @@ use App\DTO\PostDTO;
 use App\DTO\PostPaginateDTO;
 use App\EloquentModel\Category;
 use App\Mapper\MapperService;
-use App\Repositories\interfaces\CategoryRepository;
+use App\Repositories\Interfaces\CategoryRepository;
 
 class CategoryRepositoryImp implements CategoryRepository
 {

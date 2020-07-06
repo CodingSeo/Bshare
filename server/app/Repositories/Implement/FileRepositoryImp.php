@@ -5,7 +5,7 @@ namespace App\Repositories\Implement;
 use App\DTO\FileDTO;
 use App\EloquentModel\File;
 use App\Mapper\MapperService;
-use App\Repositories\interfaces\FileRepository;
+use App\Repositories\Interfaces\FileRepository;
 
 class FileRepositoryImp implements FileRepository
 {

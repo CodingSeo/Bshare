@@ -21,14 +21,14 @@ class HiworksLoginService implements OauthLoginService
     public function getAuthCode(): Response
     {
         $reponse = Http::get(
-            $this->hiworksBasicUrl . "authform?client_id=" . $this->clientId . "&access_type=offline"
+            $this->hiworksBasicUrl . "open/auth/authform?client_id=" . $this->clientId . "&access_type=offline"
         );
         return $reponse;
     }
     public function getAccessCode(string $authCode): Response
     {
-        $reponse = Http::post(
-            $this->hiworksBasicUrl . "/auth/accesstoken",
+        $reponse = Http::asForm()->post(
+            $this->hiworksBasicUrl ."open/auth/accesstoken",
             [
                 'client_id' => $this->clientId,
                 'client_secret' => $this->clientSecret,
@@ -39,11 +39,28 @@ class HiworksLoginService implements OauthLoginService
         );
         return $reponse;
     }
-    public function setClientAccessToken()
+    public function setClientAccessToken(array $data): void
     {
+        $this->hiworkClient->access_token = $data['access_token'];
+        $this->hiworkClient->refresh_token = $data['refresh_token'];
+        $this->hiworkClient->office_no = $data['office_no'];
+        $this->hiworkClient->user_no = $data['user_no'];
     }
-    public function setClientInfo()
+    public function getClientUserInfo() : array
     {
+        $reponse = Http::withHeaders([
+            "Authorization" => "Bearer ". $this->hiworkClient->access_token,
+            "Content-Type"=> "application/json"
+        ])->get($this->hiworksBasicUrl ."user/v2/me");
+        $user_info = $reponse->json();
+        $this->hiworkClient->name = $user_info['name'];
+        $this->hiworkClient->user_id = $user_info['user_id'];
+        return $user_info;
+    }
+    public function setClientInfo(array $data)
+    {
+        $this->hiworkClient->user_id = $data['user_id'];
+        $this->hiworkClient->name = $data['name'];
     }
     public function getClient(): HiworksClient
     {

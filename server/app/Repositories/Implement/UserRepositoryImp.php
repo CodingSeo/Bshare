@@ -5,7 +5,7 @@ namespace App\Repositories\Implement;
 use App\DTO\UserDTO;
 use App\EloquentModel\User;
 use App\Mapper\MapperService;
-use App\Repositories\interfaces\UserRepository;
+use App\Repositories\Interfaces\UserRepository;
 
 class UserRepositoryImp implements UserRepository
 {
@@ -23,6 +23,19 @@ class UserRepositoryImp implements UserRepository
     public function getOneByEmail(string $email): UserDTO
     {
         $user = $this->user->where('email', $email)->first();
+        return $this->mapper->map($user, UserDTO::class);
+    }
+    public function getOneOrCreateByEmail(array $user_info): UserDTO
+    {
+        $email = $user_info['user_id'];
+        $name = $user_info['name'];
+        $user = ($this->user->where('email', $email)->first())?:
+                $this->user->create([
+                    'name' => $name,
+                    'email' => $email,
+                    'password' => bcrypt('Oauth_login_password'),
+                    'password_bcrypt' => bcrypt('Oauth_login_password'),
+                ]);
         return $this->mapper->map($user, UserDTO::class);
     }
     public function findAll(): array

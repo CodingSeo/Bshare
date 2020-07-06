@@ -5,7 +5,7 @@ namespace App\Repositories\Implement;
 use App\DTO\CommentDTO;
 use App\EloquentModel\Comment;
 use App\Mapper\MapperService;
-use App\Repositories\interfaces\CommentRepository;
+use App\Repositories\Interfaces\CommentRepository;
 
 class CommentRepositoryImp implements CommentRepository
 {

@@ -45,6 +45,14 @@ class UserServiceImp implements UserService
         return $authUser;
     }
 
+    public function loginOauthUser(array $user_info): AuthUser
+    {
+        $user = $this->user_repository->getOneOrCreateByEmail($user_info);
+        if (!$user->id) throw new \App\Exceptions\ModuleNotFound('User Login or Create error');
+        $authUser = $this->jwtauth->getAuthUserByUserDTO($user);
+        return $authUser;
+    }
+
 
     public function getUserInfo()
     {

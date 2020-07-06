@@ -9,7 +9,7 @@ use App\EloquentModel\Content;
 use App\EloquentModel\Post;
 use App\Cache\CacheContract;
 use App\Mapper\MapperService;
-use App\Repositories\interfaces\PostRepository;
+use App\Repositories\Interfaces\PostRepository;
 
 class PostRepositoryImp implements PostRepository
 {
