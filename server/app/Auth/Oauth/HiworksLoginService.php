@@ -46,14 +46,16 @@ class HiworksLoginService implements OauthLoginService
         $this->hiworkClient->office_no = $data['office_no'];
         $this->hiworkClient->user_no = $data['user_no'];
     }
-    public function getClientUserInfo() :Response
+    public function getClientUserInfo() : array
     {
         $reponse = Http::withHeaders([
             "Authorization" => "Bearer ". $this->hiworkClient->access_token,
             "Content-Type"=> "application/json"
         ])->get($this->hiworksBasicUrl ."user/v2/me");
-        dd($reponse->json());
-        return $reponse;
+        $user_info = $reponse->json();
+        $this->hiworkClient->name = $user_info['name'];
+        $this->hiworkClient->user_id = $user_info['user_id'];
+        return $user_info;
     }
     public function setClientInfo(array $data)
     {

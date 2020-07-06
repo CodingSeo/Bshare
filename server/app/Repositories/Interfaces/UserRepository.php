@@ -8,6 +8,7 @@ interface UserRepository
 {
     public function getOne(int $id);
     public function getOneByEmail(string $email): UserDTO;
+    public function getOneOrCreateByEmail(array $user_info): UserDTO;
     public function findAll(): array;
     public function updateByDTO(UserDTO $post): UserDTO;
     public function updateByContent(array $post): UserDTO;

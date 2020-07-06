@@ -9,16 +9,19 @@ use App\Services\Interfaces\UserService;
 use Illuminate\Http\Request;
 use App\Http\Requests\ApiContentRequest;
 use Laravel\Socialite\Facades\Socialite;
+use App\Transformers\UserTransformer;
 use Config;
 
 class SocialiteController extends Controller
 {
     private $userService;
     private $oauthLoginService;
-    public function __construct(UserService $userService, OauthLoginService $oauthLoginService)
+    private $transform;
+    public function __construct(UserService $userService, OauthLoginService $oauthLoginService, UserTransformer $transform)
     {
         $this->userService = $userService;
         $this->oauthLoginService = $oauthLoginService;
+        $this->transform = $transform;
     }
 
     public function redirectToProvider()
@@ -32,12 +35,12 @@ class SocialiteController extends Controller
             $response = $this->oauthLoginService->getAccessCode($request->auth_code);
             if($response->successful()){
                 $this->oauthLoginService->setClientAccessToken($response->json()['data']);
-                $this->oauthLoginService->getClientUserInfo();
-                $user = $this->oauthLoginService->getClient();
-                //decide whether i'm going to cache refresh Token
+                $user_info = $this->oauthLoginService->getClientUserInfo();
+                $authUser = $this->userService->loginOauthUser($user_info);
+                return $this->transform->respondWithToken($authUser);
             }
-            return 'no AccessCode'
+            return 'No AccessCode';
         }
-        return 'no auth_code';
+        return 'No Auth_code';
     }
 }

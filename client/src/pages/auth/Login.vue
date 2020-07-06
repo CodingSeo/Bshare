@@ -94,10 +94,9 @@ export default {
       }
     },
     hiwork_login() {
-      // var url ='http://localhost:8000/dev/auth/login/hiworks';
       var url ='http://45.115.155.76/dev/auth/login/hiworks';
       this.$router.push('/home');
-      window.open(url,"_blank");
+      this.window.open(url,"_blank");
     }
   }
 };
