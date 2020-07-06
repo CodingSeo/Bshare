@@ -27,6 +27,10 @@ Route::get('category', [
     'as' => 'category',
     'uses' => 'CategoriesController@show'
 ]);
+Route::get('category/QnA', [
+    'as' => 'category.qna',
+    'uses' => 'CategoriesController@getQnAPosts'
+]);
 
 //post router
 Route::get('posts/mostViews/{amount}', [

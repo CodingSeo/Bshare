@@ -17,6 +17,10 @@ const routes = [
     component: Home
   },
   {
+    path: "/home",
+    component: Home
+  },
+  {
     path: "/login",
     name: "login",
     component: Login
@@ -27,28 +31,40 @@ const routes = [
     component: Signup
   },
   {
-    path: "/review",
+    path: "/BookReview",
     name: "review",
     component: Review,
   },
   {
-    path: "/review/:postid",
+    path: "/BookReview/:postid",
     props: true,
     name: "reviewpost",
     component: ReviewPost
   },
   {
-    path: "/purchase",
+    path: "/BookBuying",
     name: "purchase",
     component: Purchase
   },
   {
-    path: "/selling",
+    path: "/BookBuying/:postid",
+    props: true,
+    name: "Buyingpost",
+    component: ReviewPost
+  },
+  {
+    path: "/BookSelling",
     name: "selling",
     component: Selling
   },
   {
-    path: "/help",
+    path: "/BookSelling/:postid",
+    props: true,
+    name: "sellingpost",
+    component: ReviewPost
+  },
+  {
+    path: "/QnA",
     name: "help",
     component: Help
   },

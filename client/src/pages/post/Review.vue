@@ -27,7 +27,7 @@
       <v-divider></v-divider>
       <!-- list -->
       <!-- id,user_id,title,view_count,created,link,href -->
-      <v-card class="pl-3 mb-2" flat v-for="post in posts" :key="post.id" router :to="`/review/${post.id}`">
+      <v-card class="pl-3 mb-2" flat v-for="post in posts" :key="post.id" router :to="`/BookReview/${post.id}`">
         <v-layout row wrap :class="`pa-3 post review`">
           <v-flex xs12 md6>
             <div class="caption grey--text">postName</div>

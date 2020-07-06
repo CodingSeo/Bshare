@@ -1,64 +1,95 @@
 <template>
-  <div class="selling">
+  <div class="BookSelling">
     <v-container class="my-5">
       <h1 class="subheading grey--text">Book Selling</h1>
-      <v-divider></v-divider>
       <v-divider></v-divider>
       <!-- body -->
       <v-layout row wrap justify-end>
         <v-flex shrink>
           <!-- setting router to review making -->
-          <router-link class="routerLink" to="/">
-          <v-btn text>
-            <span>Write</span>
-            <v-icon right>create</v-icon>
-          </v-btn>
-          </router-link>
+          <div v-if="!login">
+            <router-link class="routerLink" to="/login">
+              <v-btn text>
+                <span>Write</span>
+                <v-icon right>create</v-icon>
+              </v-btn>
+            </router-link>
+          </div>
+          <div v-else>
+            <PostCreate
+              :user="user"
+              :category="category"
+              :category_id="category_id"
+            />
+          </div>
         </v-flex>
       </v-layout>
-
       <v-divider></v-divider>
+      <!-- list -->
+      <!-- id,user_id,title,view_count,created,link,href -->
+      <v-card class="pl-3 mb-2" flat v-for="post in posts" :key="post.id" router :to="`/BookSelling/${post.id}`">
+        <v-layout row wrap :class="`pa-3 post review`">
+          <v-flex xs12 md6>
+            <div class="caption grey--text">postName</div>
+            <div>{{post.title}}</div>
+          </v-flex>
+          <v-flex xs6 sm4 md2>
+            <div class="caption grey--text">Writer</div>
+            <div>{{post.user_id}}</div>
+          </v-flex>
+          <v-flex xs6 sm4 md2>
+            <div class="caption grey--text">Create At</div>
+            <div>{{post.created}}</div>
+          </v-flex>
+          <v-flex xs2 sm2 md2>
+            <div class="caption grey--text">View Count</div>
+            <div>{{post.view_count}}</div>
+          </v-flex>
+          <v-flex xs3 sm2 md1>
+            <div class="text-right pr-5">
+              <v-chip small :class="`${post.status} white--text caption my-2`">{{post.status}}</v-chip>
+            </div>
+          </v-flex>
+        </v-layout>
+        <v-divider></v-divider>
+      </v-card>
       <!-- pagenate -->
-      <v-simple-table fixed-header>
-        <template v-slot:default>
-          <thead>
-            <tr>
-              <th class="text-left">Name</th>
-              <th class="text-left">Calories</th>
-              <th class="text-left">Calories</th>
-              <th class="text-left">Calories</th>
-            </tr>
-          </thead>
-        </template>
-      </v-simple-table>
-      <v-list text>
-        <v-list-item-group v-model="item" color="indigo" class='mt-3 mb-3'>
-          <v-list-item v-for="(item, i) in items" :key="i">
-            <v-list-item-content>
-              <v-list-item-title v-text="item.text"></v-list-item-title>
-              <v-list-item-subtitle v-text="item.text"></v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list-item-group>
-      </v-list>
-      <v-divider></v-divider>
       <div class="text-center mt-3">
-        <v-pagination v-model="item" :length="6" color="indigo"></v-pagination>
+        <v-pagination :length="last_page" color="indigo"></v-pagination>
       </div>
-
     </v-container>
   </div>
 </template>
+
 <script>
+import PostCreate from "@/pages/post/popups/PostCreate.vue";
 export default {
   name: "Selling",
+  components: {
+    PostCreate
+  },
+  props: ["login", "user"],
+  created() {
+    //organize?
+    this.$http.get(`api/category/${this.category_id}/posts`).then(result => {
+      let content = result.data;
+      this.current_page = content.current_page;
+      this.last_page = content.last_page;
+      this.next_page_url = content.next_page_url;
+      this.posts = content.data;
+      console.log(content);
+    });
+  },
   data: () => ({
-    item: 1,
-    items: [
-      { text: "Real-Time", icon: "mdi-clock" },
-      { text: "Audience", icon: "mdi-account" },
-      { text: "Conversions", icon: "mdi-flag" }
-    ]
+    category: "sell",
+    category_id: 2,
+    per_page: "",
+    current_page: "",
+    last_page: 0,
+    next_page_url: "",
+    total: "",
+    //id,user_id,title,view_count,created,link,href
+    posts: []
   })
 };
 </script>

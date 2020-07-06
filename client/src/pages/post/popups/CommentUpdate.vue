@@ -38,10 +38,6 @@ export default {
   commponents: {},
   data() {
     return {
-      // this.postid=postid;
-      //   this.body = body;
-      //   this.user_id = user_id;
-      //   this.parent_id = parent_id;
       commentModel: new CommentModel(this.comment_id, this.postid, this.body,"",""),
       dialog: false,
       bodyRules: [
@@ -58,7 +54,7 @@ export default {
     submit() {
       if (this.$refs.form.validate()) {
         this.loading = true;
-        UserService.updatePost(this.commentModel).then(
+        UserService.updateComments(this.commentModel).then(
           response => {
             this.$router.go(`/review/${this.postid}`);
           },

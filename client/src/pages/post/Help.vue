@@ -4,20 +4,15 @@
       <h1 class="subheading grey--text">Q/N</h1>
       <v-divider></v-divider>
       <div>
-        <div class="text-center d-flex pb-4">
-          <div>{{ panel }}</div>
-        </div>
-
-        <v-expansion-panels v-model="panel" multiple>
-          <v-expansion-panel v-for="(item, i) in items" :key="i">
+        <v-expansion-panels multiple>
+          <v-expansion-panel v-for="(panel, i) in panels" :key="i">
             <v-expansion-panel-header
-              >Header {{ item }}</v-expansion-panel-header
+              > {{ panel.title }}</v-expansion-panel-header
             >
             <v-expansion-panel-content>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
+              {{panel.content.body}}  Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui reprehenderit ullam minus quos, 
+              exercitationem corrupti doloribus velit voluptatum adipisci 
+              provident officiis delectus, libero rerum eveniet! Sunt veniam suscipit ducimus consequuntur.
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-expansion-panels>
@@ -30,10 +25,25 @@
 import axios from "axios";
 export default {
   name: "Help",
+  created() {
+    //     category: (...)
+    // comments: (...)
+    // content: (...)
+    // created_at: (...)
+    // id: (...)
+    // title: (...)
+    // updated_at: (...)
+    // user_id: (...)
+    // view_count: (...)
+    this.$http.get(`api/category/QnA`).then(result => {
+      let content = result.data;
+      this.panels = content;
+      console.log(content);
+    });
+  },
   data() {
     return {
-      panel: [],
-      items: 5
+      panels: []
     };
   },
   methods: {}

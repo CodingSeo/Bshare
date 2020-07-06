@@ -43,7 +43,7 @@ class UserService {
             headers: authHeader()
         });
     }
-    updatePost(commentModel){
+    updateComments(commentModel){
         return axios.post(API_URL + "comments/"+commentModel.id, {
             _method:"PUT",
             post_id: commentModel.postid,

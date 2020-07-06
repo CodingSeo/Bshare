@@ -30,12 +30,9 @@
             </v-form>
             <v-divider light></v-divider>
             <v-card-actions>
-              <v-btn
-                width="100%"
-                color="blue"
-                dark
-                @click="hiwork_login"
-              >Hiworks Login</v-btn>
+              <v-btn width="100%" color="blue" dark @click="hiwork_login"
+                >Hiworks Login</v-btn
+              >
             </v-card-actions>
             <v-divider light></v-divider>
             <v-card-actions>
@@ -43,7 +40,13 @@
                 <v-icon>person</v-icon>Sign up
               </v-btn>
               <v-spacer></v-spacer>
-              <v-btn rounded color="primary" dark @click="loginAccount" :loading="loading">
+              <v-btn
+                rounded
+                color="primary"
+                dark
+                @click="loginAccount"
+                :loading="loading"
+              >
                 Login
                 <v-icon>keyboard_arrow_right</v-icon>
               </v-btn>
@@ -66,7 +69,9 @@ export default {
       v => /.+@.+\..+/.test(v) || "E-mail must be valid"
     ],
     passwordShow: false,
-    passwordRules: [v => !!v || "password is required"]
+    passwordRules: [v => !!v || "password is required"],
+    windowObjectReference: null,
+    previousUrl: null
   }),
   //checking whether it's loggined or not
   created() {
@@ -93,10 +98,37 @@ export default {
         );
       }
     },
+    receiveMessage(event) {
+      if (event.origin !== BASE_URL) {
+        return;
+      }
+      console.log(event);
+      // const { data } = event;
+      // if (data.source === "lma-login-redirect") {
+      //   const { payload } = data;
+      //   const redirectUrl = `/auth/google/login${payload}`;
+      //   window.location.pathname = redirectUrl;
+      // }
+    },
     hiwork_login() {
-      var url ='http://45.115.155.76/dev/auth/login/hiworks';
-      this.$router.push('/home');
-      window.open(url,"_blank");
+      var url = "http://45.115.155.76/dev/auth/login/hiworks";
+      var name = "_blank";
+      var specs = "menubar=no,status=no,toolbar=no,width=600,height=800";
+      if (
+        this.windowObjectReference === null ||
+        this.windowObjectReference.closed
+      ) {
+        this.windowObjectReference = window.open(url, name, specs);
+      } else if (this.previousUrl !== url) {
+        this.windowObjectReference = window.open(url, name, specs);
+        this.windowObjectReference.focus();
+      } else {
+        this.windowObjectReference.focus();
+      }
+      if(window.addEventListener){
+        window.addEventListener("message", this.receiveMessage, false);
+      }
+      this.previousUrl = url;
     }
   }
 };

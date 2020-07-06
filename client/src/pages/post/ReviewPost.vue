@@ -80,7 +80,7 @@
               :body="comment.body"
             />
           </v-flex>
-          <v-flex xs1 v-if="isYours(user.email, comment.user_id)">
+          <v-flex xs1 v-if="isYours(user.email, comment.user_id)" class="d-flex align-center">
             <v-btn small text @click="deleteComment(comment.id)">
               <span>Delete</span>
               <v-icon right>delete</v-icon>
@@ -115,8 +115,8 @@
               <div class="caption grey--text">Create At</div>
               <div>{{ replie.created_at }}</div>
             </v-flex>
-            <v-flex xs1 v-if="isYours(user.email, replie.user_id)" class="flex-column">
-              <v-btn small text @click="deleteComment(replie.id)">
+            <v-flex xs1 v-if="isYours(user.email, replie.user_id)" class="d-flex align-center">
+              <v-btn small text @click="deleteComment(replie.id)" >
                 <span>Delete</span>
                 <v-icon right>delete</v-icon>
               </v-btn>
@@ -180,7 +180,7 @@ export default {
     deletePost() {
       UserService.deletePost(this.postid).then(
         response => {
-          this.$router.push("/review");
+          this.$router.push("/BookReview");
         },
         error => {
           console.log(error.response);
@@ -191,7 +191,7 @@ export default {
       if (this.$refs.commentform.validate()) {
         UserService.createComment(commentModel).then(
           response => {
-            this.$router.go(`/review/${this.postid}`);
+            this.$router.go(`/BookReview/${this.postid}`);
           },
           error => {
             console.log(error.response);
@@ -202,7 +202,7 @@ export default {
     deleteComment(commentid) {
       UserService.deleteComment(commentid).then(
         response => {
-          this.$router.go(`/review/${this.postid}`);
+          this.$router.go(`/BookReview/${this.postid}`);
         },
         error => {
           console.log(error.response);

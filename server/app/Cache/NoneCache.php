@@ -60,4 +60,19 @@ class NoneCache implements CacheContract
         $this->put($key, $value = $callback(), $ttl);
         return $value;
     }
+    /**
+     * @param  string  $key
+     * @return mixed
+     */
+    public function getMulti($keys){
+        return null;
+    }
+    /**
+     * @param  string  $key
+     * @param  \DateTimeInterface|\DateInterval|int|null  $ttl
+     * @return mixed
+     */
+    public function setMulti($keys,$ttl){
+        return null;
+    }
 }
