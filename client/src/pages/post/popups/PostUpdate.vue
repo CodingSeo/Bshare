@@ -35,11 +35,11 @@
 import Post from "@/models/post";
 import UserService from "@/services/user.service";
 export default {
-  props: ["post_id", "title","content"],
+  props: ["postid", "title","content"],
   commponents: {},
   data() {
     return {
-      post: new Post(this.post_id, this.title, this.content),
+      post: new Post(this.postid, this.title, this.content,""),
       dialog: false,
       titleRules: [
         v => !!v || "title is required",
@@ -61,7 +61,7 @@ export default {
         this.loading = true;
         UserService.updatePost(this.post).then(
           response => {
-            this.$router.push(`/review/${this.post_id}`);
+            this.$router.push(`/review`);
           },
           error => {
             console.log(error.response);

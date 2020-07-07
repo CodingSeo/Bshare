@@ -26,6 +26,11 @@
 
           <v-divider></v-divider>
           <v-card class="my-3">
+            <v-card-title>
+              <p class="display-1 pl-4 pt-2 grey--text">
+                Most Viewed Posts
+              </p>
+            </v-card-title>
             <v-carousel
               cycle
               height="200"
@@ -33,11 +38,28 @@
               hide-delimiters
               show-arrows-on-hover
             >
-              <v-carousel-item v-for="(slide, i) in slides" :key="i">
+              <v-carousel-item
+                v-for="post in this.MostViewedPosts"
+                :key="post.id"
+              >
                 <v-sheet height="100%">
-                  <v-row class="fill-height" align="center" justify="center">
-                    <!-- where info goes -->
-                    <div class="display-3">{{ slide }} Slide</div>
+                  <v-row class="pa-10 fill-height" align="center" justify="center">
+                      <v-flex xs12 md6>
+                        <div class="caption grey--text">postName</div>
+                        <div>{{ post.title }}</div>
+                      </v-flex>
+                      <v-flex xs6 sm4 md2>
+                        <div class="caption grey--text">Writer</div>
+                        <div>{{ post.user_id }}</div>
+                      </v-flex>
+                      <v-flex xs6 sm4 md2>
+                        <div class="caption grey--text">Create At</div>
+                        <div>{{ post.created }}</div>
+                      </v-flex>
+                      <v-flex xs2 sm2 md2>
+                        <div class="caption grey--text">View Count</div>
+                        <div>{{ post.view_count }}</div>
+                      </v-flex>
                   </v-row>
                 </v-sheet>
               </v-carousel-item>
@@ -46,6 +68,11 @@
           <v-divider></v-divider>
 
           <v-card class="my-3">
+            <v-card-title class="height=20">
+              <p class="display-1  pl-4 pt-2  grey--text">
+                Most Recent Posts
+              </p>
+            </v-card-title>
             <v-carousel
               cycle
               height="200"
@@ -53,16 +80,31 @@
               hide-delimiters
               show-arrows-on-hover
             >
-              <v-carousel-item v-for="(slide, i) in slides" :key="i">
+              <v-carousel-item
+                v-for="post in this.MostRecentPosts"
+                :key="post.id"
+              >
                 <v-sheet height="100%">
-                  <v-row class="fill-height" align="center" justify="center">
-                    <!-- where info goes -->
-                    <div class="display-3">{{ slide }} Slide</div>
-
+                  <v-row class="pa-10 fill-height" align="center" justify="center">
+                    <v-flex xs12 md6>
+                      <div class="caption grey--text">postName</div>
+                      <div>{{ post.title }}</div>
+                    </v-flex>
+                    <v-flex xs6 sm4 md2>
+                      <div class="caption grey--text">Writer</div>
+                      <div>{{ post.user_id }}</div>
+                    </v-flex>
+                    <v-flex xs6 sm4 md2>
+                      <div class="caption grey--text">Create At</div>
+                      <div>{{ post.created }}</div>
+                    </v-flex>
+                    <v-flex xs2 sm2 md2>
+                      <div class="caption grey--text">View Count</div>
+                      <div>{{ post.view_count }}</div>
+                    </v-flex>
                   </v-row>
                 </v-sheet>
               </v-carousel-item>
-
             </v-carousel>
           </v-card>
         </v-flex>
@@ -77,9 +119,21 @@ export default {
   name: "Home",
   data() {
     return {
-      slides: ["First", "Second", "Third", "Fourth", "Fifth"]
+      MostViewedPosts: [],
+      MostRecentPosts: []
     };
   },
-  created() {}
+  created() {
+    this.$http.get(`api/posts/mostViews/5`).then(result => {
+      let content = result.data;
+      this.MostViewedPosts = content;
+      console.log(content);
+    });
+    this.$http.get(`api/posts/mostRecents/5`).then(result => {
+      let content = result.data;
+      this.MostRecentPosts = content;
+      console.log(content);
+    });
+  }
 };
 </script>

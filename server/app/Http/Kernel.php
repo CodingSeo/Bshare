@@ -53,7 +53,6 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\JWTmiddleware\JWTTokenExpiredChecking::class, //checking token expried
             \App\Http\Middleware\JWTmiddleware\JWTAuthorizationSetting::class, // checking whehter id exists in the DB
         ]
-
     ];
 
     /**

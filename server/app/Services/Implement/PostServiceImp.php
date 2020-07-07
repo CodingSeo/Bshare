@@ -78,4 +78,14 @@ class PostServiceImp implements PostService
         if (!$category->writable)
             throw new \App\Exceptions\ModuleNotFound('cannot write a post on this category');
     }
+    public function getMostViewedPost(array $requestContent): array
+    {
+        $posts = $this->postRepository->getMostViewedPost($requestContent['amount']);
+        return $posts;
+    }
+    public function getMostMostRecents(array $requestContent): array
+    {
+        $posts = $this->postRepository->getMostRecentPost($requestContent['amount']);
+        return $posts;
+    }
 }

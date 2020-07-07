@@ -11,4 +11,6 @@ interface PostService
     public function storePost(array $requestContent, AuthUser $user): PostDTO;
     public function updatePost(array $requestContent, AuthUser $user): void;
     public function deletePost(array $requestContent, AuthUser $user): void;
+    public function getMostViewedPost(array $requestContent): array;
+    public function getMostMostRecents(array $requestContent): array;
 }

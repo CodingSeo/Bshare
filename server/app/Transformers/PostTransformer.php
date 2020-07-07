@@ -29,6 +29,11 @@ class PostTransformer
         $post->content = $this->transformContent($post->content);
         return response()->json($post, 200, [], JSON_PRETTY_PRINT);
     }
+    public function transformPosts(array $posts)
+    {
+        $payload = array_map([$this, 'transformPostFromPaginate'], $posts);
+        return response()->json($payload, 200, [], JSON_PRETTY_PRINT);
+    }
 
     public function withPagination(PostPaginateDTO $posts)
     {

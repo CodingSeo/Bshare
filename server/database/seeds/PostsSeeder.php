@@ -16,8 +16,8 @@ class PostsSeeder extends Seeder
         for ($id = 1; $id <= $amount; $id++) {
             DB::table('posts')->insert([
                 'id' => $id,
-                'user_id' => 'test@test',
-                'category_id' => $id % 3 + 1,
+                'user_id' => 'test@test.com',
+                'category_id' => $id % 4 + 1,
                 'active' => 1,
                 'title' => 'posts_test' . $id,
             ]);

@@ -27,13 +27,28 @@ Route::get('category', [
     'as' => 'category',
     'uses' => 'CategoriesController@show'
 ]);
+Route::get('category/QnA', [
+    'as' => 'category.qna',
+    'uses' => 'CategoriesController@getQnAPosts'
+]);
 
-Route::get('posts/test', [
-    'as' => 'posts.test',
-    'uses' => 'PostsController@test'
-])->middleware('jwt');
+//post router
+Route::get('posts/mostViews/{amount}', [
+    'as' => 'posts.show',
+    'uses' => 'PostsController@showMostViews'
+]);
 
-//post routers
+Route::get('posts/mostRecents/{amount}', [
+    'as' => 'posts.show',
+    'uses' => 'PostsController@showMostRecents'
+]);
+
+Route::get('posts/{post_id}', [
+    'as' => 'posts.show',
+    'uses' => 'PostsController@show'
+]);
+
+
 Route::get('posts/{post_id}', [
     'as' => 'posts.show',
     'uses' => 'PostsController@show'

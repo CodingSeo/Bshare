@@ -39,4 +39,15 @@ interface CacheContract
      * @return mixed
      */
     public function remember($key, Closure $callback, $ttl=null);
+    /**
+     * @param  string  $key
+     * @return mixed
+     */
+    public function getMulti($keys);
+    /**
+     * @param  string  $key
+     * @param  \DateTimeInterface|\DateInterval|int|null  $ttl
+     * @return mixed
+     */
+    public function setMulti($keys,$ttl);
 }

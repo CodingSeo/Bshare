@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Auth\JWTAttemptUser;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PostsAmountRequest;
 use App\Http\Requests\PostsRequestIndex;
 use App\Http\Requests\PostsRequestStore;
 use App\Http\Requests\PostsRequestUpdate;
@@ -63,8 +64,20 @@ class PostsController extends Controller
         $this->service->deletePost($requestContent, $user);
         return response('success');
     }
-    public function test()
+    public function showMostViews(PostsAmountRequest $request): JsonResponse
     {
-        return response()->json($this->authUser);
+        $requestContent = onlyContent($request, [
+            'amount'
+        ]);
+        $posts = $this->service->getMostViewedPost($requestContent);
+        return $this->transform->transformPosts($posts);
+    }
+    public function showMostRecents(PostsAmountRequest $request): JsonResponse
+    {
+        $requestContent = onlyContent($request, [
+            'amount'
+        ]);
+        $posts = $this->service->getMostMostRecents($requestContent);
+        return $this->transform->transformPosts($posts);
     }
 }

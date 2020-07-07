@@ -2,6 +2,8 @@
 
 namespace App\Services\Implement;
 
+use App\Cache\CacheContract;
+use App\DTO\PostDTO;
 use App\DTO\PostPaginateDTO;
 use App\Repositories\Interfaces\CategoryRepository;
 use App\Services\Interfaces\CategoryService;
@@ -24,5 +26,11 @@ class CategoryServiceImp implements CategoryService
         $page = 5;
         $posts = $this->category_repository->getPostsByCategory($category, $page);
         return $posts;
+    }
+    public function getQnAPostsWithCategory(): array
+    {
+        $qnaPosts = $this->category_repository->getQnAPostsByID();
+        if (!$qnaPosts[0]->id) throw new \App\Exceptions\ModuleNotFound('Category not Found');
+        return $qnaPosts;
     }
 }

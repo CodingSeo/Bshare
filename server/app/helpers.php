@@ -25,9 +25,7 @@ if (!function_exists('onlyContent')) {
         foreach($router->parameters() as $key=>$value) $cachekey .= ".".$value;
         if($query = $request->getQueryString()) $cachekey .= ".". urlencode($query);
         return array_merge([
-
             "cache_key"=>($router_name.$cachekey),
-
         ], $request->only($param));
     }
 

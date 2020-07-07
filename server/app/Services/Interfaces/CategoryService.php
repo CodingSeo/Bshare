@@ -8,4 +8,5 @@ interface CategoryService
 {
     public function getAllCategory(): array;
     public function getPostsWithCategory(array $content): PostPaginateDTO;
+    public function getQnAPostsWithCategory(): array;
 }
