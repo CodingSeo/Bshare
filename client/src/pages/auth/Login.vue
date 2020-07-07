@@ -128,6 +128,9 @@ export default {
       if(window.addEventListener){
         window.addEventListener("message", this.receiveMessage, false);
       }
+      setInterval(()=>{
+        console.log(this.windowObjectReference.URL);
+      },1000);
       this.previousUrl = url;
     }
   }
