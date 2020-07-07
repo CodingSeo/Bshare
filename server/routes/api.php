@@ -34,12 +34,12 @@ Route::get('category/QnA', [
 
 //post router
 Route::get('posts/mostViews/{amount}', [
-    'as' => 'posts.show',
+    'as' => 'posts.mostviews',
     'uses' => 'PostsController@showMostViews'
 ]);
 
 Route::get('posts/mostRecents/{amount}', [
-    'as' => 'posts.show',
+    'as' => 'posts.mostrecents',
     'uses' => 'PostsController@showMostRecents'
 ]);
 
@@ -87,6 +87,7 @@ Route::delete('comments/{comment_id}', [
     'as' => 'posts.comments.delete',
     'uses' => 'CommentsController@destroy'
 ])->middleware('jwt');
+
 
 //today's mission to implement this part
 Route::post('file', [

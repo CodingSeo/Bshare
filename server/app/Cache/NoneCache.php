@@ -75,4 +75,8 @@ class NoneCache implements CacheContract
     public function setMulti($keys,$ttl){
         return null;
     }
+    public function deleteMulti(array $keys) : array
+    {
+        return [];
+    }
 }

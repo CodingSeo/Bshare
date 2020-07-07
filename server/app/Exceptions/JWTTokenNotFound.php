@@ -29,10 +29,11 @@ class JWTTokenNotFound extends Exception
      */
     public function render($request)
     {
+        $code = 401;
         $payload = [
-            'code' => 404,
+            'code' => $code,
             'message' => $this->message?:'Token not Found',
         ];
-        return response()->json($payload, 404, [], JSON_PRETTY_PRINT);
+        return response()->json($payload, $code, [], JSON_PRETTY_PRINT);
     }
 }

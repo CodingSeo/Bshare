@@ -16,6 +16,7 @@ class JWTAttemptUser
      * @var array
      */
     public $payload;
+
     public function __construct(AuthUser $authUser)
     {
         $this->authUser = $authUser;
@@ -33,8 +34,8 @@ class JWTAttemptUser
 
     /**
      * Set the value of authUser
-     *
-     * @param  AuthUser  $authUser
+     *`
+     * @param AuthUser $authUser
      *
      * @return  self
      */
@@ -59,7 +60,7 @@ class JWTAttemptUser
     /**
      * Set the value of token
      *
-     * @param  string  $token
+     * @param string $token
      *
      * @return  self
      */
@@ -83,7 +84,7 @@ class JWTAttemptUser
     /**
      * Set the value of payload
      *
-     * @param  array  $payload
+     * @param array $payload
      *
      * @return  self
      */

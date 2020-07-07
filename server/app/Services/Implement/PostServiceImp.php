@@ -5,7 +5,6 @@ namespace App\Services\Implement;
 use App\Auth\AuthUser;
 use App\DTO\CategoryDTO;
 use App\DTO\PostDTO;
-use App\Exceptions\IllegalUserApproach;
 use App\Repositories\Interfaces\CategoryRepository;
 use App\Repositories\Interfaces\PostRepository;
 use App\Services\Interfaces\PostService;
@@ -27,7 +26,7 @@ class PostServiceImp implements PostService
         if (!$post->id) throw new \App\Exceptions\ModuleNotFound('Post not Found');
         $post->view_count++;
         $result = $this->postRepository->updateByDTO($post);
-        if (!$result) throw new \App\Exceptions\ModuleNotFound('Post not updated');
+        if (!$result) throw new \App\Exceptions\ModuleNotUpdated('Post not Update');
         return $post;
     }
 
@@ -35,26 +34,22 @@ class PostServiceImp implements PostService
     {
         $category = $this->categoryRepository->getCategoryByID($requestContent['category_id']);
         $this->checkCategoryAvaliable($category);
-        DB::beginTransaction();
-        $post = $this->postRepository->save($requestContent, $user->email);
-        if (!$post->id) {
-            throw new \App\Exceptions\ModuleNotFound('Post not saved');
-            DB::rollBack();
-        }
-        $postContent = $this->postRepository->saveContent($post->id, $requestContent);
-        DB::commit();
-        $post->category = $category;
-        $post->content = $postContent;
+        $post = DB::transaction(function () use($requestContent,$user,$category) {
+            $post = $this->postRepository->save($requestContent, $user->email);
+            $postContent = $this->postRepository->saveContent($post->id, $requestContent);
+            $post->category = $category;
+            $post->content = $postContent;
+            if (!$post->id) throw new \App\Exceptions\ModuleNotFound('Post not Found');
+            return $post;
+        });
         return $post;
     }
 
     public function updatePost(array $requestContent, AuthUser $user): void
     {
         $post_exit = $this->postRepository->getOneWithCategory($requestContent['post_id']);
-        if (!$post_exit->id)
-            throw new \App\Exceptions\ModuleNotFound('Post do not exist');
-        if (strcmp($post_exit->user_id, $user->email))
-            throw new IllegalUserApproach();
+        if (!$post_exit->id) throw new \App\Exceptions\ModuleNotFound('Post do not exist');
+        if (strcmp($post_exit->user_id, $user->email)) throw new \App\Exceptions\IllegalUserApproach();
         $this->checkCategoryAvaliable($post_exit->category);
         DB::beginTransaction();
         $this->postRepository->updateByContent($requestContent);
@@ -66,9 +61,21 @@ class PostServiceImp implements PostService
     {
         $post_exit = $this->postRepository->getOne($requestContent['post_id']);
         if (!$post_exit->id) throw new \App\Exceptions\ModuleNotFound('Post not Found');
-        if (strcmp($post_exit->user_id, $user->email)) throw new IllegalUserApproach();
+        if (strcmp($post_exit->user_id, $user->email)) throw new \App\Exceptions\IllegalUserApproach();
         $delete_result = $this->postRepository->delete($post_exit);
-        if (!$delete_result) throw new \App\Exceptions\ModuleNotFound('delete failed');
+        if (!$delete_result) throw new \App\Exceptions\ModuelNotDeleted('delete failed');
+    }
+
+    public function getMostViewedPost(array $requestContent): array
+    {
+        $posts = $this->postRepository->getMostViewedPost($requestContent['amount']);
+        return $posts;
+    }
+
+    public function getMostMostRecents(array $requestContent): array
+    {
+        $posts = $this->postRepository->getMostRecentPost($requestContent['amount']);
+        return $posts;
     }
 
     public function checkCategoryAvaliable(CategoryDTO $category)
@@ -76,16 +83,6 @@ class PostServiceImp implements PostService
         if (!$category->id)
             throw new \App\Exceptions\ModuleNotFound('category not found');
         if (!$category->writable)
-            throw new \App\Exceptions\ModuleNotFound('cannot write a post on this category');
-    }
-    public function getMostViewedPost(array $requestContent): array
-    {
-        $posts = $this->postRepository->getMostViewedPost($requestContent['amount']);
-        return $posts;
-    }
-    public function getMostMostRecents(array $requestContent): array
-    {
-        $posts = $this->postRepository->getMostRecentPost($requestContent['amount']);
-        return $posts;
+            throw new \App\Exceptions\IllegalUserApproach('cannot write a post on this category');
     }
 }

@@ -28,5 +28,16 @@ if (!function_exists('onlyContent')) {
             "cache_key"=>($router_name.$cachekey),
         ], $request->only($param));
     }
+}
+
+if (!function_exists('checkKeyNull')) {
+    /**
+     * @param array $content
+     * @param string $key
+     */
+    function checkKeyNull($content, $key): bool
+    {
+        return array_key_exists($key, $content)&&$content[$key]!==null;
+    }
 
 }

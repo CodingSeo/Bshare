@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Auth\JWTAttemptUser;
+use App\EloquentModel\Attachment;
+use App\EloquentModel\Post;
 use App\Http\Controllers\Controller;
 use App\Services\Interfaces\CommentService;
 use App\Transformers\PostTransformer;
@@ -19,18 +21,14 @@ class FilesController extends Controller
     public function store(Request $request)
     {
         $user = $this->authUser->getAuthUser();
-        if ($request->has('attachments')) {
-            $attachments = \App\Attachment::whereIn('id', $request->input('attachments'))->get();
-            $attachments->each(function($attachment) use($article) {
-                $attachment->article()->associate($article);
-                $attachment->save();
-            });
-        }
-        $file->move(attachment_path(), $name);
+        // if ($request->has('attachments')) {
+
+        // }
+        // $file->move(attachment_path(), $name);
         $articleId = $request->input('articleId');
         $attachment = $articleId
-            ? \App\Article::findOrFail($articleId)->attachments()->create(['name' => $name])
-            : \App\Attachment::create(['name' => $name]);
+            ? Post::findOrFail($articleId)->attachments()->create(['name' => $name])
+            : Attachment::create(['name' => $name]);
     }
 
     public function destroy(Request $request)
