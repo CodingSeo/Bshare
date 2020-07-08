@@ -22,7 +22,7 @@ class CommentServiceImp implements CommentService
     {
         $post = $this->post_repository->getOne($content['post_id']);
         if (!$post->id) throw new \App\Exceptions\ModuleNotFound('Post not Found');
-        if (checkKeyNull($content,'parent_id')){
+        if (!empty($content['parent_id'])){
             $parent_comment = $this->comment_repository->getOne($content['parent_id']);
             if (!$parent_comment->id) throw new \App\Exceptions\ModuleNotFound('parent_comment not Found');
         }

@@ -21,6 +21,10 @@ class CommentDTO
      */
     public $replies;
     /**
+     * @var int
+     */
+    public $active;
+    /**
      * @var string
      */
     public $created_at;

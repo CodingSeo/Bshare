@@ -2,8 +2,6 @@
 
 namespace App\EloquentModel;
 
-use Carbon\Carbon;
-use DateTime;
 use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
