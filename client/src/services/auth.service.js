@@ -29,6 +29,10 @@ class AuthService {
             return res.data;
         });
     }
+    oauthLogin(userInfo){
+        localStorage.setItem('user', JSON.stringify(userInfo));
+        return userInfo;
+    }
 }
 
 export default new AuthService();

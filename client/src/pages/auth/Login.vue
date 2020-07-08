@@ -86,7 +86,7 @@ export default {
         this.loading = true;
         this.$store.dispatch("auth/login", this.user).then(
           response => {
-            this.$router.go("/home");
+            this.$router.push("/home");
           },
           error => {
             this.loading = false;
@@ -97,18 +97,6 @@ export default {
           }
         );
       }
-    },
-    receiveMessage(event) {
-      if (event.origin !== BASE_URL) {
-        return;
-      }
-      console.log(event);
-      // const { data } = event;
-      // if (data.source === "lma-login-redirect") {
-      //   const { payload } = data;
-      //   const redirectUrl = `/auth/google/login${payload}`;
-      //   window.location.pathname = redirectUrl;
-      // }
     },
     hiwork_login() {
       var url = "http://45.115.155.76/dev/auth/login/hiworks";
@@ -125,13 +113,22 @@ export default {
       } else {
         this.windowObjectReference.focus();
       }
-      if(window.addEventListener){
-        window.addEventListener("message", this.receiveMessage, false);
-      }
-      setInterval(()=>{
-        console.log(this.windowObjectReference.URL);
-      },1000);
-      this.previousUrl = url;
+      var LoginScanninginterval = setInterval(()=>{
+        var currentUrl = this.windowObjectReference.location.href;
+        if(url != currentUrl){
+          console.log('loggined');
+          var user_info = JSON.parse(this.windowObjectReference.document.getElementsByTagName('pre')[0].innerText)
+          console.log(user_info);
+          this.$store.dispatch("auth/oauthLogin", user_info);
+          this.$router.push("/");
+          this.windowObjectReference.close();
+          clearInterval(LoginScanninginterval);
+        }
+        if(this.windowObjectReference === null){
+          clearInterval(LoginScanninginterval);
+        }
+      },100);
+
     }
   }
 };

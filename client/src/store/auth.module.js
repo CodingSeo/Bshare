@@ -50,6 +50,13 @@ export const auth = {
                     return Promise.reject(error);
                 }
             );
+        },
+        oauthLogin({
+            commit
+        },userinfo){
+            AuthService.oauthLogin(userinfo);
+            commit('loginSuccess',userinfo);
+            return userinfo;
         }
     },
     mutations: {
