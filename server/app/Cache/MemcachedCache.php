@@ -111,4 +111,9 @@ class MemcachedCache implements CacheContract
     {
         return (is_null($time)) ? $this->expired_time : $time;
     }
+
+    public function deleteMulti(array $keys) : array
+    {
+        return $this->cmd->deleteMulti($keys);
+    }
 }

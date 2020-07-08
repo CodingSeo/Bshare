@@ -41,8 +41,7 @@ class JWTPayloadValidateChecking
             throw new JWTTokenException('Illegal Approach (prv)');
 
         //$token_jti = $payload['jti'];
-        //logout -> cached?????? this is ridiculous...let's check out it can be done
-        //is there other way to do this? using jti maybe there is another option?
+        //$this->authManager->checklogout($token_jti, $token)
 
         $this->attemptUser->setPayload($payload);
         return $next($request);

@@ -33,6 +33,10 @@ class PostDTO
      */
     public $view_count;
     /**
+     * @var int
+     */
+    public $active;
+    /**
      * @var string
      */
     public $created_at;

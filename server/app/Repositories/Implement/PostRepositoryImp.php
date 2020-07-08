@@ -10,6 +10,7 @@ use App\EloquentModel\Post;
 use App\Cache\CacheContract;
 use App\Mapper\MapperService;
 use App\Repositories\Interfaces\PostRepository;
+use Illuminate\Support\Facades\DB;
 
 class PostRepositoryImp implements PostRepository
 {
@@ -23,18 +24,17 @@ class PostRepositoryImp implements PostRepository
     public function getFullContent(int $id): PostDTO
     {
         $post = $this->cache->remember("api.post.fullcontent." . $id, function () use ($id) {
-            $post = POST::with('content')->find($id);
-            $post->comments = $post->comments()->with('replies')->whereNull('parent_id')->latest()->get();
-            return $post;
+            return POST::with('content','comments')->active()->find($id);
+            // return DB::table('posts')
+            //         ->where('posts.id','=',$id)
+            //         ->get();
         });
-        $postDTO = $this->mapper->map($post, PostDTO::class);
-        $postDTO->comments = $this->mapper->mapArray(json_decode($post->comments), CommentDTO::class);
-        return $postDTO;
+        return $this->mapper->map($post, PostDTO::class);;
     }
 
     public function getOne(int $id): PostDTO
     {
-        $post = $this->cache->remember("api.post." . $id, function () use ($id) {
+        $post = $this->cache->remember("api.post.". $id, function () use ($id) {
             return POST::find($id);
         });
         return $this->mapper->map($post, PostDTO::class);
@@ -71,7 +71,8 @@ class PostRepositoryImp implements PostRepository
     {
         $post_id = $postDTO->id;
         $result  = Post::where('id', $post_id)->delete();
-        if ($result) $this->cache->destroy('api.posts.' . $post_id);
+        if ($result) $this->cache->destroy('api.post.' . $post_id);
+        if ($result) $this->cache->destroy('api.post.fullcontent' . $post_id);
         return $result;
     }
 

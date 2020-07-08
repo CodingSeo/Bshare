@@ -27,7 +27,7 @@ class PostsController extends Controller
 
     public function show(PostsRequestIndex $request): JsonResponse
     {
-        $requestContent = onlyContent($request, [
+        $requestContent = onlyContent($request,[
             'post_id'
         ]);
         $post = $this->service->getPost($requestContent);
@@ -37,7 +37,7 @@ class PostsController extends Controller
     public function store(PostsRequestStore $request): JsonResponse
     {
         $user = $this->authUser->getAuthUser();
-        $requestContent = onlyContent($request, [
+        $requestContent = onlyContent($request,[
             'title', 'body', 'category_id'
         ]);
         $post = $this->service->storePost($requestContent, $user);
@@ -48,7 +48,7 @@ class PostsController extends Controller
     {
 
         $user = $this->authUser->getAuthUser();
-        $requestContent = onlyContent($request, [
+        $requestContent = onlyContent($request,[
             'post_id', 'title', 'body'
         ]);
         $this->service->updatePost($requestContent, $user);
@@ -58,7 +58,7 @@ class PostsController extends Controller
     public function destroy(PostsRequestIndex $request)
     {
         $user = $this->authUser->getAuthUser();
-        $requestContent = onlyContent($request, [
+        $requestContent = onlyContent($request,[
             'post_id'
         ]);
         $this->service->deletePost($requestContent, $user);
@@ -66,7 +66,7 @@ class PostsController extends Controller
     }
     public function showMostViews(PostsAmountRequest $request): JsonResponse
     {
-        $requestContent = onlyContent($request, [
+        $requestContent = onlyContent($request,[
             'amount'
         ]);
         $posts = $this->service->getMostViewedPost($requestContent);
@@ -74,7 +74,7 @@ class PostsController extends Controller
     }
     public function showMostRecents(PostsAmountRequest $request): JsonResponse
     {
-        $requestContent = onlyContent($request, [
+        $requestContent = onlyContent($request,[
             'amount'
         ]);
         $posts = $this->service->getMostMostRecents($requestContent);

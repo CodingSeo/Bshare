@@ -50,4 +50,6 @@ interface CacheContract
      * @return mixed
      */
     public function setMulti($keys,$ttl);
+
+    public function deleteMulti(array $keys) : array;
 }

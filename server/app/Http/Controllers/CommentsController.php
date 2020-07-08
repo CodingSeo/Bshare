@@ -24,7 +24,7 @@ class CommentsController extends Controller
     public function store(CommentsStoreRequest $request)
     {
         $user = $this->authUser->getAuthUser();
-        $content = $request->only([
+        $content = onlyContent($request,[
             'body','parent_id','post_id'
         ]);
         $comment = $this->comment_service->storeComment($content,$user);
@@ -34,7 +34,7 @@ class CommentsController extends Controller
     public function update(CommentsUpdateRequest $request)
     {
         $user = $this->authUser->getAuthUser();
-        $content = $request->only([
+        $content = onlyContent($request,[
             'comment_id','parent_id','body'
         ]);
         $this->comment_service->updateComment($content,$user);
@@ -44,7 +44,7 @@ class CommentsController extends Controller
     public function destroy(CommentDestoryRequest $request)
     {
         $user = $this->authUser->getAuthUser();
-        $content = $request->only([
+        $content = onlyContent($request,[
             'comment_id'
         ]);
         $this->comment_service->deleteComment($content,$user);
