@@ -1,35 +1,31 @@
 <template>
   <v-app class="grey lighten-4">
-    <NavBar :login="login" :user="user" />
+    <NavBar :login="loggedIn" :user="user_info" />
     <v-content class="mx-4 mb-4">
-      <router-view :login="login" :user="user"></router-view>
+      <router-view :login="loggedIn" :user="user_info"></router-view>
     </v-content>
   </v-app>
 </template>
 <script>
 import NavBar from "@/components/NavBar";
-import User from "@/models/user";
+import { mapState } from "vuex";
 export default {
   name: "App",
   components: {
     NavBar
   },
   computed: {
+    ...mapState({
+      auth: 'auth' 
+    }),
     loggedIn() {
-      return this.$store.state.auth.status.loggedIn;
+      return this.auth.status.loggedIn;
+    },
+    user_info() {
+      return this.auth.user;
     }
-  },
-  created() {
-    if (this.loggedIn) {
-      this.login = true;
-      this.user = this.$store.state.auth.user.user_info;
-    }
-  },
-  data: () => ({
-    login: false,
-    user: new User()
-  })
-}
+  }
+};
 </script>
 
 <style>

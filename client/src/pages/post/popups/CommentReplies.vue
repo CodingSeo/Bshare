@@ -60,7 +60,7 @@ export default {
         this.loading = true;
         UserService.createComment(this.commentModel).then(
           response => {
-            this.$router.go(`/review/${this.postid}`);
+            this.$router.push(`/BookReview`);
           },
           error => {
             console.log(error.response);

@@ -191,7 +191,7 @@ export default {
       if (this.$refs.commentform.validate()) {
         UserService.createComment(commentModel).then(
           response => {
-            this.$router.push(`/BookReview/${this.postid}`);
+            this.$router.push(`/BookReview`);
           },
           error => {
             console.log(error.response);
@@ -202,7 +202,7 @@ export default {
     deleteComment(commentid) {
       UserService.deleteComment(commentid).then(
         response => {
-          this.$router.push(`/BookReview/${this.postid}`);
+          this.$router.push(`/BookReview`);
         },
         error => {
           console.log(error.response);

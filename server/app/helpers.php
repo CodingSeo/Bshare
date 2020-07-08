@@ -3,16 +3,6 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
-if (!function_exists('taggable')) {
-    /**
-     * @return bool
-     */
-    function taggable()
-    {
-        return in_array(config('cache.default'), ['memcached', 'redis'], true);
-    }
-}
-
 
 if (!function_exists('onlyContent')) {
     /**

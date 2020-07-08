@@ -64,7 +64,7 @@ export default {
         console.log(this.post);
         UserService.savePost(this.post).then(
           response => {
-            this.$router.go("/home");
+            this.$router.push("/home");
           },
           error => {
             console.log(error.response);

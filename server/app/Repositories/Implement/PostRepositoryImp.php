@@ -25,9 +25,6 @@ class PostRepositoryImp implements PostRepository
     {
         $post = $this->cache->remember("api.post.fullcontent." . $id, function () use ($id) {
             return POST::with('content','comments')->active()->find($id);
-            // return DB::table('posts')
-            //         ->where('posts.id','=',$id)
-            //         ->get();
         });
         return $this->mapper->map($post, PostDTO::class);;
     }

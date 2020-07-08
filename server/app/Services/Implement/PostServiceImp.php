@@ -39,7 +39,6 @@ class PostServiceImp implements PostService
             $postContent = $this->postRepository->saveContent($post->id, $requestContent);
             $post->category = $category;
             $post->content = $postContent;
-            if (!$post->id) throw new \App\Exceptions\ModuleNotFound('Post not Found');
             return $post;
         });
         return $post;
@@ -51,10 +50,10 @@ class PostServiceImp implements PostService
         if (!$post_exit->id) throw new \App\Exceptions\ModuleNotFound('Post do not exist');
         if (strcmp($post_exit->user_id, $user->email)) throw new \App\Exceptions\IllegalUserApproach();
         $this->checkCategoryAvaliable($post_exit->category);
-        DB::beginTransaction();
-        $this->postRepository->updateByContent($requestContent);
-        $this->postRepository->updateContent($post_exit, $requestContent);
-        DB::commit();
+        DB::transaction(function () use($requestContent,$post_exit){
+            $this->postRepository->updateByContent($requestContent);
+            $this->postRepository->updateContent($post_exit, $requestContent);
+        });
     }
 
     public function deletePost(array $requestContent, AuthUser $user): void
@@ -68,14 +67,12 @@ class PostServiceImp implements PostService
 
     public function getMostViewedPost(array $requestContent): array
     {
-        $posts = $this->postRepository->getMostViewedPost($requestContent['amount']);
-        return $posts;
+        return $this->postRepository->getMostViewedPost($requestContent['amount']);
     }
 
     public function getMostMostRecents(array $requestContent): array
     {
-        $posts = $this->postRepository->getMostRecentPost($requestContent['amount']);
-        return $posts;
+        return $this->postRepository->getMostRecentPost($requestContent['amount']);
     }
 
     public function checkCategoryAvaliable(CategoryDTO $category)

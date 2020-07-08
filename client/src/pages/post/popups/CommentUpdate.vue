@@ -56,7 +56,7 @@ export default {
         this.loading = true;
         UserService.updateComments(this.commentModel).then(
           response => {
-            this.$router.go(`/review/${this.postid}`);
+            this.$router.push(`/review/${this.postid}`);
           },
           error => {
             console.log(error.response);

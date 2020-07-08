@@ -1,4 +1,4 @@
-export default class Post {
+class Post {
     constructor(id,title, body, category_id) {
         this.id=id;
         this.title = title;
@@ -6,3 +6,5 @@ export default class Post {
         this.category_id = category_id;
     }
 }
+
+export default Post;

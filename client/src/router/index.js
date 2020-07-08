@@ -4,7 +4,7 @@ import Home from "../pages/Home";
 import Login from "../pages/auth/Login";
 import Signup from "../pages/auth/Signup";
 import Review from "../pages/post/Review";
-import ReviewPost from "../pages/post/ReviewPost";
+import Post from "../pages/post/Post";
 import Selling from "../pages/post/Selling";
 import Purchase from "../pages/post/Purchase";
 import Help from "../pages/post/Help";
@@ -38,8 +38,8 @@ const routes = [
   {
     path: "/BookReview/:postid",
     props: true,
-    name: "reviewpost",
-    component: ReviewPost
+    name: "Post",
+    component: Post
   },
   {
     path: "/BookBuying",
@@ -50,7 +50,7 @@ const routes = [
     path: "/BookBuying/:postid",
     props: true,
     name: "Buyingpost",
-    component: ReviewPost
+    component: Post
   },
   {
     path: "/BookSelling",
@@ -61,7 +61,7 @@ const routes = [
     path: "/BookSelling/:postid",
     props: true,
     name: "sellingpost",
-    component: ReviewPost
+    component: Post
   },
   {
     path: "/QnA",

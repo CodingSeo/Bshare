@@ -47,8 +47,10 @@ class CommentRepositoryImp implements CommentRepository
     public function save($content, string $user_email): CommentDTO
     {
         $comment = new Comment();
-        $comment->fill($content);
         $comment->user_id = $user_email;
+        $comment->body = $content['body'];
+        $comment->parent_id = $content['parent_id'];
+        $comment->post_id = $content['post_id'];
         $comment->save();
         return $this->mapper->map($comment, CommentDTO::class);
     }

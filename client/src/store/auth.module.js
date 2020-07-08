@@ -1,16 +1,16 @@
 import AuthService from '@/services/auth.service';
-
+import User from "@/models/user";
 const user = JSON.parse(localStorage.getItem('user'));
 const initialState = user ? {
     status: {
         loggedIn: true
     },
-    user
+    user: user.user_info
 } : {
     status: {
         loggedIn: false
     },
-    user: null,
+    user: new User()
 };
 
 export const auth = {

@@ -41,7 +41,7 @@
             <div class="caption grey--text">Create At</div>
             <div>{{post.created}}</div>
           </v-flex>
-          <v-flex xs2 sm2 md2>
+          <v-flex xs2 sm2 md1>
             <div class="caption grey--text">View Count</div>
             <div>{{post.view_count}}</div>
           </v-flex>
