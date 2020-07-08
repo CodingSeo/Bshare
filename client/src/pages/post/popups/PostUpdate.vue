@@ -61,7 +61,7 @@ export default {
         this.loading = true;
         UserService.updatePost(this.post).then(
           response => {
-            this.$router.push(`/review`);
+            this.$router.push(`/BookReview`);
           },
           error => {
             console.log(error.response);

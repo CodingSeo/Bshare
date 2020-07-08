@@ -23,7 +23,9 @@ class CategoriesController extends Controller
     }
     public function index(CateogriesIndexRequest $request) : JsonResponse
     {
-        $content = $request->only(['category_id']);
+        $content = onlyContent($request,[
+            'category_id'
+        ]);
         $posts = $this->category_service->getPostsWithCategory($content);
         return $this->transformer->withPagination($posts);
     }

@@ -29,7 +29,7 @@ class UserService {
         });
     }
     createComment(commentModel){
-        return axios.post(API_URL + "comments/", {
+        return axios.post(API_URL + "comments", {
             post_id: commentModel.postid,
             body: commentModel.body,
             user_id: commentModel.user_id,

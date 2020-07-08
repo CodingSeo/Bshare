@@ -48,10 +48,10 @@ class BshareProvider extends ServiceProvider
     public function register()
     {
         $container = app();
-        if (in_array(config('cache.default'), ['memcached'], true)) {
+        if ((config('memcached.check_cache')==='memcached')) {
             $cacheService = new MemcachedCache(
                 config('memcached.server'),
-                config(('memcached.port'))
+                config('memcached.port')
             );
         } else {
             $cacheService = new NoneCache(); //file cache로 변경
