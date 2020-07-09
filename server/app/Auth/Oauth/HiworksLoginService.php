@@ -53,13 +53,12 @@ class HiworksLoginService implements OauthLoginService
             "Content-Type"=> "application/json"
         ])->get($this->hiworksBasicUrl ."user/v2/me");
         $user_info = $reponse->json();
-        $this->hiworkClient->name = $user_info['name'];
-        $this->hiworkClient->user_id = $user_info['user_id'];
+        $this->setClientInfo($user_info);
         return $user_info;
     }
     public function setClientInfo(array $data)
     {
-        $this->hiworkClient->user_id = $data['user_id'];
+        $this->hiworkClient->user_id = $data['user_id'].'@gabia.com';
         $this->hiworkClient->name = $data['name'];
     }
     public function getClient(): HiworksClient

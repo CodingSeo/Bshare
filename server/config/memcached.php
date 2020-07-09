@@ -1,5 +1,6 @@
 <?php
 return ([
-    'server' => env('MECACHED_HOST'),
-    'port' => env('MECACHED_PORT')
+    'check_cache' => env('CACHE_CHECK',null),
+    'server' => env('MEMCACHED_HOST'),
+    'port' => env('MEMCACHED_PORT')
 ]);

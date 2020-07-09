@@ -15,11 +15,6 @@ Route::post('login', [
 ]);
 
 //Hiworks
-Route::get('auth/hiworks', [
-    'as' => 'auth.hiworks',
-    'uses' => 'SocialiteController@authorizedUser'
-]);
-
 Route::get('login/hiworks', [
     'as' => 'login.hiworks',
     'uses' => 'SocialiteController@redirectToProvider'
@@ -30,19 +25,3 @@ Route::get('hiworks/callback', [
     'uses' => 'SocialiteController@handleProviderCallback'
 ]);
 
-//+ should it be the
-
-// Route::get('user', [
-//     'as' => 'user',
-//     'uses' => 'JWTAuthController@user'
-// ])->middleware('jwt');
-
-// Route::get('refresh', [
-//     'as' => 'refresh',
-//     'uses' => 'JWTAuthController@refresh'
-// ])->middleware('jwt');
-
-// Route::get('logout', [
-//     'as' => 'logout',
-//     'uses' => 'JWTAuthController@logout'
-// ])->middleware('jwt');

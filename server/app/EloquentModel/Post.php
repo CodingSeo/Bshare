@@ -16,7 +16,7 @@ class Post extends Model
     }
     public function comments()
     {
-        return $this->hasMany(Comment::class)->active()->with('replies');
+        return $this->hasMany(Comment::class)->active()->parent()->with('replies');
     }
     public function content()
     {
@@ -25,5 +25,9 @@ class Post extends Model
     public function scopeActive($query)
     {
         return $query->where('active', 1);
+    }
+    public function scopeParent($query)
+    {
+        return $query->where('parent_id',null);
     }
 }

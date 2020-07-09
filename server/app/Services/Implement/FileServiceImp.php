@@ -19,11 +19,7 @@ class FileServiceImp implements FileService
 
     public function storeFile(array $content, AuthUser $user): FileDTO
     {
-        $attachments = Attachment::whereIn('id', $request->input('attachments'))->get();
-        $attachments->each(function($attachment) use($article) {
-            $attachment->article()->associate($article);
-            $attachment->save();
-        });
+
     }
 
     public function updateFile(array $content, AuthUser $user): void
