@@ -3,6 +3,7 @@
 namespace App\Auth\Manager;
 
 use App\Auth\AuthUser;
+use App\Cache\CacheContract;
 use Exception;
 use App\DTO\UserDTO;
 use App\Exceptions\JWTTokenException;
@@ -36,11 +37,17 @@ class JWTAuthManagerTymond implements JWTAuthManager
      * @var Lcobucci
      */
     private $tokenProvider;
-    public function __construct(JWTAuth $jwtauth, TokenValidator $tokenValidator, Lcobucci $tokenProvider)
+    /**
+     * @var CacheContract
+     */
+    private $cacheContract;
+    public function __construct(JWTAuth $jwtauth, TokenValidator $tokenValidator,
+         Lcobucci $tokenProvider, CacheContract $cacheContract)
     {
         $this->tokenValidator = $tokenValidator;
         $this->jwtauth = $jwtauth;
         $this->tokenProvider = $tokenProvider;
+        $this->cacheContract = $cacheContract;
     }
     /**
      * @param Request
@@ -94,6 +101,7 @@ class JWTAuthManagerTymond implements JWTAuthManager
     {
         return strcmp($token_prv, sha1(AuthUser::class));
     }
+
     public function getAuthUserByUserDTO(UserDTO $user): AuthUser
     {
         $auth_user = new AuthUser((array) $user, 'email', 'password', null);
@@ -101,13 +109,20 @@ class JWTAuthManagerTymond implements JWTAuthManager
         $auth_user->token = $token;
         return $auth_user;
     }
+
+    // public function checklogout(string $token_jti) : bool
+    // {
+    //      this is the user issue
+    //     return ($this->cache->get($token_jti))?true:false;
+    // }
+
     // /**
     //  * @param string $token_user
     //  * @return null|Authenticatable
     //  */
     // public function checkAuthorizationToken(string $token_user)
     // {
-    //     //cache? or db access?
+    //     //doesn't have to check the user_id
     //     return Auth::loginUsingId($token_user);
     // }
 }
