@@ -23,7 +23,6 @@ class PostRepositoryImp implements PostRepository
     }
     public function getFullContent(int $id): PostDTO
     {
-        $this->cache->put('t',1);
         $post = $this->cache->remember("api.post.fullcontent.".$id, 1000, function () use ($id) {
             return POST::with('content','comments')->active()->find($id);
         });
@@ -40,7 +39,7 @@ class PostRepositoryImp implements PostRepository
 
     public function getOneWithCategory(int $id): PostDTO
     {
-        $post = $this->cache->remember("api.post.withCategory.".$id, function () use ($id) {
+        $post = $this->cache->remember("api.post.withCategory.".$id,1000, function () use ($id) {
             return POST::with('category')->find($id);
         });
         return $this->mapper->map($post, PostDTO::class);
@@ -107,21 +106,21 @@ class PostRepositoryImp implements PostRepository
 
     public function getMostViewedPost(string $amount): array
     {
-        $posts = $this->cache->remember('api.posts.mostviewed', function () use ($amount) {
+        $posts = $this->cache->remember('api.posts.mostviewed',1000, function () use ($amount) {
             return Post::orderBy('view_count', 'desc')
                 ->take($amount++)
                 ->get();
-        }, 600);
+        });
         return $this->mapper->mapArray($posts, PostDTO::class);
     }
 
     public function getMostRecentPost(string $amount): array
     {
-        $posts = $this->cache->remember('api.posts.mostrecent', function () use ($amount) {
+        $posts = $this->cache->remember('api.posts.mostrecent',1000, function () use ($amount) {
             return Post::latest()
                 ->take($amount++)
                 ->get();
-        }, 600);
+        });
         return $this->mapper->mapArray($posts, PostDTO::class);
     }
 }

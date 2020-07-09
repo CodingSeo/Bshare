@@ -54,7 +54,7 @@ class HiworksLoginService implements OauthLoginService
         ])->get($this->hiworksBasicUrl ."user/v2/me");
         $user_info = $reponse->json();
         $this->setClientInfo($user_info);
-        return $user_info;
+        return (array)$this->hiworkClient;
     }
     public function setClientInfo(array $data)
     {

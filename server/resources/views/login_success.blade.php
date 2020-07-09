@@ -8,8 +8,8 @@
     <script>
         var json_data = @json($json_data);
         window.onload = function() {
-        console.log(json_data);
-        window.parent.postMessage({ childData : json_data }, '*');
+            console.log(json_data);
+            window.opener.postMessage(json_data, '*');
         };
     </script>
     <body>

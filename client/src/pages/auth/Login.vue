@@ -98,6 +98,12 @@ export default {
         );
       }
     },
+    receiveMessage(e){
+      console.log(e.data);
+      this.windowObjectReference.close();
+      this.$store.dispatch("auth/oauthLogin", e.data);
+      this.$router.push("/");
+    },
     hiwork_login() {
       var url = "http://45.115.155.76/dev/auth/login/hiworks";
       var name = "_blank";
@@ -113,22 +119,9 @@ export default {
       } else {
         this.windowObjectReference.focus();
       }
-      var LoginScanninginterval = setInterval(()=>{
-        var currentUrl = this.windowObjectReference.location.href;
-        if(url != currentUrl){
-          console.log('loggined');
-          var user_info = JSON.parse(this.windowObjectReference.document.getElementsByTagName('pre')[0].innerText)
-          console.log(user_info);
-          this.$store.dispatch("auth/oauthLogin", user_info);
-          this.$router.push("/");
-          this.windowObjectReference.close();
-          clearInterval(LoginScanninginterval);
-        }
-        if(this.windowObjectReference === null){
-          clearInterval(LoginScanninginterval);
-        }
-      },100);
-
+      if(window.addEventListener){
+        window.addEventListener("message",this.receiveMessage);
+      }
     }
   }
 };

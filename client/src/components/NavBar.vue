@@ -96,7 +96,7 @@ export default {
     logout() {
       //if
       this.$store.dispatch("auth/logout");
-      this.$router.go("/");
+      this.$router.push("/");
     }
   }
 };
