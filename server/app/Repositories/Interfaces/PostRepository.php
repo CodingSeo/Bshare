@@ -10,7 +10,7 @@ interface PostRepository
 {
     public function getOne(int $id): PostDTO;
     public function getOneWithCategory(int $id): PostDTO;
-    public function getFullContent(int $id): PostDTO;
+    public function getOneWithContent(int $id): PostDTO;
 
     public function updateByDTO(PostDTO $postDTO): bool;
     public function updateByContent(array $post): bool;

@@ -44,12 +44,10 @@ export default {
       post: new Post("","","",this.category_id),
       dialog: false,
       titleRules: [
-        v => !!v || "title is required",
-        v => v.length >= 10 || "must be longer then 10"
+        v => !!v || "title is required"
       ],
       bodyRules: [
-        v => !!v || "body is required",
-        v => v.length >= 10 || "must be longer then 10"
+        v => !!v || "body is required"
       ],
       loading: false
     };

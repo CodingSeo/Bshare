@@ -3,7 +3,9 @@
 namespace App\Repositories\Implement;
 
 use App\DTO\CommentDTO;
+use App\DTO\PostDTO;
 use App\EloquentModel\Comment;
+use App\EloquentModel\Post;
 use App\Mapper\MapperService;
 use App\Repositories\Interfaces\CommentRepository;
 
@@ -14,34 +16,31 @@ class CommentRepositoryImp implements CommentRepository
     {
         $this->mapper = $mapper;
     }
-    public function getOne(int $id): CommentDTO
+    public function getCommentWithReplies(PostDTO $postDTO): array
     {
-        $comment = Comment::find($id);
-        return $this->mapper->map($comment, CommentDTO::class);
-    }
-    public function findAll(): array
-    {
-        $comments = Comment::all();
+        $post = new Post();
+        $post->id = $postDTO->id;
+        $comments = $post->comments()->get();
         return $this->mapper->mapArray($comments, CommentDTO::class);
     }
     public function updateByDTO(CommentDTO $comment): bool
     {
-        return Comment::where('id',$comment->comment_id)
+        return Comment::where('id', $comment->comment_id)
             ->update([
-                'body'=>$comment->body
+                'body' => $comment->body
             ]);
     }
     public function updateByContent(array $content): bool
     {
-        return Comment::where('id',$content['comment_id'])
+        return Comment::where('id', $content['comment_id'])
             ->update([
-                'body'=>$content['body']
+                'body' => $content['body']
             ]);
     }
     public function delete(CommentDTO $comment): bool
     {
         return Comment::where('id', $comment->id)
-        ->delete();
+            ->delete();
     }
     //save에 관하여 saveByContent와 saveByDTO를 나누어 작업하는 것이 맞다고 본다.
     public function save($content, string $user_email): CommentDTO

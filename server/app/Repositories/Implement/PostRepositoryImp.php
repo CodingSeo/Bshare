@@ -2,7 +2,6 @@
 
 namespace App\Repositories\Implement;
 
-use App\DTO\CommentDTO;
 use App\DTO\ContentDTO;
 use App\DTO\PostDTO;
 use App\EloquentModel\Content;
@@ -21,10 +20,10 @@ class PostRepositoryImp implements PostRepository
         $this->cache = cache();
         // $this->cache = $cache;
     }
-    public function getFullContent(int $id): PostDTO
+    public function getOneWithContent(int $id): PostDTO
     {
-        $post = $this->cache->remember("api.post.fullcontent.".$id, 1000, function () use ($id) {
-            return POST::with('content','comments')->active()->find($id);
+        $post = $this->cache->remember("api.post.withContent.".$id, 1000, function () use ($id) {
+            return POST::with('content')->active()->find($id);
         });
         return $this->mapper->map($post, PostDTO::class);;
     }
@@ -32,7 +31,7 @@ class PostRepositoryImp implements PostRepository
     public function getOne(int $id): PostDTO
     {
         $post = $this->cache->remember("api.post.". $id, function () use ($id) {
-            return POST::find($id);
+            return POST::active()->find($id);
         });
         return $this->mapper->map($post, PostDTO::class);
     }
@@ -40,7 +39,7 @@ class PostRepositoryImp implements PostRepository
     public function getOneWithCategory(int $id): PostDTO
     {
         $post = $this->cache->remember("api.post.withCategory.".$id,1000, function () use ($id) {
-            return POST::with('category')->find($id);
+            return POST::with('category')->active()->find($id);
         });
         return $this->mapper->map($post, PostDTO::class);
     }

@@ -6,6 +6,7 @@ use App\Auth\AuthUser;
 use App\DTO\CategoryDTO;
 use App\DTO\PostDTO;
 use App\Repositories\Interfaces\CategoryRepository;
+use App\Repositories\Interfaces\CommentRepository;
 use App\Repositories\Interfaces\PostRepository;
 use App\Services\Interfaces\PostService;
 use Illuminate\Support\Facades\DB;
@@ -14,16 +15,20 @@ class PostServiceImp implements PostService
 {
     protected $postRepository;
     protected $categoryRepository;
-    public function __construct(PostRepository $postRepository, CategoryRepository $categoryRepository)
+    protected $commentRepository;
+    public function __construct(PostRepository $postRepository, CategoryRepository $categoryRepository,
+        CommentRepository $commentRepository)
     {
+        $this->commentRepository = $commentRepository;
         $this->postRepository = $postRepository;
         $this->categoryRepository = $categoryRepository;
     }
 
     public function getPost(array $requestContent): PostDTO
     {
-        $post = $this->postRepository->getFullContent($requestContent['post_id']);
+        $post = $this->postRepository->getOneWithContent($requestContent['post_id']);
         if (!$post->id) throw new \App\Exceptions\ModuleNotFound('Post not Found');
+        $post->comments = $this->commentRepository->getCommentWithReplies($post);
         $post->view_count++;
         $result = $this->postRepository->updateByDTO($post);
         if (!$result) throw new \App\Exceptions\ModuleNotUpdated('Post not Update');
