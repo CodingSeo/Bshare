@@ -48,15 +48,15 @@ class BshareProvider extends ServiceProvider
     public function register()
     {
         $container = app();
-        if ((config('memcached.check_cache')==='memcached')) {
-            $cacheService = new MemcachedCache(
-                config('memcached.server'),
-                config('memcached.port')
-            );
-        } else {
-            $cacheService = new NoneCache(); //file cache로 변경
-        }
-
+        // if ((config('memcached.check_cache')==='memcached')) {
+        //     $cacheService = new MemcachedCache(
+        //         config('memcached.server'),
+        //         config('memcached.port')
+        //     );
+        // } else {
+        //     $cacheService = new NoneCache(); //file cache로 변경
+        // }
+        $cacheService = new NoneCache(); //file cache로 변경
         $container->singleton(CacheContract::class, function () use ($cacheService) {
             return $cacheService;
         });

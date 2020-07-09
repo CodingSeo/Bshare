@@ -4,9 +4,8 @@ namespace App\Cache;
 
 use Closure;
 
-class MemcachedCache implements CacheContract
+class MemcachedCache extends TaggedCached implements CacheContract
 {
-
     /**
      *
      * @var Memcached
@@ -116,4 +115,5 @@ class MemcachedCache implements CacheContract
     {
         return $this->cmd->deleteMulti($keys);
     }
+
 }

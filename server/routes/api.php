@@ -49,11 +49,6 @@ Route::get('posts/{post_id}', [
 ]);
 
 
-Route::get('posts/{post_id}', [
-    'as' => 'posts.show',
-    'uses' => 'PostsController@show'
-]);
-
 Route::post('posts', [
     'as' => 'posts.store',
     'uses' => 'PostsController@store'

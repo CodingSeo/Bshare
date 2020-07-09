@@ -9,28 +9,27 @@ use App\Repositories\Interfaces\UserRepository;
 
 class UserRepositoryImp implements UserRepository
 {
-    protected $user, $mapper;
-    public function __construct(User $user, MapperService $mapper)
+    protected $mapper;
+    public function __construct(MapperService $mapper)
     {
-        $this->user = $user;
         $this->mapper = $mapper;
     }
     public function getOne(int $id)
     {
-        $user = $this->user->find($id);
+        $user = User::find($id);
         return $this->mapper->map($user, UserDTO::class);
     }
     public function getOneByEmail(string $email): UserDTO
     {
-        $user = $this->user->where('email', $email)->first();
+        $user = User::where('email', $email)->first();
         return $this->mapper->map($user, UserDTO::class);
     }
     public function getOneOrCreateByEmail(array $user_info): UserDTO
     {
         $email = $user_info['user_id'];
         $name = $user_info['name'];
-        $user = ($this->user->where('email', $email)->first())?:
-                $this->user->create([
+        $user = (User::where('email', $email)->first())?:
+                User::create([
                     'name' => $name,
                     'email' => $email,
                     'password' => bcrypt('Oauth_login_password'),
@@ -40,44 +39,24 @@ class UserRepositoryImp implements UserRepository
     }
     public function findAll(): array
     {
-        $users = $this->user->all();
+        $users = User::all();
         return $this->mapper->mapArray($users, UserDTO::class);
-    }
-
-    public function updateByDTO(UserDTO $user): UserDTO
-    {
-        $this->user->fill((array) $user);
-        $this->user->password = bcrypt($user->password);
-        $this->user->password_bcrypt = $user->password;
-        $this->user->exists = true;
-        $this->user->update();
-        return $this->mapper->map($this->user, UserDTO::class);
-    }
-
-    public function updateByContent(array $content): UserDTO
-    {
-        $this->user->fill((array) $content);
-        $this->user->password = bcrypt($content['password']);
-        $this->user->password_bcrypt = $content['password'];
-        $this->user->exists = true;
-        $this->user->update();
-        return $this->mapper->map($this->user, UserDTO::class);
     }
 
     public function delete(UserDTO $user): bool
     {
-        $this->user->fill((array) $user);
-        $this->user->exists = true;
-        $this->user->delete();
-        return $this->mapper->map($this->user, UserDTO::class);
+        $result = User::where('id',$user->id)->delete();
+        return $result;
     }
 
     public function save($content): UserDTO
     {
-        $this->user->fill($content);
-        $this->user->password = bcrypt($content['password']);
-        $this->user->password_bcrypt = $content['password'];
-        $this->user->save();
-        return $this->mapper->map($this->user, UserDTO::class);
+        $user = new User();
+        $user->name = $content['name'];
+        $user->email = $content['email'];
+        $user->password = bcrypt($content['password']);
+        $user->password_bcrypt = $content['password'];
+        $user->save();
+        return $this->mapper->map($user, UserDTO::class);
     }
 }

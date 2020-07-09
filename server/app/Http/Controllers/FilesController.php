@@ -20,13 +20,13 @@ class FilesController extends Controller
     }
     public function store(Request $request)
     {
-        $user = $this->authUser->getAuthUser();
-        if ($request->has('attachments')) {
-        $attachments = Attachment::whereIn('id', $request->input('attachments'))->get();
-        $attachments->each(function ($attachment) use ($article) {
-            $attachment->article()->associate($article);
-            $attachment->save();
-        });
+        // $user = $this->authUser->getAuthUser();
+        // if ($request->has('attachments')) {
+        // $attachments = Attachment::whereIn('id', $request->input('attachments'))->get();
+        // $attachments->each(function ($attachment) use ($article) {
+        //     $attachment->article()->associate($article);
+        //     $attachment->save();
+        // });
         // }
         // $file->move(attachment_path(), $name);
         // $articleId = $request->input('articleId');
@@ -37,9 +37,9 @@ class FilesController extends Controller
 
     public function destroy(Request $request)
     {
-        $user = $this->authUser->getAuthUser();
-        $content = $request->only([]);
-        $this->comment_service->deleteComment($content, $user);
-        return response('success');
+        // $user = $this->authUser->getAuthUser();
+        // $content = $request->only([]);
+        // $this->comment_service->deleteComment($content, $user);
+        // return response('success');
     }
 }

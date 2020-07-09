@@ -32,7 +32,7 @@ class JWTAuthorizationSetting
     public function handle($request, Closure $next)
     {
         $token_user = $this->attemptUser->getPayload()['sub'];
-        //get the user id throw Auth it's not n
+        // get the user id throw Auth it's not n
         // $user_auth = $this->authManager->checkAuthorizationToken($token_user);
         // if (!$user_auth) throw new JWTTokenException('Illegal User');
         $this->attemptUser->getAuthUser()->email = $token_user;

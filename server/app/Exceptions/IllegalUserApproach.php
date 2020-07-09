@@ -29,10 +29,11 @@ class IllegalUserApproach extends Exception
      */
     public function render($request)
     {
+        $code = 403;
         $payload = [
-            'code' => 403 ,
+            'code' => $code ,
             'message' => $this->message ?:'IllegalUserApproach',
         ];
-        return response()->json($payload, 403 , [], JSON_PRETTY_PRINT);
+        return response()->json($payload, $code , [], JSON_PRETTY_PRINT);
     }
 }

@@ -29,17 +29,17 @@ class UserServiceImp implements UserService
     {
         $email = $content['email'];
         $user_check = $this->user_repository->getOneByEmail($email);
-        if ($user_check->id) throw new \App\Exceptions\ModuleNotFound('User already exists');
+        if ($user_check->id) throw new \App\Exceptions\ModuleNotSaved('User already exists');
         $user = $this->user_repository->save($content);
         return $user;
-    }
+}
 
     public function loginUser(array $user_info): AuthUser
     {
         $email = $user_info['email'];
         $password = $user_info['password'];
         $user = $this->user_repository->getOneByEmail($email);
-        if (!$user->id) throw new \App\Exceptions\ModuleNotFound('User does not exists');
+        if (!$user->id) throw new \App\Exceptions\IllegalUserApproach('User does not exists');
         if (!strcmp($user->password, bcrypt($password))) throw new \App\Exceptions\ModuleNotFound('Password Incorrect');
         $authUser = $this->jwtauth->getAuthUserByUserDTO($user);
         return $authUser;
@@ -48,22 +48,9 @@ class UserServiceImp implements UserService
     public function loginOauthUser(array $user_info): AuthUser
     {
         $user = $this->user_repository->getOneOrCreateByEmail($user_info);
-        if (!$user->id) throw new \App\Exceptions\ModuleNotFound('User Login or Create error');
+        if (!$user->id) throw new \App\Exceptions\ModuleNotSaved('User Login or Create error');
         $authUser = $this->jwtauth->getAuthUserByUserDTO($user);
         return $authUser;
     }
 
-
-    public function getUserInfo()
-    {
-        return auth('api')->user();
-    }
-    public function refreshToken()
-    {
-        return auth('api')->refresh();
-    }
-    public function logoutUser()
-    {
-        return auth()->logout();
-    }
 }

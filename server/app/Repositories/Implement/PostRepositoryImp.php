@@ -10,7 +10,6 @@ use App\EloquentModel\Post;
 use App\Cache\CacheContract;
 use App\Mapper\MapperService;
 use App\Repositories\Interfaces\PostRepository;
-use Illuminate\Support\Facades\DB;
 
 class PostRepositoryImp implements PostRepository
 {
@@ -19,11 +18,13 @@ class PostRepositoryImp implements PostRepository
     public function __construct(MapperService $mapper, CacheContract $cache)
     {
         $this->mapper = $mapper;
-        $this->cache = $cache;
+        $this->cache = cache();
+        // $this->cache = $cache;
     }
     public function getFullContent(int $id): PostDTO
     {
-        $post = $this->cache->remember("api.post.fullcontent.".$id, function () use ($id) {
+        $this->cache->put('t',1);
+        $post = $this->cache->remember("api.post.fullcontent.".$id, 1000, function () use ($id) {
             return POST::with('content','comments')->active()->find($id);
         });
         return $this->mapper->map($post, PostDTO::class);;
@@ -39,7 +40,7 @@ class PostRepositoryImp implements PostRepository
 
     public function getOneWithCategory(int $id): PostDTO
     {
-        $post = $this->cache->remember("api.post.withCategory." . $id, function () use ($id) {
+        $post = $this->cache->remember("api.post.withCategory.".$id, function () use ($id) {
             return POST::with('category')->find($id);
         });
         return $this->mapper->map($post, PostDTO::class);
@@ -51,7 +52,7 @@ class PostRepositoryImp implements PostRepository
             'title' => $postDTO->title,
             'view_count' => $postDTO->view_count,
         ]);
-        if ($result) $this->cache->destroy('api.posts.' . $postDTO->id);
+        if ($result) $this->cache->pull('api.posts.' . $postDTO->id);
         return $result;
     }
 
@@ -60,7 +61,7 @@ class PostRepositoryImp implements PostRepository
         $result = Post::where('id', $requestContent['post_id'])->update(
             ['title' => $requestContent['title']]
         );
-        if ($result) $this->cache->destroy('api.posts.' . $requestContent['post_id']);
+        if ($result) $this->cache->pull('api.posts.' . $requestContent['post_id']);
         return $result;
     }
 
@@ -68,8 +69,8 @@ class PostRepositoryImp implements PostRepository
     {
         $post_id = $postDTO->id;
         $result  = Post::where('id', $post_id)->delete();
-        if ($result) $this->cache->destroy('api.post.' . $post_id);
-        if ($result) $this->cache->destroy('api.post.fullcontent' . $post_id);
+        if ($result) $this->cache->pull('api.post.' . $post_id);
+        if ($result) $this->cache->pull('api.post.fullcontent' . $post_id);
         return $result;
     }
 
@@ -80,7 +81,7 @@ class PostRepositoryImp implements PostRepository
         $post->title = $requestContent['title'];
         $post->category_id = $requestContent['category_id'];
         $post->save();
-        if ($post->id)  $this->cache->destroy("api.category.posts.".$requestContent['category_id']);
+        if ($post->id)  $this->cache->pull("api.category.posts.".$requestContent['category_id']);
         return $this->mapper->map($post, PostDTO::class);
     }
 
@@ -90,7 +91,7 @@ class PostRepositoryImp implements PostRepository
         $postContent->post_id = $postID;
         $postContent->body = $requestContent['body'];
         $postContent->save();
-        if ($postContent->id) $this->cache->destroy('api.posts.' . $postID);
+        if ($postContent->id) $this->cache->pull('api.posts.' . $postID);
         return $this->mapper->map($postContent, ContentDTO::class);
     }
 
@@ -100,7 +101,7 @@ class PostRepositoryImp implements PostRepository
         $result = Content::where('post_id', $post->id)->update([
             'body' => $requestContent['body']
         ]);
-        if ($result) $this->cache->destroy('api.posts.' . $post->id);
+        if ($result) $this->cache->pull('api.posts.' . $post->id);
         return $result;
     }
 

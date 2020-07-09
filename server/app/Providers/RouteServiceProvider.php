@@ -71,6 +71,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         // Route::prefix('api')
         Route::prefix('dev/api')
+
             ->middleware('api')
             ->as('api.')
             ->namespace($this->namespace)
@@ -78,6 +79,7 @@ class RouteServiceProvider extends ServiceProvider
 
         // Route::prefix('auth')
         Route::prefix('dev/auth')
+
             ->middleware('api')
             ->as('auth.')
             ->namespace($this->namespace)
