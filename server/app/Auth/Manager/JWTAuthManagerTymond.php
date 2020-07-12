@@ -41,9 +41,12 @@ class JWTAuthManagerTymond implements JWTAuthManager
      * @var CacheContract
      */
     private $cacheContract;
-    public function __construct(JWTAuth $jwtauth, TokenValidator $tokenValidator,
-         Lcobucci $tokenProvider, CacheContract $cacheContract)
-    {
+    public function __construct(
+        JWTAuth $jwtauth,
+        TokenValidator $tokenValidator,
+        Lcobucci $tokenProvider,
+        CacheContract $cacheContract
+    ) {
         $this->tokenValidator = $tokenValidator;
         $this->jwtauth = $jwtauth;
         $this->tokenProvider = $tokenProvider;
@@ -112,8 +115,8 @@ class JWTAuthManagerTymond implements JWTAuthManager
 
     // public function checklogout(string $token_jti) : bool
     // {
-    //      this is the user issue
-    //     return ($this->cache->get($token_jti))?true:false;
+    //      this is the security issue
+    //     return $this->cache->get($token_jti)
     // }
 
     // /**

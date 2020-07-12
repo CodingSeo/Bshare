@@ -3,9 +3,7 @@
 namespace App\Repositories\Implement;
 
 use App\DTO\CommentDTO;
-use App\DTO\PostDTO;
 use App\EloquentModel\Comment;
-use App\EloquentModel\Post;
 use App\Mapper\MapperService;
 use App\Repositories\Interfaces\CommentRepository;
 
@@ -16,12 +14,10 @@ class CommentRepositoryImp implements CommentRepository
     {
         $this->mapper = $mapper;
     }
-    public function getCommentWithReplies(PostDTO $postDTO): array
+    public function getComment(int $comment_id): CommentDTO
     {
-        $post = new Post();
-        $post->id = $postDTO->id;
-        $comments = $post->comments()->get();
-        return $this->mapper->mapArray($comments, CommentDTO::class);
+        $comment  = Comment::find($comment_id);
+        return $this->mapper->map($comment, CommentDTO::class);
     }
     public function updateByDTO(CommentDTO $comment): bool
     {
@@ -42,7 +38,6 @@ class CommentRepositoryImp implements CommentRepository
         return Comment::where('id', $comment->id)
             ->delete();
     }
-    //save에 관하여 saveByContent와 saveByDTO를 나누어 작업하는 것이 맞다고 본다.
     public function save($content, string $user_email): CommentDTO
     {
         $comment = new Comment();

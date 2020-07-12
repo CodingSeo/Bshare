@@ -22,32 +22,32 @@ class CategoryRepositoryImp implements CategoryRepository
     }
     public function getAllCategory(): array
     {
-        $categories = $this->cache->remember("api.categories", function () {
+        $categories = $this->cache->remember("api.categories", null, function () {
             return Category::get();
-        }, 0);
+        });
         return $this->mapper->mapArray($categories, CategoryDTO::class);
     }
-    public function getCategoryByID(int $category_id): CategoryDTO
+    public function getCategory(int $category_id): CategoryDTO
     {
-        $category = $this->cache->remember("api.category." . $category_id, function () use ($category_id) {
+        $category = $this->cache->remember("api.category." . $category_id, null, function () use ($category_id) {
             return Category::find($category_id);
-        }, 0);
+        });
         return $this->mapper->map($category, CategoryDTO::class);
     }
     public function getPostsByCategory(CategoryDTO $categoryDTO, int $page = 5): PostPaginateDTO
     {
-        $postPaginate = $this->cache->remember("api.category.posts." . $categoryDTO->id, function () use ($categoryDTO, $page) {
+        $postPaginate = $this->cache->remember("api.category.posts." . $categoryDTO->id, null, function () use ($categoryDTO, $page) {
             $categoryModel = new Category();
             $categoryModel->id = $categoryDTO->id;
             return $categoryModel->posts()->latest()->paginate($page);
         });
         return $this->mapper->map(collect($postPaginate), PostPaginateDTO::class);
     }
-    public function getQnAPostsByID() : array
+    public function getQnAPostsByID(): array
     {
-        $posts = $this->cache->remember('category/qna',function(){
-            return Post::with('content')->where('category_id',4)->get();
-        },0);
-        return $this->mapper->mapArray($posts,PostDTO::class);
+        $posts = $this->cache->remember('category/qna', null, function () {
+            return Post::with('content')->where('category_id', 4)->get();
+        });
+        return $this->mapper->mapArray($posts, PostDTO::class);
     }
 }

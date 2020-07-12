@@ -7,7 +7,7 @@ use App\DTO\PostDTO;
 
 interface CommentRepository
 {
-    public function getCommentWithReplies(PostDTO $postDTO): array;
+    public function getComment(int $comment_id): CommentDTO;
     public function updateByDTO(CommentDTO $comment): bool;
     public function updateByContent(array $post): bool;
     public function delete(CommentDTO $comment): bool;

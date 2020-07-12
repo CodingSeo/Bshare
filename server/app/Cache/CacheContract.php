@@ -13,7 +13,7 @@ interface CacheContract
      *
      * @return bool
      */
-    public function put($key, $value, $ttl=null);
+    public function put($key, $value, $ttl = null);
 
     /**
      * @param  string  $key
@@ -27,7 +27,7 @@ interface CacheContract
      *
      * @return bool
      */
-    public function destroy($key);
+    public function pull($key);
     /**
      * @return bool
      */
@@ -38,7 +38,7 @@ interface CacheContract
      * @param  \Closure  $callback
      * @return mixed
      */
-    public function remember($key, Closure $callback, $ttl=null);
+    public function remember($key, $ttl = null, Closure $callback);
     /**
      * @param  string  $key
      * @return mixed
@@ -49,7 +49,7 @@ interface CacheContract
      * @param  \DateTimeInterface|\DateInterval|int|null  $ttl
      * @return mixed
      */
-    public function setMulti($keys,$ttl);
+    public function setMulti($keys, $ttl);
 
-    public function deleteMulti(array $keys) : array;
+    public function deleteMulti(array $keys): array;
 }
