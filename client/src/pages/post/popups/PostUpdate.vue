@@ -35,20 +35,14 @@
 import Post from "@/models/post";
 import UserService from "@/services/user.service";
 export default {
-  props: ["postid", "title","content"],
+  props: ["postid", "title", "content", "category"],
   commponents: {},
   data() {
     return {
-      post: new Post(this.postid, this.title, this.content,""),
+      post: new Post(this.postid, this.title, this.content, ""),
       dialog: false,
-      titleRules: [
-        v => !!v || "title is required",
-        v => v.length >= 10 || "must be longer then 10"
-      ],
-      bodyRules: [
-        v => !!v || "body is required",
-        v => v.length >= 10 || "must be longer then 10"
-      ],
+      titleRules: [v => !!v || "title is required"],
+      bodyRules: [v => !!v || "body is required"],
       loading: false
     };
   },
@@ -61,7 +55,7 @@ export default {
         this.loading = true;
         UserService.updatePost(this.post).then(
           response => {
-            this.$router.push(`/BookReview`);
+            this.$router.push(`/${this.category}`);
           },
           error => {
             console.log(error.response);

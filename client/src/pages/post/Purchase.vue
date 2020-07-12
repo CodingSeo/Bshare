@@ -16,18 +16,21 @@
             </router-link>
           </div>
           <div v-else>
-            <PostCreate
-              :user="user"
-              :category="category"
-              :category_id="category_id"
-            />
+            <PostCreate :user="user" :category="category" :category_id="category_id" />
           </div>
         </v-flex>
       </v-layout>
       <v-divider></v-divider>
       <!-- list -->
       <!-- id,user_id,title,view_count,created,link,href -->
-      <v-card class="pl-3 mb-2" flat v-for="post in posts" :key="post.id" router :to="`/BookBuying/${post.id}`">
+      <v-card
+        class="pl-3 mb-2"
+        flat
+        v-for="post in posts"
+        :key="post.id"
+        router
+        :to="`/${category}/${post.id}`"
+      >
         <v-layout row wrap :class="`pa-3 post review`">
           <v-flex xs12 md6>
             <div class="caption grey--text">postName</div>
@@ -81,8 +84,8 @@ export default {
     });
   },
   data: () => ({
-    category: "sell",
-    category_id: 3,
+    category: "BookBuying",
+    category_id: 2,
     per_page: "",
     current_page: "",
     last_page: 0,

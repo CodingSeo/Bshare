@@ -8,8 +8,10 @@ use App\EloquentModel\Content;
 use App\EloquentModel\Post;
 use App\Cache\CacheContract;
 use App\DTO\CommentDTO;
+use App\EloquentModel\Comment;
 use App\Mapper\MapperService;
 use App\Repositories\Interfaces\PostRepository;
+use Illuminate\Support\Facades\DB;
 
 class PostRepositoryImp implements PostRepository
 {
@@ -62,8 +64,17 @@ class PostRepositoryImp implements PostRepository
 
     public function delete(PostDTO $postDTO): bool
     {
-        $post_id = $postDTO->id;
-        $result  = Post::where('id', $post_id)->delete();
+        $post_id = $postDTO->getId();
+        // $result  = Post::where('id', $post_id)->delete();
+        $result = DB::transaction(function () use ($post_id) {
+            $postUpdateResult = Post::where('id', $post_id)->update([
+                'active' => 0,
+            ]);
+            $commentUpdateResult = Comment::where('post_id', $post_id)->update([
+                'active' => 0,
+            ]);
+            return ($postUpdateResult && $commentUpdateResult);
+        });
         return $result;
     }
 
@@ -77,7 +88,7 @@ class PostRepositoryImp implements PostRepository
         return $this->mapper->map($post, PostDTO::class);
     }
 
-    public function getMostViewedPost(string $amount): array
+    public function getMostViewedPost(int $amount): array
     {
         $posts = $this->cache->remember('api.posts.mostviewed', 1000, function () use ($amount) {
             return Post::orderBy('view_count', 'desc')
@@ -87,7 +98,7 @@ class PostRepositoryImp implements PostRepository
         return $this->mapper->mapArray($posts, PostDTO::class);
     }
 
-    public function getMostRecentPost(string $amount): array
+    public function getMostRecentPost(int $amount): array
     {
         $posts = $this->cache->remember('api.posts.mostrecent', 1000, function () use ($amount) {
             return Post::latest()

@@ -10,8 +10,7 @@ import Purchase from "../pages/post/Purchase";
 import Help from "../pages/post/Help";
 Vue.use(VueRouter);
 
-const routes = [
-  {
+const routes = [{
     path: "/",
     name: "home",
     component: Home
@@ -36,21 +35,9 @@ const routes = [
     component: Review,
   },
   {
-    path: "/BookReview/:postid",
-    props: true,
-    name: "Post",
-    component: Post
-  },
-  {
     path: "/BookBuying",
     name: "purchase",
     component: Purchase
-  },
-  {
-    path: "/BookBuying/:postid",
-    props: true,
-    name: "Buyingpost",
-    component: Post
   },
   {
     path: "/BookSelling",
@@ -58,9 +45,9 @@ const routes = [
     component: Selling
   },
   {
-    path: "/BookSelling/:postid",
+    path: "/:category/:postid",
     props: true,
-    name: "sellingpost",
+    name: "Post",
     component: Post
   },
   {

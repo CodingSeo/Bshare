@@ -6,6 +6,7 @@ use App\Auth\JWTAttemptUser;
 use App\EloquentModel\Attachment;
 use App\EloquentModel\Post;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\FileRequest;
 use App\Services\Interfaces\CommentService;
 use App\Transformers\PostTransformer;
 use Illuminate\Http\Request;
@@ -18,28 +19,23 @@ class FilesController extends Controller
         $this->authUser = $authUser;
         $this->transform = $transform;
     }
-    public function store(Request $request)
+    public function store(FileRequest $request)
     {
         // $user = $this->authUser->getAuthUser();
-        // if ($request->has('attachments')) {
-        // $attachments = Attachment::whereIn('id', $request->input('attachments'))->get();
+        // $file = $request->file('file');
+        // $name = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
+        // //attachmentMove
+        // $file->move('./', $name);
+
         // $attachments->each(function ($attachment) use ($article) {
         //     $attachment->article()->associate($article);
         //     $attachment->save();
         // });
         // }
-        // $file->move(attachment_path(), $name);
-        // $articleId = $request->input('articleId');
-        // $attachment = $articleId
-        //     ? Post::findOrFail($articleId)->attachments()->create(['name' => $name])
-        //     : Attachment::create(['name' => $name]);
+
     }
 
     public function destroy(Request $request)
     {
-        // $user = $this->authUser->getAuthUser();
-        // $content = $request->only([]);
-        // $this->comment_service->deleteComment($content, $user);
-        // return response('success');
     }
 }

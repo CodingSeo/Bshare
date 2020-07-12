@@ -17,17 +17,20 @@ class Comment extends Model
     {
         return $this->belongsTo(Post::class);
     }
-    public function replies(){
-        return $this->hasMany(Comment::class,'parent_id')->active();
+    public function replies()
+    {
+        return $this->hasMany(Comment::class, 'parent_id')->active();
     }
-    public function parent(){
-        return $this->belongsTo(Comment::class,'id','parent_id');
+    public function parent()
+    {
+        return $this->belongsTo(Comment::class, 'id', 'parent_id');
     }
-    public function scopeActive($query){
-        return $query->where('active',1);
+    public function scopeActive($query)
+    {
+        return $query->where('active', 1);
     }
     public function scopeParent($query)
     {
-        return $query->where('parent_id',null);
+        return $query->where('parent_id', null);
     }
 }

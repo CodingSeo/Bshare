@@ -26,7 +26,7 @@ import axios from "axios";
 export default {
   name: "Help",
   created() {
-    //     category: (...)
+    // category: (...)
     // comments: (...)
     // content: (...)
     // created_at: (...)

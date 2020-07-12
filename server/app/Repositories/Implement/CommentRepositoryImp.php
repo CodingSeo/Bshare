@@ -35,8 +35,10 @@ class CommentRepositoryImp implements CommentRepository
     }
     public function delete(CommentDTO $comment): bool
     {
-        return Comment::where('id', $comment->id)
-            ->delete();
+        return Comment::where('id', $comment->id)->update([
+            'active' => 0
+        ]);
+        // ->delete();
     }
     public function save($content, string $user_email): CommentDTO
     {

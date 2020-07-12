@@ -18,6 +18,6 @@ interface PostRepository
     public function delete(PostDTO $requestContent): bool;
     public function save($requestContent, string $user_email): PostDTO;
 
-    public function getMostViewedPost(string $amount): array;
-    public function getMostRecentPost(string $amount): array;
+    public function getMostViewedPost(int $amount): array;
+    public function getMostRecentPost(int $amount): array;
 }

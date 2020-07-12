@@ -39,7 +39,7 @@ class CategoryRepositoryImp implements CategoryRepository
         $postPaginate = $this->cache->remember("api.category.posts." . $categoryDTO->id, null, function () use ($categoryDTO, $page) {
             $categoryModel = new Category();
             $categoryModel->id = $categoryDTO->id;
-            return $categoryModel->posts()->latest()->paginate($page);
+            return $categoryModel->posts()->active()->latest()->paginate($page);
         });
         return $this->mapper->map(collect($postPaginate), PostPaginateDTO::class);
     }
