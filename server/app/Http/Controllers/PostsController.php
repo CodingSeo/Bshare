@@ -64,6 +64,7 @@ class PostsController extends Controller
         $this->service->deletePost($requestContent, $user);
         return response('success');
     }
+
     public function showMostViews(PostsAmountRequest $request): JsonResponse
     {
         $requestContent = onlyContent($request, [
@@ -72,6 +73,7 @@ class PostsController extends Controller
         $posts = $this->service->getMostViewedPost($requestContent);
         return $this->transform->transformPosts($posts);
     }
+
     public function showMostRecents(PostsAmountRequest $request): JsonResponse
     {
         $requestContent = onlyContent($request, [

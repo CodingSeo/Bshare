@@ -19,8 +19,7 @@ class JSONMapperService implements MapperService
         $object = json_decode(json_encode($object));
         return $this->mapper->map($object, new $path);
     }
-    //something i should get collect
-    //is_array($names) ? $names : func_get_args()));
+    //is_array($names) ? $names : func_get_args()
     public function mapArray($object, string $path)
     {
         if (!$object) return [];
