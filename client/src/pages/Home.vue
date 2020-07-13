@@ -18,9 +18,9 @@
           </v-card>
 
           <v-divider></v-divider>
-          <v-card class="my-3">
+          <v-card class="my-3 indigo">
             <v-card-title>
-              <p class="display-1 pl-4 pt-2 text-uppercase grey--text">
+              <p class="display-1 pl-4 pt-2 text-uppercase white--text">
                 Most Viewed Posts
               </p>
             </v-card-title>
@@ -66,9 +66,9 @@
           </v-card>
           <v-divider></v-divider>
 
-          <v-card class="my-3">
+          <v-card class="my-3 indigo">
             <v-card-title class="height=20">
-              <p class="display-1  pl-4 pt-2 text-uppercase  grey--text">
+              <p class="display-1  pl-4 pt-2 text-uppercase  white--text">
                 Most Recent Posts
               </p>
             </v-card-title>

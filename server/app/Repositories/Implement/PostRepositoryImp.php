@@ -62,7 +62,8 @@ class PostRepositoryImp implements PostRepository
     {
         $result = Post::where('id', $requestContent['post_id'])
             ->update([
-                'title' => $requestContent['title']
+                'title' => $requestContent['title'],
+                'trade_status' =>$requestContent['trade_status']
             ]);
         return $result;
     }

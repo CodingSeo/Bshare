@@ -47,7 +47,6 @@
       <v-subheader mb5 left class="white--text mb-3" style="font-size:1em"
         >Menu</v-subheader
       >
-
       <v-list v-if="login">
           <v-list-item to="UserInformation">
             <v-list-item-icon>
@@ -106,7 +105,6 @@ export default {
   },
   methods: {
     logout() {
-      //if
       this.$store.dispatch("auth/logout");
       this.$router.push("/");
     }

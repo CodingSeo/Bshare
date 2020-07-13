@@ -51,7 +51,7 @@ class CategoryRepositoryImp implements CategoryRepository
     }
     public function getQnAPostsByID(): array
     {
-        $posts = $this->cache->remember('category/qna', null, function ()
+        $posts = $this->cache->remember('api.category.qna', null, function ()
         {
             return Post::with('content')->where('category_id', 4)->get();
         });

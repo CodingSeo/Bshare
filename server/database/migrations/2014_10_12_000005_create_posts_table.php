@@ -20,6 +20,7 @@ class CreatePostsTable extends Migration
             $table->boolean('active')->default(1);
             $table->string('title', 255);
             $table->integer('view_count')->unsinged()->default(0);
+            $table->string('trade_status')->nullable();
             $table->timestamps();
             $table->foreign('category_id')->references('id')->on('categories')
                 ->onUpdate('cascade')->onDelete('cascade');

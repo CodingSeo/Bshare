@@ -3,17 +3,19 @@
 namespace App\Services\Implement;
 
 use App\Auth\AuthUser;
-use App\DTO\CategoryDTO;
 use App\DTO\PostDTO;
 use App\Repositories\Interfaces\CategoryRepository;
 use App\Repositories\Interfaces\CommentRepository;
 use App\Repositories\Interfaces\ContentRepository;
 use App\Repositories\Interfaces\PostRepository;
+use App\Services\Implement\traits\CategoryHelpers;
 use App\Services\Interfaces\PostService;
 use Illuminate\Support\Facades\DB;
 
 class PostServiceImp implements PostService
 {
+    use CategoryHelpers;
+
     protected $postRepository;
     protected $categoryRepository;
     protected $commentRepository;
@@ -58,6 +60,8 @@ class PostServiceImp implements PostService
         $category = $this->categoryRepository->getCategory($requestContent['category_id']);
 
         $this->checkCategoryAvaliable($category);
+
+        $requestContent['trade_status'] = $this->setTrade_status($category);
 
         $postDTO = DB::transaction(function () use ($requestContent, $user, $category)
         {
@@ -135,23 +139,12 @@ class PostServiceImp implements PostService
         return $this->postRepository->getMostRecentPost($requestContent['amount']);
     }
 
-    public function checkCategoryAvaliable(CategoryDTO $category)
-    {
-        if (!$category->getId())
-        {
-            throw new \App\Exceptions\ModuleNotFound('category not found');
-        }
-
-        if (!$category->getWritable())
-        {
-            throw new \App\Exceptions\IllegalUserApproach('cannot write a post on this category');
-        }
-
-    }
     public function getRandomPost() : PostDTO
     {
         $category_id = [1,2,3];
         $randomPost = $this->postRepository->getRandomPost($category_id);
         return $randomPost;
     }
+
+
 }

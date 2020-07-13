@@ -29,6 +29,10 @@ class PostDTO
      */
     public $comments;
     /**
+     * @var string|null
+     */
+    public $trade_status;
+    /**
      * @var int
      */
     public $view_count;
@@ -281,6 +285,30 @@ class PostDTO
     public function setUpdated_at(string $updated_at)
     {
         $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of trade_status
+     *
+     * @return  string|null
+     */
+    public function getTrade_status()
+    {
+        return $this->trade_status;
+    }
+
+    /**
+     * Set the value of trade_status
+     *
+     * @param  string|null  $trade_status
+     *
+     * @return  self
+     */
+    public function setTrade_status($trade_status)
+    {
+        $this->trade_status = $trade_status;
 
         return $this;
     }

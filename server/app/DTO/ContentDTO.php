@@ -8,10 +8,6 @@ class ContentDTO
      * @var string
      */
     public $body;
-    /**
-     * @var string
-     */
-    public $state;
 
     /**
      * Get the value of body

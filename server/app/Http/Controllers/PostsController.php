@@ -38,7 +38,7 @@ class PostsController extends Controller
     {
         $user = $this->authUser->getAuthUser();
         $requestContent = onlyContent($request, [
-            'title', 'body', 'category_id'
+            'title', 'body', 'category_id', 'trade_status'
         ]);
         $post = $this->service->storePost($requestContent, $user);
         return $this->transform->transformPost($post);
@@ -49,7 +49,7 @@ class PostsController extends Controller
 
         $user = $this->authUser->getAuthUser();
         $requestContent = onlyContent($request, [
-            'post_id', 'title', 'body'
+            'post_id', 'title', 'body', 'trade_status'
         ]);
         $this->service->updatePost($requestContent, $user);
         return response('success');
@@ -88,5 +88,5 @@ class PostsController extends Controller
         $post = $this->service->getRandomPost();
         return $this->transform->transformPost($post);
     }
-    
+
 }

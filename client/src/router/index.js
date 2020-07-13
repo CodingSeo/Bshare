@@ -51,7 +51,7 @@ const routes = [{
     component: Selling
   },
   {
-    path: "/:category/:postid",
+    path: "/:category/post/:postid",
     props: true,
     name: "Post",
     component: Post
