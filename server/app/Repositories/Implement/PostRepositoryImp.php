@@ -2,9 +2,7 @@
 
 namespace App\Repositories\Implement;
 
-use App\DTO\ContentDTO;
 use App\DTO\PostDTO;
-use App\EloquentModel\Content;
 use App\EloquentModel\Post;
 use App\Cache\CacheContract;
 use App\DTO\CommentDTO;

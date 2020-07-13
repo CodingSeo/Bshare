@@ -2,8 +2,6 @@
 
 namespace App\Repositories\Interfaces;
 
-use App\DTO\ContentDTO;
-use App\DTO\PostCommentsDTO;
 use App\DTO\PostDTO;
 
 interface PostRepository
