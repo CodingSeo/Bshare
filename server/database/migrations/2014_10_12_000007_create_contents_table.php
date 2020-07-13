@@ -17,6 +17,7 @@ class CreateContentsTable extends Migration
             $table->increments('id');
             $table->integer('post_id')->unsigned()->index();
             $table->text('body');
+            $table->string('type')->nullable();
             $table->foreign('post_id')->references('id')->on('posts')
                 ->onUpdate('cascade')->onDelete('cascade');
         });

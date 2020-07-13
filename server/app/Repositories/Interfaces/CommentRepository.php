@@ -3,11 +3,11 @@
 namespace App\Repositories\Interfaces;
 
 use App\DTO\CommentDTO;
+use App\DTO\PostDTO;
 
 interface CommentRepository
 {
-    public function getOne(int $id): CommentDTO;
-    public function findAll(): array;
+    public function getComment(int $comment_id): CommentDTO;
     public function updateByDTO(CommentDTO $comment): bool;
     public function updateByContent(array $post): bool;
     public function delete(CommentDTO $comment): bool;

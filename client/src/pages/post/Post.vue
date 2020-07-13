@@ -6,20 +6,14 @@
       <!-- body -->
       <v-layout row wrap justify-end>
         <v-flex col-xs-8>
-          <div class="subtitle-1 grey--text ml-5 mt-1 mb-2">
-            view count : {{ view_count }}
-          </div>
+          <div class="subtitle-1 grey--text ml-5 mt-1 mb-2">view count : {{ view_count }}</div>
         </v-flex>
         <template v-if="isYours(user.email, user_id)">
           <v-btn @click="deletePost" text>
             <span>Delete</span>
             <v-icon right>delete</v-icon>
           </v-btn>
-          <PostUpdate
-            :postid="postid"
-            :content="content"
-            :title="title"
-          ></PostUpdate>
+          <PostUpdate :postid="postid" :content="content" :title="title" :category="category"></PostUpdate>
         </template>
       </v-layout>
       <v-divider></v-divider>
@@ -54,12 +48,7 @@
         </v-flex>
       </v-layout>
       <v-divider></v-divider>
-      <v-card
-        class="pl-3 mb-2"
-        flat
-        v-for="comment in comments"
-        :key="comment.id"
-      >
+      <v-card class="pl-3 mb-2" flat v-for="comment in comments" :key="comment.id">
         <v-layout row wrap class="pa-2">
           <v-flex xs12>
             <div class="caption grey--text">content</div>
@@ -78,6 +67,7 @@
               :postid="postid"
               :comment_id="comment.id"
               :body="comment.body"
+              :category="category"
             />
           </v-flex>
           <v-flex xs1 v-if="isYours(user.email, comment.user_id)" class="d-flex align-center">
@@ -89,21 +79,16 @@
               :postid="postid"
               :comment_id="comment.id"
               :body="comment.body"
+              :category="category"
             />
           </v-flex>
         </v-layout>
         <v-divider></v-divider>
-        <v-card
-          class="pl-10 mb-2"
-          flat
-          v-for="replie in comment.replies"
-          :key="replie.id"
-        >
+        <v-card class="pl-10 mb-2" flat v-for="replie in comment.replies" :key="replie.id">
           <v-layout row wrap class="pa-2">
             <v-flex xs12>
               <div class="caption grey--text">
-                <v-icon small>subdirectory_arrow_right</v-icon>
-                content
+                <v-icon small>subdirectory_arrow_right</v-icon>content
               </div>
               <div class="ml-5">{{ replie.body }}</div>
             </v-flex>
@@ -116,7 +101,7 @@
               <div>{{ replie.created_at }}</div>
             </v-flex>
             <v-flex xs1 v-if="isYours(user.email, replie.user_id)" class="d-flex align-center">
-              <v-btn small text @click="deleteComment(replie.id)" >
+              <v-btn small text @click="deleteComment(replie.id)">
                 <span>Delete</span>
                 <v-icon right>delete</v-icon>
               </v-btn>
@@ -124,6 +109,7 @@
                 :postid="postid"
                 :comment_id="replie.id"
                 :body="replie.body"
+                :category="category"
               />
             </v-flex>
           </v-layout>
@@ -141,13 +127,12 @@ import CommentReplies from "@/pages/post/popups/CommentReplies.vue";
 import UserService from "@/services/user.service";
 import CommentModel from "@/models/commentmodel";
 export default {
-  name: "reviewpost",
   components: {
     PostUpdate,
     CommentUpdate,
     CommentReplies
   },
-  props: ["login", "user", "postid"],
+  props: ["login", "user", "postid", "category"],
   created() {
     this.$http.get(`api/posts/${this.postid}`).then(result => {
       let content = result.data;
@@ -169,7 +154,7 @@ export default {
       user_id: "",
       view_count: "",
       comments: [],
-      commentModel: new CommentModel("", "","", this.user.email),
+      commentModel: new CommentModel("", "", "", this.user.email),
       commentRules: [v => !!v || "comment is required"]
     };
   },
@@ -180,7 +165,7 @@ export default {
     deletePost() {
       UserService.deletePost(this.postid).then(
         response => {
-          this.$router.push("/BookReview");
+          this.$router.push(`/${this.category}`);
         },
         error => {
           console.log(error.response);
@@ -191,7 +176,7 @@ export default {
       if (this.$refs.commentform.validate()) {
         UserService.createComment(commentModel).then(
           response => {
-            this.$router.push("/BookReview");
+            this.$router.push(`/${this.category}`);
           },
           error => {
             console.log(error.response);
@@ -202,7 +187,7 @@ export default {
     deleteComment(commentid) {
       UserService.deleteComment(commentid).then(
         response => {
-          this.$router.push("/BookReview");
+          this.$router.push(`/${this.category}`);
         },
         error => {
           console.log(error.response);

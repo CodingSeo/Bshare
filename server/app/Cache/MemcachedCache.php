@@ -54,7 +54,7 @@ class MemcachedCache extends TaggedCached implements CacheContract
      *
      * @return bool
      */
-    public function destroy($key)
+    public function pull($key)
     {
         return $this->mcd->delete($key);
     }
@@ -73,7 +73,7 @@ class MemcachedCache extends TaggedCached implements CacheContract
      * @param  \Closure  $callback
      * @return mixed
      */
-    public function remember($key, Closure $callback, $ttl = null)
+    public function remember($key,  $ttl = null, Closure $callback)
     {
         $ttl = $this->check_time($ttl);
         $value = $this->get($key);
@@ -96,8 +96,9 @@ class MemcachedCache extends TaggedCached implements CacheContract
      * @param  \DateTimeInterface|\DateInterval|int|null  $ttl
      * @return mixed
      */
-    public function setMulti($keys,$ttl){
-        $this->mcd->getMulti($keys,$ttl);
+    public function setMulti($keys, $ttl)
+    {
+        $this->mcd->getMulti($keys, $ttl);
     }
 
     /**
@@ -111,9 +112,8 @@ class MemcachedCache extends TaggedCached implements CacheContract
         return (is_null($time)) ? $this->expired_time : $time;
     }
 
-    public function deleteMulti(array $keys) : array
+    public function deleteMulti(array $keys): array
     {
         return $this->cmd->deleteMulti($keys);
     }
-
 }

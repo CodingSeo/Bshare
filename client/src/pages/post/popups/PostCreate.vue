@@ -41,16 +41,10 @@ export default {
   commponents: {},
   data() {
     return {
-      post: new Post("","","",this.category_id),
+      post: new Post("", "", "", this.category_id),
       dialog: false,
-      titleRules: [
-        v => !!v || "title is required",
-        v => v.length >= 10 || "must be longer then 10"
-      ],
-      bodyRules: [
-        v => !!v || "body is required",
-        v => v.length >= 10 || "must be longer then 10"
-      ],
+      titleRules: [v => !!v || "title is required"],
+      bodyRules: [v => !!v || "body is required"],
       loading: false
     };
   },
@@ -64,7 +58,7 @@ export default {
         console.log(this.post);
         UserService.savePost(this.post).then(
           response => {
-            this.$router.push("/home");
+            this.$router.push(`/${this.category}`);
           },
           error => {
             console.log(error.response);

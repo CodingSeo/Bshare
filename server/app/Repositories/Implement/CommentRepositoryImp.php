@@ -14,36 +14,32 @@ class CommentRepositoryImp implements CommentRepository
     {
         $this->mapper = $mapper;
     }
-    public function getOne(int $id): CommentDTO
+    public function getComment(int $comment_id): CommentDTO
     {
-        $comment = Comment::find($id);
+        $comment  = Comment::find($comment_id);
         return $this->mapper->map($comment, CommentDTO::class);
-    }
-    public function findAll(): array
-    {
-        $comments = Comment::all();
-        return $this->mapper->mapArray($comments, CommentDTO::class);
     }
     public function updateByDTO(CommentDTO $comment): bool
     {
-        return Comment::where('id',$comment->comment_id)
+        return Comment::where('id', $comment->comment_id)
             ->update([
-                'body'=>$comment->body
+                'body' => $comment->body
             ]);
     }
     public function updateByContent(array $content): bool
     {
-        return Comment::where('id',$content['comment_id'])
+        return Comment::where('id', $content['comment_id'])
             ->update([
-                'body'=>$content['body']
+                'body' => $content['body']
             ]);
     }
     public function delete(CommentDTO $comment): bool
     {
-        return Comment::where('id', $comment->id)
-        ->delete();
+        return Comment::where('id', $comment->id)->update([
+            'active' => 0
+        ]);
+        // ->delete();
     }
-    //save에 관하여 saveByContent와 saveByDTO를 나누어 작업하는 것이 맞다고 본다.
     public function save($content, string $user_email): CommentDTO
     {
         $comment = new Comment();

@@ -36,6 +36,8 @@ use App\Cache\FileCache;
 use App\Cache\MemcachedCache;
 use App\Cache\NoneCache;
 use App\Http\Controllers\SocialiteController;
+use App\Repositories\Implement\ContentRepositoryImp;
+use App\Repositories\Interfaces\ContentRepository;
 use Exception;
 
 class BshareProvider extends ServiceProvider
@@ -80,6 +82,8 @@ class BshareProvider extends ServiceProvider
         $container->when(PostsController::class)->needs(PostService::class)->give(PostServiceImp::class);
         $container->when(PostServiceImp::class)->needs(PostRepository::class)->give(PostRepositoryImp::class);
         $container->when(PostServiceImp::class)->needs(CategoryRepository::class)->give(CategoryRepositoryImp::class);
+        $container->when(PostServiceImp::class)->needs(CommentRepository::class)->give(CommentRepositoryImp::class);
+        $container->when(PostServiceImp::class)->needs(ContentRepository::class)->give(ContentRepositoryImp::class);
 
         $container->when(CommentsController::class)->needs(CommentService::class)->give(CommentServiceImp::class);
         $container->when(CommentServiceImp::class)->needs(PostRepository::class)->give(PostRepositoryImp::class);

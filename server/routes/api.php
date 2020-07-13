@@ -90,12 +90,7 @@ Route::post('file', [
     'uses' => 'FilesController@store'
 ])->middleware('jwt');
 
-Route::put('file/{comment_id}', [
-    'as' => 'posts.file.update',
-    'uses' => 'FilesController@update'
-])->middleware('jwt');
-
-Route::delete('file/{comment_id}', [
+Route::delete('file/{file_id}', [
     'as' => 'posts.file.delete',
     'uses' => 'FilesController@destroy'
 ])->middleware('jwt');

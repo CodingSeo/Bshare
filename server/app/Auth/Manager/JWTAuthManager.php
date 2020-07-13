@@ -24,6 +24,8 @@ interface JWTAuthManager
     public function checkPrvCode(string $token_prv): bool;
     public function getAuthUserByUserDTO(UserDTO $user): AuthUser;
     public function checkPayloadValidation(string $token);
+    // public function checklogout(string $token_jti);
+
     // /**
     //  * @param string $token_user
     //  * @return boolean|Authenticatable

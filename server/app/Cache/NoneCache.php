@@ -37,7 +37,7 @@ class NoneCache implements CacheContract
      *
      * @return bool
      */
-    public function destroy($key)
+    public function pull($key)
     {
         return false;
     }
@@ -55,16 +55,16 @@ class NoneCache implements CacheContract
      * @param  \Closure  $callback
      * @return mixed
      */
-    public function remember($key, Closure $callback, $ttl = null)
+    public function remember($key,  $ttl = null, Closure $callback)
     {
-        $this->put($key, $value = $callback(), $ttl);
-        return $value;
+        return $callback();
     }
     /**
      * @param  string  $key
      * @return mixed
      */
-    public function getMulti($keys){
+    public function getMulti($keys)
+    {
         return null;
     }
     /**
@@ -72,10 +72,11 @@ class NoneCache implements CacheContract
      * @param  \DateTimeInterface|\DateInterval|int|null  $ttl
      * @return mixed
      */
-    public function setMulti($keys,$ttl){
+    public function setMulti($keys, $ttl)
+    {
         return null;
     }
-    public function deleteMulti(array $keys) : array
+    public function deleteMulti(array $keys): array
     {
         return [];
     }

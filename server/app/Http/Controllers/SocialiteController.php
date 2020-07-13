@@ -33,11 +33,11 @@ class SocialiteController extends Controller
     {
         if ($request->auth_code) {
             $response = $this->oauthLoginService->getAccessCode($request->auth_code);
-            if($response->successful()){
+            if ($response->successful()) {
                 $this->oauthLoginService->setClientAccessToken($response->json()['data']);
                 $user_info = $this->oauthLoginService->getClientUserInfo();
                 $authUser = $this->userService->loginOauthUser($user_info);
-                return $this->transform->respondWithToken($authUser);
+                return $this->transform->respondWithTokenThroughView($authUser);
             }
             return 'No AccessCode';
         }

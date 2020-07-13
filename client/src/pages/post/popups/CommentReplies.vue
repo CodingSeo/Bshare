@@ -4,7 +4,7 @@
       <template v-slot:activator="{ on, attrs }">
         <v-btn small text v-bind="attrs" v-on="on">
           <span>Replies</span>
-          <v-icon  right>rate_review</v-icon>
+          <v-icon right>rate_review</v-icon>
         </v-btn>
       </template>
       <v-card>
@@ -34,25 +34,22 @@
 import CommentModel from "@/models/commentmodel";
 import UserService from "@/services/user.service";
 export default {
-  props: ["comment_id", "body","postid"],
+  props: ["comment_id", "body", "postid", "category"],
   commponents: {},
   data() {
     return {
-      // this.postid=postid;
+    // this.postid=postid;
       //   this.body = body;
       //   this.user_id = user_id;
       //   this.parent_id = parent_id;
-      commentModel: new CommentModel("",this.postid, "","",this.comment_id),
+      commentModel: new CommentModel("", this.postid, "", "", this.comment_id),
       dialog: false,
-      bodyRules: [
-        v => !!v || "body is required",
-      ],
+      bodyRules: [v => !!v || "body is required"],
       loading: false
     };
   },
   methods: {
     close() {
-      // this.$refs.form.reset();
       this.dialog = false;
     },
     submit() {
@@ -60,7 +57,7 @@ export default {
         this.loading = true;
         UserService.createComment(this.commentModel).then(
           response => {
-            this.$router.push(`/BookReview`);
+            this.$router.push(`/${this.category}`);
           },
           error => {
             console.log(error.response);

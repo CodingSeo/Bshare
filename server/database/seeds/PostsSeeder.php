@@ -21,6 +21,8 @@ class PostsSeeder extends Seeder
                 'active' => 1,
                 'title' => 'posts_test' . $id,
             ]);
+        }
+        for ($id = 1; $id <= $amount; $id++) {
             DB::table('contents')->insert([
                 'post_id' => $id,
                 'body' => 'posts_test' . $id . '_content'
