@@ -66,16 +66,13 @@ class PostRepositoryImp implements PostRepository
     {
         $post_id = $postDTO->getId();
         // $result  = Post::where('id', $post_id)->delete();
-        $result = DB::transaction(function () use ($post_id) {
-            $postUpdateResult = Post::where('id', $post_id)->update([
-                'active' => 0,
-            ]);
-            $commentUpdateResult = Comment::where('post_id', $post_id)->update([
-                'active' => 0,
-            ]);
-            return ($postUpdateResult && $commentUpdateResult);
-        });
-        return $result;
+        $postUpdateResult = Post::where('id', $post_id)->update([
+            'active' => 0,
+        ]);
+        $commentUpdateResult = Comment::where('post_id', $post_id)->update([
+            'active' => 0,
+        ]);
+        return ($postUpdateResult || $commentUpdateResult);
     }
 
     public function save($requestContent, string $user_email): PostDTO

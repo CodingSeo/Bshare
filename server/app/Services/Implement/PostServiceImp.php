@@ -73,7 +73,9 @@ class PostServiceImp implements PostService
         $post_exit = $this->postRepository->getPost($requestContent['post_id']);
         if (!$post_exit->id) throw new \App\Exceptions\ModuleNotFound('Post not Found');
         if (strcmp($post_exit->user_id, $user->email)) throw new \App\Exceptions\IllegalUserApproach();
-        $delete_result = $this->postRepository->delete($post_exit);
+        $delete_result = DB::transaction(function () use ($post_exit) {
+            return $this->postRepository->delete($post_exit);
+        });
         if (!$delete_result) throw new \App\Exceptions\ModuelNotDeleted('delete failed');
     }
 
