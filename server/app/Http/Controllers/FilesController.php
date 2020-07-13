@@ -26,16 +26,15 @@ class FilesController extends Controller
         // $name = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
         // //attachmentMove
         // $file->move('./', $name);
-
         // $attachments->each(function ($attachment) use ($article) {
         //     $attachment->article()->associate($article);
         //     $attachment->save();
         // });
         // }
-
     }
 
     public function destroy(Request $request)
     {
+
     }
 }

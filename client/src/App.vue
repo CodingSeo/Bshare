@@ -42,13 +42,13 @@ export default {
   border-left: 4px solid tomato;
 }
 .post.ongoing {
-  border-left: 4px solid greenyellow;
+  border-left: 4px solid green;
 }
 
 .v-chip.complete {
   background: tomato !important;
 }
 .v-chip.ongoing {
-  background: greenyellow !important;
+  background: green !important;
 }
 </style>

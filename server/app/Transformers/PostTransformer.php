@@ -33,6 +33,7 @@ class PostTransformer
             'title' => $postDTO->getTitle(),
             'content' => $this->transformContent($postDTO->getContent()),
             'view_count' => $postDTO->getView_count(),
+            'trade_status' => $postDTO->getTrade_status(),
             'comments' => empty($postDTO->getComments()) ? [] : array_map([$this, 'transformComments'], $postDTO->getComments()),
             'created' => $this->changeDateTime($postDTO->getCreated_at()),
             'links' => [
@@ -73,6 +74,7 @@ class PostTransformer
             'user_id' => $post->getUser_id(),
             'title' => $post->getTitle(),
             'view_count' => $post->getView_count(),
+            'trade_status' => $post->getTrade_status(),
             'created' => $this->changeDateTime($post->getCreated_at()),
             'links' => [
                 [

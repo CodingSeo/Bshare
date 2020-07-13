@@ -5,34 +5,29 @@
       <v-divider></v-divider>
       <v-layout col wrap>
         <v-flex>
-          <v-card class="my-3">
-            <v-card-actions>
-              <v-btn text color="grey--text">
-                Learn More
-              </v-btn>
-            </v-card-actions>
+          <v-card class="my-3" height="30%">
             <v-card-text>
-              <div>Word of the Day</div>
+              <div>{{this.RandomPost.id}}</div>
               <p class="display-1 text--primary">
-                be•nev•o•lent
+                {{this.RandomPost.title}}
               </p>
-              <p>adjective</p>
               <div class="text--primary">
-                well meaning and kindly.<br />
-                "a benevolent smile"
+                {{this.RandomPost.body}}
               </div>
             </v-card-text>
           </v-card>
 
           <v-divider></v-divider>
-          <v-card class="my-3">
+          <v-card class="my-3 indigo">
             <v-card-title>
-              <p class="display-1 pl-4 pt-2 grey--text">
+              <p class="display-1 pl-4 pt-2 text-uppercase white--text">
                 Most Viewed Posts
               </p>
             </v-card-title>
+            <v-divider></v-divider>
             <v-carousel
               cycle
+              light
               height="200"
               hide-delimiter-background
               hide-delimiters
@@ -43,49 +38,11 @@
                 :key="post.id"
               >
                 <v-sheet height="100%">
-                  <v-row class="pa-10 fill-height" align="center" justify="center">
-                      <v-flex xs12 md6>
-                        <div class="caption grey--text">postName</div>
-                        <div>{{ post.title }}</div>
-                      </v-flex>
-                      <v-flex xs6 sm4 md2>
-                        <div class="caption grey--text">Writer</div>
-                        <div>{{ post.user_id }}</div>
-                      </v-flex>
-                      <v-flex xs6 sm4 md2>
-                        <div class="caption grey--text">Create At</div>
-                        <div>{{ post.created }}</div>
-                      </v-flex>
-                      <v-flex xs2 sm2 md2>
-                        <div class="caption grey--text">View Count</div>
-                        <div>{{ post.view_count }}</div>
-                      </v-flex>
-                  </v-row>
-                </v-sheet>
-              </v-carousel-item>
-            </v-carousel>
-          </v-card>
-          <v-divider></v-divider>
-
-          <v-card class="my-3">
-            <v-card-title class="height=20">
-              <p class="display-1  pl-4 pt-2  grey--text">
-                Most Recent Posts
-              </p>
-            </v-card-title>
-            <v-carousel
-              cycle
-              height="200"
-              hide-delimiter-background
-              hide-delimiters
-              show-arrows-on-hover
-            >
-              <v-carousel-item
-                v-for="post in this.MostRecentPosts"
-                :key="post.id"
-              >
-                <v-sheet height="100%">
-                  <v-row class="pa-10 fill-height" align="center" justify="center">
+                  <v-row
+                    class="pa-10 fill-height"
+                    align="center"
+                    justify="center"
+                  >
                     <v-flex xs12 md6>
                       <div class="caption grey--text">postName</div>
                       <div>{{ post.title }}</div>
@@ -107,6 +64,55 @@
               </v-carousel-item>
             </v-carousel>
           </v-card>
+          <v-divider></v-divider>
+
+          <v-card class="my-3 indigo">
+            <v-card-title class="height=20">
+              <p class="display-1  pl-4 pt-2 text-uppercase  white--text">
+                Most Recent Posts
+              </p>
+            </v-card-title>
+            <v-divider></v-divider>
+            <v-carousel
+              cycle
+              light
+              height="200"
+              hide-delimiter-background
+              hide-delimiters
+              show-arrows-on-hover
+            >
+              <v-carousel-item
+                v-for="post in this.MostRecentPosts"
+                :key="post.id"
+              >
+                <v-sheet height="100%">
+                  <v-row
+                    class="pa-10 fill-height"
+                    align="center"
+                    justify="center"
+                  >
+                    <v-flex xs12 md6>
+                      <div class="caption grey--text">postName</div>
+                      <div>{{ post.title }}</div>
+                    </v-flex>
+                    <v-flex xs6 sm4 md2>
+                      <div class="caption grey--text">Writer</div>
+                      <div>{{ post.user_id }}</div>
+                    </v-flex>
+                    <v-flex xs6 sm4 md2>
+                      <div class="caption grey--text">Create At</div>
+                      <div>{{ post.created }}</div>
+                    </v-flex>
+                    <v-flex xs2 sm2 md2>
+                      <div class="caption grey--text">View Count</div>
+                      <div>{{ post.view_count }}</div>
+                    </v-flex>
+                  </v-row>
+                </v-sheet>
+              </v-carousel-item>
+            </v-carousel>
+
+          </v-card>
         </v-flex>
       </v-layout>
     </v-container>
@@ -115,15 +121,24 @@
 
 <script>
 import axios from "axios";
+import Post from "@/models/post";
 export default {
   name: "Home",
   data() {
     return {
       MostViewedPosts: [],
-      MostRecentPosts: []
+      MostRecentPosts: [],
+      RandomPost: new Post(),
     };
   },
   created() {
+    this.$http.get(`api/posts/random`).then(result => {
+      let content = result.data;
+      this.RandomPost.id = content.user_id;
+      this.RandomPost.body = content.content.body;
+      this.RandomPost.title = content.title;
+      console.log(this.RandomPost);
+    });
     this.$http.get(`api/posts/mostViews/5`).then(result => {
       let content = result.data;
       this.MostViewedPosts = content;

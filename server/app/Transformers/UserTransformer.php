@@ -36,10 +36,16 @@ class UserTransformer
         return response()->json($json_data, 200, [], JSON_PRETTY_PRINT);
     }
 
-    public function registerResponse(UserDTO $user)
+    public function UserResponse(UserDTO $user)
     {
         return response()->json([
             'status' => 'success',
+            'data' => $this->transformUser($user),
+        ], 200, [], JSON_PRETTY_PRINT);
+    }
+    public function UserInfoResponse(UserDTO $user)
+    {
+        return response()->json([
             'data' => $this->transformUser($user),
         ], 200, [], JSON_PRETTY_PRINT);
     }

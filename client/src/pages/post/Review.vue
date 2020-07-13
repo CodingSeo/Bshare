@@ -29,7 +29,7 @@
         v-for="post in posts"
         :key="post.id"
         router
-        :to="`/${category}/${post.id}`"
+        :to="`/${category}/post/${post.id}`"
       >
         <v-layout row wrap :class="`pa-3 post review`">
           <v-flex xs12 md6>

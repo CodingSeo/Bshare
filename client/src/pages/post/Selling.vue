@@ -29,9 +29,9 @@
         v-for="post in posts"
         :key="post.id"
         router
-        :to="`/${category}/${post.id}`"
+        :to="`/${category}/post/${post.id}`"
       >
-        <v-layout row wrap :class="`pa-3 post review`">
+        <v-layout row wrap :class="`pa-3 post ${post.trade_status}`">
           <v-flex xs12 md6>
             <div class="caption grey--text">postName</div>
             <div>{{post.title}}</div>
@@ -40,7 +40,7 @@
             <div class="caption grey--text">Writer</div>
             <div>{{post.user_id}}</div>
           </v-flex>
-          <v-flex xs6 sm4 md2>
+          <v-flex xs6 sm4 md1>
             <div class="caption grey--text">Create At</div>
             <div>{{post.created}}</div>
           </v-flex>
@@ -48,9 +48,9 @@
             <div class="caption grey--text">View Count</div>
             <div>{{post.view_count}}</div>
           </v-flex>
-          <v-flex xs3 sm2 md1>
+          <v-flex xs3 sm2 md2>
             <div class="text-right pr-5">
-              <v-chip small :class="`${post.status} white--text caption my-2`">{{post.status}}</v-chip>
+              <v-chip small :class="`${post.trade_status} white--text caption my-2`">{{post.trade_status}}</v-chip>
             </div>
           </v-flex>
         </v-layout>

@@ -45,7 +45,7 @@ class UserRepositoryImp implements UserRepository
 
     public function delete(UserDTO $user): bool
     {
-        $result = User::where('id',$user->id)->delete();
+        $result = User::where('id',$user->getId())->delete();
         return $result;
     }
 

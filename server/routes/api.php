@@ -43,11 +43,15 @@ Route::get('posts/mostRecents/{amount}', [
     'uses' => 'PostsController@showMostRecents'
 ]);
 
+Route::get('posts/random', [
+    'as' => 'posts.random',
+    'uses' => 'PostsController@getRandomPost'
+]);
+
 Route::get('posts/{post_id}', [
     'as' => 'posts.show',
     'uses' => 'PostsController@show'
 ]);
-
 
 Route::post('posts', [
     'as' => 'posts.store',

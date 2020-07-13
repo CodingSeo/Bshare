@@ -2,16 +2,13 @@
 
 namespace App\Repositories\Implement;
 
-use App\DTO\ContentDTO;
 use App\DTO\PostDTO;
-use App\EloquentModel\Content;
 use App\EloquentModel\Post;
 use App\Cache\CacheContract;
 use App\DTO\CommentDTO;
 use App\EloquentModel\Comment;
 use App\Mapper\MapperService;
 use App\Repositories\Interfaces\PostRepository;
-use Illuminate\Support\Facades\DB;
 
 class PostRepositoryImp implements PostRepository
 {
@@ -25,46 +22,56 @@ class PostRepositoryImp implements PostRepository
     public function getPost(int $id): PostDTO
     {
         $post = POST::active()->find($id);
+
         return $this->mapper->map($post, PostDTO::class);
     }
     public function getPostWithCategory(int $id): PostDTO
     {
         $post = POST::with('category')->active()->find($id);
+
         return $this->mapper->map($post, PostDTO::class);
     }
     public function getPostWithContent(int $id): PostDTO
     {
         $post = POST::with('content')->active()->find($id);
+
         return $this->mapper->map($post, PostDTO::class);
     }
     public function getCommentAndRepliesByPost(PostDTO $postDTO): array
     {
         $post = new Post();
+
         $post->id = $postDTO->getId();
+
         $comments = $post->comments()->active()->parent()->with('replies')->get();
+
         return $this->mapper->mapArray($comments, CommentDTO::class);
     }
 
     public function updatePostByDTO(PostDTO $postDTO): bool
     {
-        $result = Post::where('id', $postDTO->getId())->update([
-            'title' => $postDTO->getTitle(),
-            'view_count' => $postDTO->getView_count(),
-        ]);
+        $result = Post::where('id', $postDTO->getId())
+            ->update([
+                'title' => $postDTO->getTitle(),
+                'view_count' => $postDTO->getView_count(),
+            ]);
         return $result;
     }
 
     public function updateByRequestContent(array $requestContent): bool
     {
-        $result = Post::where('id', $requestContent['post_id'])->update(
-            ['title' => $requestContent['title']]
-        );
+        $result = Post::where('id', $requestContent['post_id'])
+            ->update([
+                'title' => $requestContent['title'],
+                'trade_status' =>$requestContent['trade_status']
+            ]);
         return $result;
     }
 
     public function delete(PostDTO $postDTO): bool
     {
         $post_id = $postDTO->getId();
+<<<<<<< HEAD
         // $result  = Post::where('id', $post_id)->delete();
         $postUpdateResult = Post::where('id', $post_id)->update([
             'active' => 0,
@@ -72,6 +79,16 @@ class PostRepositoryImp implements PostRepository
         $commentUpdateResult = Comment::where('post_id', $post_id)->update([
             'active' => 0,
         ]);
+=======
+        $postUpdateResult = Post::where('id', $post_id)
+            ->update([
+                'active' => 0,
+            ]);
+        $commentUpdateResult = Comment::where('post_id', $post_id)
+            ->update([
+                'active' => 0,
+            ]);
+>>>>>>> fac61fc99ab0209ba1b4d30d44d410f09e30c660
         return ($postUpdateResult || $commentUpdateResult);
     }
 
@@ -88,20 +105,36 @@ class PostRepositoryImp implements PostRepository
     public function getMostViewedPost(int $amount): array
     {
         $posts = $this->cache->remember('api.posts.mostviewed', 1000, function () use ($amount) {
-            return Post::orderBy('view_count', 'desc')
+            return Post::active()
+                ->orderBy('view_count', 'desc')
                 ->take($amount++)
                 ->get();
         });
+
         return $this->mapper->mapArray($posts, PostDTO::class);
     }
 
     public function getMostRecentPost(int $amount): array
     {
         $posts = $this->cache->remember('api.posts.mostrecent', 1000, function () use ($amount) {
-            return Post::latest()
+            return Post::active()
+                ->latest()
                 ->take($amount++)
                 ->get();
         });
+
         return $this->mapper->mapArray($posts, PostDTO::class);
+    }
+
+    public function getRandomPost(array $category_id) : PostDTO
+    {
+        $randomPost = $this->cache->remember('api.posts.randomPost', 200, function () use ($category_id) {
+            return POST::with('content')
+                ->active()
+                ->whereIn('category_id',$category_id)
+                ->inRandomOrder()
+                ->first();
+        });
+        return $this->mapper->map($randomPost, PostDTO::class);
     }
 }

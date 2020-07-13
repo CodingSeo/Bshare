@@ -8,6 +8,7 @@ import Post from "../pages/post/Post";
 import Selling from "../pages/post/Selling";
 import Purchase from "../pages/post/Purchase";
 import Help from "../pages/post/Help";
+import UserInformation from "../pages/auth/UserInformation";
 Vue.use(VueRouter);
 
 const routes = [{
@@ -30,6 +31,11 @@ const routes = [{
     component: Signup
   },
   {
+    path: "/UserInformation",
+    name: "UserInformation",
+    component: UserInformation
+  },
+  {
     path: "/BookReview",
     name: "review",
     component: Review,
@@ -45,7 +51,7 @@ const routes = [{
     component: Selling
   },
   {
-    path: "/:category/:postid",
+    path: "/:category/post/:postid",
     props: true,
     name: "Post",
     component: Post

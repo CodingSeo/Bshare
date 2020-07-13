@@ -20,15 +20,19 @@ class CategoryServiceImp implements CategoryService
     public function getPostsWithCategory(array $content): PostPaginateDTO
     {
         $category = $this->category_repository->getCategory($content['category_id']);
-        if (!$category->id) throw new \App\Exceptions\ModuleNotFound('Category not Found');
-        $page = 5;
+
+        if (!$category->getId()) throw new \App\Exceptions\ModuleNotFound('Category not Found');
+
+        $page = 10;
+
         $posts = $this->category_repository->getPostsByCategory($category, $page);
+
         return $posts;
     }
     public function getQnAPostsWithCategory(): array
     {
         $qnaPosts = $this->category_repository->getQnAPostsByID();
-        if (!$qnaPosts[0]->id) throw new \App\Exceptions\ModuleNotFound('Category not Found');
+
         return $qnaPosts;
     }
 }
