@@ -33,37 +33,69 @@ class PostServiceImp implements PostService
     public function getPost(array $requestContent): PostDTO
     {
         $postDTO = $this->postRepository->getPostWithContent($requestContent['post_id']);
-        if (!$postDTO->getId()) throw new \App\Exceptions\ModuleNotFound('Post not Found');
+
+        if (!$postDTO->getId()) {
+            throw new \App\Exceptions\ModuleNotFound('Post not Found');
+        }
+
         $comments = $this->postRepository->getCommentAndRepliesByPost($postDTO);
+
         $postDTO->setComments($comments);
+
         $postDTO->setView_count($postDTO->getView_count() + 1);
+
         $result = $this->postRepository->updatePostByDTO($postDTO);
-        if (!$result) throw new \App\Exceptions\ModuleNotUpdated('Post not Update');
+
+        if (!$result) {
+            throw new \App\Exceptions\ModuleNotUpdated('Post not Update');
+        }
+
         return $postDTO;
     }
 
     public function storePost(array $requestContent, AuthUser $user): PostDTO
     {
         $category = $this->categoryRepository->getCategory($requestContent['category_id']);
+
         $this->checkCategoryAvaliable($category);
-        $postDTO = DB::transaction(function () use ($requestContent, $user, $category) {
+
+        $postDTO = DB::transaction(function () use ($requestContent, $user, $category)
+        {
+
             $postDTO = $this->postRepository->save($requestContent, $user->email);
+
             $postContent = $this->contentRepository->saveContent($postDTO->getID(), $requestContent);
+
             $postDTO->setCategory($category);
+
             $postDTO->setContent($postContent);
+
             return $postDTO;
         });
+
         return $postDTO;
     }
 
     public function updatePost(array $requestContent, AuthUser $user): void
     {
         $post_exit = $this->postRepository->getPostWithCategory($requestContent['post_id']);
-        if (!$post_exit->getId()) throw new \App\Exceptions\ModuleNotFound('Post do not exist');
-        if (strcmp($post_exit->getUser_id(), $user->email)) throw new \App\Exceptions\IllegalUserApproach();
+
+        if (!$post_exit->getId())
+        {
+            throw new \App\Exceptions\ModuleNotFound('Post do not exist');
+        }
+
+        if (strcmp($post_exit->getUser_id(), $user->email))
+        {
+            throw new \App\Exceptions\IllegalUserApproach();
+        }
+
         $this->checkCategoryAvaliable($post_exit->getCategory());
-        DB::transaction(function () use ($requestContent, $post_exit) {
+
+        DB::transaction(function () use ($requestContent, $post_exit)
+        {
             $this->postRepository->updateByRequestContent($requestContent);
+
             $this->contentRepository->updateContent($post_exit, $requestContent);
         });
     }
@@ -71,12 +103,26 @@ class PostServiceImp implements PostService
     public function deletePost(array $requestContent, AuthUser $user): void
     {
         $post_exit = $this->postRepository->getPost($requestContent['post_id']);
-        if (!$post_exit->id) throw new \App\Exceptions\ModuleNotFound('Post not Found');
-        if (strcmp($post_exit->user_id, $user->email)) throw new \App\Exceptions\IllegalUserApproach();
-        $delete_result = DB::transaction(function () use ($post_exit) {
+
+        if (!$post_exit->id)
+        {
+            throw new \App\Exceptions\ModuleNotFound('Post not Found');
+        }
+
+        if (strcmp($post_exit->user_id, $user->email))
+        {
+            throw new \App\Exceptions\IllegalUserApproach();
+        }
+
+        $delete_result = DB::transaction(function () use ($post_exit)
+        {
             return $this->postRepository->delete($post_exit);
         });
-        if (!$delete_result) throw new \App\Exceptions\ModuelNotDeleted('delete failed');
+
+        if (!$delete_result)
+        {
+            throw new \App\Exceptions\ModuelNotDeleted('delete failed');
+        }
     }
 
     public function getMostViewedPost(array $requestContent): array
@@ -92,8 +138,20 @@ class PostServiceImp implements PostService
     public function checkCategoryAvaliable(CategoryDTO $category)
     {
         if (!$category->getId())
+        {
             throw new \App\Exceptions\ModuleNotFound('category not found');
+        }
+
         if (!$category->getWritable())
+        {
             throw new \App\Exceptions\IllegalUserApproach('cannot write a post on this category');
+        }
+
+    }
+    public function getRandomPost() : PostDTO
+    {
+        $category_id = [1,2,3];
+        $randomPost = $this->postRepository->getRandomPost($category_id);
+        return $randomPost;
     }
 }

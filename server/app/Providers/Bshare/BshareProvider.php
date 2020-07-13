@@ -79,6 +79,7 @@ class BshareProvider extends ServiceProvider
                 config('social.hiwork_client_secret')
             );
         });
+
         $container->when(PostsController::class)->needs(PostService::class)->give(PostServiceImp::class);
         $container->when(PostServiceImp::class)->needs(PostRepository::class)->give(PostRepositoryImp::class);
         $container->when(PostServiceImp::class)->needs(CategoryRepository::class)->give(CategoryRepositoryImp::class);

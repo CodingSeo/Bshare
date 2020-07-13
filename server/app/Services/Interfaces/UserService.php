@@ -10,4 +10,5 @@ interface UserService
     public function registerUser(array $user_info): UserDTO;
     public function loginUser(array $user_info): AuthUser;
     public function loginOauthUser(array $user_info): AuthUser;
+    public function getUserInformation(AuthUser $user): UserDTO;
 }

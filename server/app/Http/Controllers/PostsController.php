@@ -82,4 +82,11 @@ class PostsController extends Controller
         $posts = $this->service->getMostMostRecents($requestContent);
         return $this->transform->transformPosts($posts);
     }
+
+    public function getRandomPost():JsonResponse
+    {
+        $post = $this->service->getRandomPost();
+        return $this->transform->transformPost($post);
+    }
+    
 }

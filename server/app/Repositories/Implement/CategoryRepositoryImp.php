@@ -22,32 +22,40 @@ class CategoryRepositoryImp implements CategoryRepository
     }
     public function getAllCategory(): array
     {
-        $categories = $this->cache->remember("api.categories", null, function () {
+        $categories = $this->cache->remember("api.categories", null, function ()
+        {
             return Category::get();
         });
+
         return $this->mapper->mapArray($categories, CategoryDTO::class);
     }
     public function getCategory(int $category_id): CategoryDTO
     {
-        $category = $this->cache->remember("api.category." . $category_id, null, function () use ($category_id) {
+        $category = $this->cache->remember("api.category.".$category_id, null, function () use ($category_id)
+        {
             return Category::find($category_id);
         });
+
         return $this->mapper->map($category, CategoryDTO::class);
     }
-    public function getPostsByCategory(CategoryDTO $categoryDTO, int $page = 5): PostPaginateDTO
+    public function getPostsByCategory(CategoryDTO $categoryDTO, int $page = 10): PostPaginateDTO
     {
-        $postPaginate = $this->cache->remember("api.category.posts." . $categoryDTO->id, null, function () use ($categoryDTO, $page) {
-            $categoryModel = new Category();
-            $categoryModel->id = $categoryDTO->id;
-            return $categoryModel->posts()->active()->latest()->paginate($page);
-        });
+
+        $categoryModel = new Category();
+
+        $categoryModel->id = $categoryDTO->getId();
+
+        $postPaginate = $categoryModel->posts()->active()->latest()->paginate($page);
+
         return $this->mapper->map(collect($postPaginate), PostPaginateDTO::class);
     }
     public function getQnAPostsByID(): array
     {
-        $posts = $this->cache->remember('category/qna', null, function () {
+        $posts = $this->cache->remember('category/qna', null, function ()
+        {
             return Post::with('content')->where('category_id', 4)->get();
         });
+
         return $this->mapper->mapArray($posts, PostDTO::class);
     }
 }

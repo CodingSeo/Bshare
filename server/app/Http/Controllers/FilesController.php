@@ -31,7 +31,6 @@ class FilesController extends Controller
         //     $attachment->save();
         // });
         // }
-
     }
 
     public function destroy(Request $request)

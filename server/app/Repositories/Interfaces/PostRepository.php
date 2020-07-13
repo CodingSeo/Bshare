@@ -18,4 +18,5 @@ interface PostRepository
 
     public function getMostViewedPost(int $amount): array;
     public function getMostRecentPost(int $amount): array;
+    public function getRandomPost(array $category_id): PostDTO;
 }
