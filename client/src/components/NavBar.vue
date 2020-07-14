@@ -63,7 +63,7 @@
           class="d-flex mb-6"
           v-for="(link, i) in links"
           :key="link.id"
-          :to="link.category"
+          :to="{path:'/'+link.category}"
         >
           <v-list-item-icon>
             <v-icon class="white--text">{{ icons[i] }}</v-icon>

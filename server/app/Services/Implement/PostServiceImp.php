@@ -107,14 +107,6 @@ class PostServiceImp implements PostService
     public function deletePost(array $requestContent, AuthUser $user): void
     {
         $post_exit = $this->postRepository->getPost($requestContent['post_id']);
-<<<<<<< HEAD
-        if (!$post_exit->id) throw new \App\Exceptions\ModuleNotFound('Post not Found');
-        if (strcmp($post_exit->user_id, $user->email)) throw new \App\Exceptions\IllegalUserApproach();
-        $delete_result = DB::transaction(function () use ($post_exit) {
-            return $this->postRepository->delete($post_exit);
-        });
-        if (!$delete_result) throw new \App\Exceptions\ModuelNotDeleted('delete failed');
-=======
 
         if (!$post_exit->id)
         {
@@ -135,7 +127,6 @@ class PostServiceImp implements PostService
         {
             throw new \App\Exceptions\ModuelNotDeleted('delete failed');
         }
->>>>>>> fac61fc99ab0209ba1b4d30d44d410f09e30c660
     }
 
     public function getMostViewedPost(array $requestContent): array

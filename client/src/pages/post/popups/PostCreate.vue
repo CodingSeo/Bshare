@@ -55,10 +55,10 @@ export default {
     submit() {
       if (this.$refs.form.validate()) {
         this.loading = true;
-        console.log(this.post);
         UserService.savePost(this.post).then(
           response => {
-            this.$router.push(`/${this.category}`);
+            console.log(response.data);
+            this.$router.push(`/${this.category}/post/${response.data.id}`);
           },
           error => {
             console.log(error.response);
