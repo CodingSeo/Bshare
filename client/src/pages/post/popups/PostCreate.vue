@@ -57,7 +57,6 @@ export default {
         this.loading = true;
         UserService.savePost(this.post).then(
           response => {
-            console.log(response.data);
             this.$router.push(`/${this.category}/post/${response.data.id}`);
           },
           error => {
