@@ -71,6 +71,15 @@ class PostRepositoryImp implements PostRepository
     public function delete(PostDTO $postDTO): bool
     {
         $post_id = $postDTO->getId();
+<<<<<<< HEAD
+        // $result  = Post::where('id', $post_id)->delete();
+        $postUpdateResult = Post::where('id', $post_id)->update([
+            'active' => 0,
+        ]);
+        $commentUpdateResult = Comment::where('post_id', $post_id)->update([
+            'active' => 0,
+        ]);
+=======
         $postUpdateResult = Post::where('id', $post_id)
             ->update([
                 'active' => 0,
@@ -79,6 +88,7 @@ class PostRepositoryImp implements PostRepository
             ->update([
                 'active' => 0,
             ]);
+>>>>>>> fac61fc99ab0209ba1b4d30d44d410f09e30c660
         return ($postUpdateResult || $commentUpdateResult);
     }
 
