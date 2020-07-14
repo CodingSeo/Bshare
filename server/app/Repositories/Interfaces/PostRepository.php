@@ -12,7 +12,9 @@ interface PostRepository
     public function getCommentAndRepliesByPost(PostDTO $postDTO): array;
 
     public function updatePostByDTO(PostDTO $postDTO): bool;
-    public function updateByRequestContent(array $post): bool;
+    public function updateByRequestContent(array $requestContent): bool;
+    public function updateTradeInfoByRequestContent(array $requestContent): bool;
+
     public function delete(PostDTO $requestContent): bool;
     public function save($requestContent, string $user_email): PostDTO;
 

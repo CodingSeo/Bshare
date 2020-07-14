@@ -94,7 +94,7 @@ class PostServiceImp implements PostService
             throw new \App\Exceptions\IllegalUserApproach();
         }
 
-        $this->checkCategoryAvaliable($post_exit->getCategory());
+        $this->checkCategoryWritable($post_exit->getCategory());
 
         DB::transaction(function () use ($requestContent, $post_exit)
         {
@@ -108,12 +108,12 @@ class PostServiceImp implements PostService
     {
         $post_exit = $this->postRepository->getPost($requestContent['post_id']);
 
-        if (!$post_exit->id)
+        if (!$post_exit->getId())
         {
             throw new \App\Exceptions\ModuleNotFound('Post not Found');
         }
 
-        if (strcmp($post_exit->user_id, $user->email))
+        if (strcmp($post_exit->getUser_id(), $user->email))
         {
             throw new \App\Exceptions\IllegalUserApproach();
         }
@@ -128,6 +128,32 @@ class PostServiceImp implements PostService
             throw new \App\Exceptions\ModuelNotDeleted('delete failed');
         }
     }
+
+    public function updateTradeInfoPost(array $requestContent, AuthUser $user): void
+    {
+        $post_exit = $this->postRepository->getPostWithCategory($requestContent['post_id']);
+
+        if (!$post_exit->getId())
+        {
+            throw new \App\Exceptions\ModuleNotFound('Post do not exist');
+        }
+
+        if (strcmp($post_exit->getUser_id(), $user->email))
+        {
+            throw new \App\Exceptions\IllegalUserApproach();
+        }
+
+        $this->checkCategoryTradeAble($post_exit->getCategory());
+
+        $update_result = $this->postRepository->updateTradeInfoByRequestContent($requestContent);
+
+        if (!$update_result)
+        {
+            throw new \App\Exceptions\ModuleNotUpdated('update failed');
+        }
+
+    }
+
 
     public function getMostViewedPost(array $requestContent): array
     {

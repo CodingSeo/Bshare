@@ -6,16 +6,18 @@ use App\DTO\CategoryDTO;
 
 trait CategoryHelpers
 {
-    public function checkCategoryAvaliable(CategoryDTO $category)
+    public function checkCategoryWritable(CategoryDTO $category)
     {
-        if (!$category->getId())
-        {
-            throw new \App\Exceptions\ModuleNotFound('category not found');
-        }
-
         if (!$category->getWritable())
         {
             throw new \App\Exceptions\IllegalUserApproach('cannot write a post on this category');
+        }
+    }
+    public function checkCategoryTradeAble(CategoryDTO $category)
+    {
+        if(!$category->getUse_trade())
+        {
+            throw new \App\Exceptions\IllegalUserApproach('cannot trade a post on this category');
         }
     }
 

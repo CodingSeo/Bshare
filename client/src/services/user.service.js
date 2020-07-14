@@ -28,6 +28,14 @@ class UserService {
             headers: authHeader()
         });
     }
+    completePost(post_id) {
+        return axios.post(API_URL + "posts/tradeInfo/"+ post_id,{
+            _method:"PUT",
+            trade_status:"complete"
+        },{
+            headers: authHeader()
+        });
+    }
     createComment(commentModel){
         return axios.post(API_URL + "comments", {
             post_id: commentModel.postid,

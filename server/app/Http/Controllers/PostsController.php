@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PostsAmountRequest;
 use App\Http\Requests\PostsRequestIndex;
 use App\Http\Requests\PostsRequestStore;
+use App\Http\Requests\PostsRequestTradeUpdate;
 use App\Http\Requests\PostsRequestUpdate;
 use App\Services\Interfaces\PostService;
 use App\Transformers\PostTransformer;
@@ -49,9 +50,19 @@ class PostsController extends Controller
 
         $user = $this->authUser->getAuthUser();
         $requestContent = onlyContent($request, [
-            'post_id', 'title', 'body', 'trade_status'
+            'post_id', 'title', 'body'
         ]);
         $this->service->updatePost($requestContent, $user);
+        return response('success');
+    }
+
+    public function updateTradeInfo(PostsRequestTradeUpdate $request)
+    {
+        $user = $this->authUser->getAuthUser();
+        $requestContent = onlyContent($request, [
+            'post_id', 'trade_status'
+        ]);
+        $this->service->updateTradeInfoPost($requestContent, $user);
         return response('success');
     }
 

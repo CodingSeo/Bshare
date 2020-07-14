@@ -68,6 +68,11 @@ Route::delete('posts/{post_id}', [
     'uses' => 'PostsController@destroy'
 ])->middleware('jwt');
 
+Route::put('posts/tradeInfo/{post_id}', [
+    'as' => 'posts.tradeInfo.update',
+    'uses' => 'PostsController@updateTradeInfo'
+])->middleware('jwt');
+
 
 
 

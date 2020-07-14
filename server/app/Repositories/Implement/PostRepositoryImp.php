@@ -31,12 +31,14 @@ class PostRepositoryImp implements PostRepository
 
         return $this->mapper->map($post, PostDTO::class);
     }
+
     public function getPostWithContent(int $id): PostDTO
     {
         $post = POST::with('content')->active()->find($id);
 
         return $this->mapper->map($post, PostDTO::class);
     }
+
     public function getCommentAndRepliesByPost(PostDTO $postDTO): array
     {
         $post = new Post();
@@ -63,6 +65,15 @@ class PostRepositoryImp implements PostRepository
         $result = Post::where('id', $requestContent['post_id'])
             ->update([
                 'title' => $requestContent['title']
+            ]);
+        return $result;
+    }
+
+    public function updateTradeInfoByRequestContent(array $requestContent):bool
+    {
+        $result = Post::where('id', $requestContent['post_id'])
+            ->update([
+                'trade_status' => $requestContent['trade_status']
             ]);
         return $result;
     }

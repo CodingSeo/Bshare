@@ -12,17 +12,25 @@
           </div>
         </v-flex>
         <template v-if="isYours(user.email, user_id)">
-          <v-btn @click="deletePost" text>
-            <span>Delete</span>
-            <v-icon right>delete</v-icon>
+
+          <v-btn v-if="trade_status=='ongoing'" @click="completePost" text>
+            <span>Complete</span>
+            <v-icon right>done</v-icon>
           </v-btn>
+
           <PostUpdate
             :postid="postid"
             :content="content"
             :title="title"
             :category="category"
           ></PostUpdate>
-          <v-chip v-if="trade_status!==null" small :class="`${trade_status} white--text caption my-2`">{{trade_status}}</v-chip>
+          <v-btn @click="deletePost" text>
+            <span>Delete</span>
+            <v-icon right>delete</v-icon>
+          </v-btn>
+
+          
+
         </template>
       </v-layout>
       <v-divider></v-divider>
@@ -193,6 +201,16 @@ export default {
     },
     deletePost() {
       UserService.deletePost(this.postid).then(
+        response => {
+          this.$router.push(`/${this.category}`);
+        },
+        error => {
+          console.log(error.response);
+        }
+      );
+    },
+    completePost() {
+      UserService.completePost(this.postid).then(
         response => {
           this.$router.push(`/${this.category}`);
         },
