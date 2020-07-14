@@ -87,6 +87,7 @@ class PostRepositoryImp implements PostRepository
         $post = new Post();
         $post->user_id = $user_email;
         $post->title = $requestContent['title'];
+        $post->trade_status = $requestContent['trade_status'];
         $post->category_id = $requestContent['category_id'];
         $post->save();
         return $this->mapper->map($post, PostDTO::class);
