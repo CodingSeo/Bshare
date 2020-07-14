@@ -2,7 +2,9 @@
 
 namespace App\Repositories\Implement;
 
+use App\Cache\CacheContract;
 use App\DTO\ContentDTO;
+use App\DTO\ImageDTO;
 use App\DTO\PostDTO;
 use App\EloquentModel\Content;
 use App\Mapper\MapperService;
@@ -10,10 +12,11 @@ use App\Repositories\Interfaces\ContentRepository;
 
 class ContentRepositoryImp implements ContentRepository
 {
-    protected $mapper;
-    public function __construct(MapperService $mapper)
+    protected $mapper, $cache;
+    public function __construct(MapperService $mapper, CacheContract $cache)
     {
         $this->mapper = $mapper;
+        $this->cache = $cache;
     }
     public function saveContent(int $postID, array $requestContent): ContentDTO
     {
@@ -29,5 +32,18 @@ class ContentRepositoryImp implements ContentRepository
             'body' => $requestContent['body']
         ]);
         return $result;
+    }
+    public function getImagesByContent(ContentDTO $contentDTO): array
+    {
+        $images = $this->cache->remember('api.posts.content.images.' . $contentDTO->getId(), 1000, function () use ($contentDTO) {
+
+            $content = new Content();
+
+            $content->id = $contentDTO->getId();
+
+            return $content->images()->get();
+        });
+
+        return $this->mapper->mapArray($images, ImageDTO::class);
     }
 }

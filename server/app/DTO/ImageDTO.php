@@ -19,9 +19,13 @@ class ImageDTO
     /**
      * @var string
      */
+    public $filepath;
+    /**
+     * @var string
+     */
     public $bytes;
     /**
-     * @var int
+     * @var string
      */
     public $mime;
     /**
@@ -81,5 +85,51 @@ class ImageDTO
         return $this;
     }
 
+    /**
+     * Get the value of filepath
+     *
+     * @return  string
+     */
+    public function getFilepath()
+    {
+        return $this->filepath;
+    }
 
+    /**
+     * Set the value of filepath
+     *
+     * @param  string  $filepath
+     *
+     * @return  self
+     */
+    public function setFilepath(string $filepath)
+    {
+        $this->filepath = $filepath;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of filename
+     *
+     * @return  string
+     */
+    public function getFilename()
+    {
+        return $this->filename;
+    }
+
+    /**
+     * Set the value of filename
+     *
+     * @param  string  $filename
+     *
+     * @return  self
+     */
+    public function setFilename(string $filename)
+    {
+        $this->filename = $filename;
+
+        return $this;
+    }
 }

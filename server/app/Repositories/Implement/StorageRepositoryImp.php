@@ -15,13 +15,16 @@ class StorageRepositoryImp implements StorageRepository
     {
         $this->mapperService  = $mapperService;
     }
-    public function save(string $path,string $array_name, array $requestContent) : FileDTO
+    public function save(string $path, string $array_name, array $requestContent): FileDTO
     {
         $file = $requestContent[$array_name];
+
         $fileName = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
+
         $fileResult = $file->move(public_path($path), $fileName);
+
         $fileDTO = $this->mapToFileDTO($fileResult);
+
         return $fileDTO;
     }
-
 }

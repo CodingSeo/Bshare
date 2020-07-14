@@ -30,9 +30,7 @@
             </v-form>
             <v-divider light></v-divider>
             <v-card-actions>
-              <v-btn width="100%" color="blue" dark @click="hiwork_login"
-                >Hiworks Login</v-btn
-              >
+              <v-btn width="100%" color="blue" dark @click="hiwork_login">Hiworks Login</v-btn>
             </v-card-actions>
             <v-divider light></v-divider>
             <v-card-actions>
@@ -40,13 +38,7 @@
                 <v-icon>person</v-icon>Sign up
               </v-btn>
               <v-spacer></v-spacer>
-              <v-btn
-                rounded
-                color="primary"
-                dark
-                @click="loginAccount"
-                :loading="loading"
-              >
+              <v-btn rounded color="primary" dark @click="loginAccount" :loading="loading">
                 Login
                 <v-icon>keyboard_arrow_right</v-icon>
               </v-btn>
@@ -98,7 +90,7 @@ export default {
         );
       }
     },
-    receiveMessage(e){
+    receiveMessage(e) {
       console.log(e.data);
       this.windowObjectReference.close();
       this.$store.dispatch("auth/oauthLogin", e.data);
@@ -119,8 +111,8 @@ export default {
       } else {
         this.windowObjectReference.focus();
       }
-      if(window.addEventListener){
-        window.addEventListener("message",this.receiveMessage);
+      if (window.addEventListener) {
+        window.addEventListener("message", this.receiveMessage);
       }
     }
   }

@@ -21,13 +21,14 @@ class ImagesController extends Controller
         $requestContent = onlyContent($request, [
             'image'
         ]);
+
         $fileDTO = $this->imagesService->uploadImages($requestContent);
-        return response()->json($fileDTO,200,[],JSON_PRETTY_PRINT);
+
+        return response()->json($fileDTO, 200, [], JSON_PRETTY_PRINT);
     }
 
     public function deleteImages(Request $request)
     {
-
         $user = $this->authUser->getAuthUser();
     }
 }

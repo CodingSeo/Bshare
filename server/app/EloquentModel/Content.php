@@ -1,6 +1,7 @@
 <?php
 
 namespace App\EloquentModel;
+
 use Illuminate\Database\Eloquent\Model;
 
 class Content extends Model
@@ -10,7 +11,7 @@ class Content extends Model
 
     protected $fillable = ['body'];
 
-    protected $hidden = ['id', 'post_id'];
+    protected $hidden = ['post_id'];
 
     public function post()
     {

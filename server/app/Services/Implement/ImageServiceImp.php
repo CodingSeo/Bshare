@@ -19,16 +19,20 @@ class ImageServiceImp implements ImageService
 
     public function uploadImages(array $requestContent): ImageDTO
     {
-        $fileDTO = $this->storageRepository->save('images','image',$requestContent);
+        $fileDTO = $this->storageRepository->save('images', 'image', $requestContent);
+
         $imageDTO = $this->imageRepository->uploadImagesByFileDTO($fileDTO);
-        return new ImageDTO();
+
+        if (!$imageDTO->getID()) {
+            throw new \App\Exceptions\ModuleNotUpdated('Image upload to database failed');
+        }
+
+        return $imageDTO;
     }
     public function updateImages(array $requestContent, AuthUser $user): void
     {
-
     }
     public function deleteImages(array $requestContent, AuthUser $user): void
     {
-
     }
 }

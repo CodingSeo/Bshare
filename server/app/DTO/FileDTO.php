@@ -5,7 +5,7 @@ namespace App\DTO;
 class FileDTO
 {
     public $filename;
-    public $path;
+    public $filepath;
     public $size;
     public $extension;
 
@@ -25,26 +25,6 @@ class FileDTO
     public function setFilename($filename)
     {
         $this->filename = $filename;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of path
-     */
-    public function getPath()
-    {
-        return $this->path;
-    }
-
-    /**
-     * Set the value of path
-     *
-     * @return  self
-     */
-    public function setPath($path)
-    {
-        $this->path = $path;
 
         return $this;
     }
@@ -85,6 +65,26 @@ class FileDTO
     public function setExtension($extension)
     {
         $this->extension = $extension;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of filepath
+     */
+    public function getFilepath()
+    {
+        return $this->filepath;
+    }
+
+    /**
+     * Set the value of filepath
+     *
+     * @return  self
+     */
+    public function setFilepath($filepath)
+    {
+        $this->filepath = $filepath;
 
         return $this;
     }

@@ -18,9 +18,10 @@ class ImageRepositoryImp implements ImageRepository
     public function uploadImagesByFileDTO(FileDTO $fileDTO): ImageDTO
     {
         $image = Image::create([
-            'filename'=>$fileDTO->getFilename(),
-            'bytes'=>$fileDTO->getSize(),
-            'mime'=>$fileDTO->getExtension(),
+            'filename' => $fileDTO->getFilename(),
+            'filepath' => $fileDTO->getFilepath(),
+            'bytes' => $fileDTO->getSize(),
+            'mime' => $fileDTO->getExtension(),
         ]);
         return $this->mapper->map($image, ImageDTO::class);
     }

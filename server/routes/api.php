@@ -98,6 +98,11 @@ Route::post('images', [
     'uses' => 'ImagesController@uploadImages'
 ])->middleware('jwt');
 
+Route::get('imagesget', [
+    'as' => 'posts.image.upload',
+    'uses' => 'ImagesController@get'
+]);
+
 Route::delete('images/{image_id}', [
     'as' => 'posts.image.delete',
     'uses' => 'ImagesController@deleteImages'

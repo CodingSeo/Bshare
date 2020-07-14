@@ -15,7 +15,8 @@ class PostsRequestStore extends ApiRequest
         return [
             'title' => ['required', 'max:255'],
             'body' => ['required'],
-            'category_id' => ['required','numeric','min:0','max:4'],
+            'category_id' => ['required', 'numeric', 'min:0', 'max:4'],
+            'images_info' => ['array', 'max:5', 'nullable'],
         ];
     }
     public function attributes()
@@ -23,13 +24,8 @@ class PostsRequestStore extends ApiRequest
         return [
             'title' => 'title',
             'body'  => 'body',
-            'category_id'=>'category ID'
-        ];
-    }
-    public function messages(){
-        return [
-            'min'  => ':attribute should be greater than 0 length',
-            'max'  => ':attribute should be smaller than 5 length',
+            'category_id' => 'category ID',
+            'images_info' => 'images_info'
         ];
     }
 }

@@ -25,22 +25,7 @@ class JWTAuthManagerTymond implements JWTAuthManager
         'sub',
         'jti',
     ];
-    /**
-     * @var JWTAuth
-     */
-    private $jwtauth;
-    /**
-     * @var TokenValidator
-     */
-    private $tokenValidator;
-    /**
-     * @var Lcobucci
-     */
-    private $tokenProvider;
-    /**
-     * @var CacheContract
-     */
-    private $cacheContract;
+    private $jwtauth, $tokenValidator, $tokenProvider, $cacheContract;
     public function __construct(
         JWTAuth $jwtauth,
         TokenValidator $tokenValidator,
@@ -89,8 +74,10 @@ class JWTAuthManagerTymond implements JWTAuthManager
     public function getTokenPayload(string $token): array
     {
         try {
+
             return $this->tokenProvider->decode($token);
         } catch (Exception $e) {
+
             throw new JWTTokenException('can not decode the token');
         }
     }

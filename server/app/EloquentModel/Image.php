@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Image extends Model
 {
-    public $fillable=[
-        'filename','bytes','mime'
+    public $fillable = [
+        'filename', 'bytes', 'mime', 'id', 'filepath'
     ];
 
     public function content()

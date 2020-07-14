@@ -6,7 +6,10 @@ use App\DTO\PostDTO;
 use App\EloquentModel\Post;
 use App\Cache\CacheContract;
 use App\DTO\CommentDTO;
+use App\DTO\ContentDTO;
 use App\EloquentModel\Comment;
+use App\EloquentModel\Content;
+use App\EloquentModel\Image;
 use App\Mapper\MapperService;
 use App\Repositories\Interfaces\PostRepository;
 
@@ -25,6 +28,7 @@ class PostRepositoryImp implements PostRepository
 
         return $this->mapper->map($post, PostDTO::class);
     }
+
     public function getPostWithCategory(int $id): PostDTO
     {
         $post = POST::with('category')->active()->find($id);
@@ -69,7 +73,7 @@ class PostRepositoryImp implements PostRepository
         return $result;
     }
 
-    public function updateTradeInfoByRequestContent(array $requestContent):bool
+    public function updateTradeInfoByRequestContent(array $requestContent): bool
     {
         $result = Post::where('id', $requestContent['post_id'])
             ->update([
@@ -103,6 +107,24 @@ class PostRepositoryImp implements PostRepository
         return $this->mapper->map($post, PostDTO::class);
     }
 
+    public function attachPostwithImage(array $image_info, ContentDTO $contentDTO): void
+    {
+        $contentModel = new Content();
+
+        $contentModel->id = $contentDTO->getId();
+
+        $values = getValuesFromJsonArray($image_info, 'id');
+
+        $images = Image::whereIn('id', $values)->get();
+
+        $images->each(function ($image) use ($contentModel) {
+
+            $image->content()->associate($contentModel);
+
+            $image->save();
+        });
+    }
+
     public function getMostViewedPost(int $amount): array
     {
         $posts = $this->cache->remember('api.posts.mostviewed', 1000, function () use ($amount) {
@@ -127,12 +149,12 @@ class PostRepositoryImp implements PostRepository
         return $this->mapper->mapArray($posts, PostDTO::class);
     }
 
-    public function getRandomPost(array $category_id) : PostDTO
+    public function getRandomPost(array $category_id): PostDTO
     {
         $randomPost = $this->cache->remember('api.posts.randomPost', 200, function () use ($category_id) {
             return POST::with('content')
                 ->active()
-                ->whereIn('category_id',$category_id)
+                ->whereIn('category_id', $category_id)
                 ->inRandomOrder()
                 ->first();
         });

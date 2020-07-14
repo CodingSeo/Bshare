@@ -42,6 +42,10 @@ class PostServiceImp implements PostService
 
         $comments = $this->postRepository->getCommentAndRepliesByPost($postDTO);
 
+        $images = $this->contentRepository->getImagesByContent($postDTO->getContent());
+
+        $postDTO->getContent()->setImages($images);
+
         $postDTO->setComments($comments);
 
         $postDTO->setView_count($postDTO->getView_count() + 1);
@@ -63,8 +67,7 @@ class PostServiceImp implements PostService
 
         $requestContent['trade_status'] = $this->setTrade_status($category);
 
-        $postDTO = DB::transaction(function () use ($requestContent, $user, $category)
-        {
+        $postDTO = DB::transaction(function () use ($requestContent, $user, $category) {
 
             $postDTO = $this->postRepository->save($requestContent, $user->email);
 
@@ -74,8 +77,12 @@ class PostServiceImp implements PostService
 
             $postDTO->setContent($postContent);
 
+            if ($requestContent['images_info']) {
+                $this->postRepository->attachPostwithImage($requestContent['images_info'], $postContent);
+            }
             return $postDTO;
         });
+
 
         return $postDTO;
     }
@@ -84,20 +91,18 @@ class PostServiceImp implements PostService
     {
         $post_exit = $this->postRepository->getPostWithCategory($requestContent['post_id']);
 
-        if (!$post_exit->getId())
-        {
+        if (!$post_exit->getId()) {
             throw new \App\Exceptions\ModuleNotFound('Post do not exist');
         }
 
-        if (strcmp($post_exit->getUser_id(), $user->email))
-        {
+        if (strcmp($post_exit->getUser_id(), $user->email)) {
             throw new \App\Exceptions\IllegalUserApproach();
         }
 
         $this->checkCategoryWritable($post_exit->getCategory());
 
-        DB::transaction(function () use ($requestContent, $post_exit)
-        {
+        DB::transaction(function () use ($requestContent, $post_exit) {
+
             $this->postRepository->updateByRequestContent($requestContent);
 
             $this->contentRepository->updateContent($post_exit, $requestContent);
@@ -108,23 +113,19 @@ class PostServiceImp implements PostService
     {
         $post_exit = $this->postRepository->getPost($requestContent['post_id']);
 
-        if (!$post_exit->getId())
-        {
+        if (!$post_exit->getId()) {
             throw new \App\Exceptions\ModuleNotFound('Post not Found');
         }
 
-        if (strcmp($post_exit->getUser_id(), $user->email))
-        {
+        if (strcmp($post_exit->getUser_id(), $user->email)) {
             throw new \App\Exceptions\IllegalUserApproach();
         }
 
-        $delete_result = DB::transaction(function () use ($post_exit)
-        {
+        $delete_result = DB::transaction(function () use ($post_exit) {
             return $this->postRepository->delete($post_exit);
         });
 
-        if (!$delete_result)
-        {
+        if (!$delete_result) {
             throw new \App\Exceptions\ModuelNotDeleted('delete failed');
         }
     }
@@ -133,13 +134,11 @@ class PostServiceImp implements PostService
     {
         $post_exit = $this->postRepository->getPostWithCategory($requestContent['post_id']);
 
-        if (!$post_exit->getId())
-        {
+        if (!$post_exit->getId()) {
             throw new \App\Exceptions\ModuleNotFound('Post do not exist');
         }
 
-        if (strcmp($post_exit->getUser_id(), $user->email))
-        {
+        if (strcmp($post_exit->getUser_id(), $user->email)) {
             throw new \App\Exceptions\IllegalUserApproach();
         }
 
@@ -147,11 +146,9 @@ class PostServiceImp implements PostService
 
         $update_result = $this->postRepository->updateTradeInfoByRequestContent($requestContent);
 
-        if (!$update_result)
-        {
-            throw new \App\Exceptions\ModuleNotUpdated('update failed');
+        if (!$update_result) {
+            throw new \App\Exceptions\ModuleNotUpdated('post update failed');
         }
-
     }
 
 
@@ -165,12 +162,10 @@ class PostServiceImp implements PostService
         return $this->postRepository->getMostRecentPost($requestContent['amount']);
     }
 
-    public function getRandomPost() : PostDTO
+    public function getRandomPost(): PostDTO
     {
-        $category_id = [1,2,3];
+        $category_id = [1, 2, 3];
         $randomPost = $this->postRepository->getRandomPost($category_id);
         return $randomPost;
     }
-
-
 }

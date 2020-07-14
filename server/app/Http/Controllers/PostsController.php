@@ -39,7 +39,7 @@ class PostsController extends Controller
     {
         $user = $this->authUser->getAuthUser();
         $requestContent = onlyContent($request, [
-            'title', 'body', 'category_id', 'trade_status'
+            'title', 'body', 'category_id', 'trade_status', 'images_info'
         ]);
         $post = $this->service->storePost($requestContent, $user);
         return $this->transform->transformPost($post);
@@ -94,10 +94,9 @@ class PostsController extends Controller
         return $this->transform->transformPosts($posts);
     }
 
-    public function getRandomPost():JsonResponse
+    public function getRandomPost(): JsonResponse
     {
         $post = $this->service->getRandomPost();
         return $this->transform->transformPost($post);
     }
-
 }
