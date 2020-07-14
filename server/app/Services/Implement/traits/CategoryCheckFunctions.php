@@ -4,7 +4,7 @@ namespace App\Services\Implement\traits;
 
 use App\DTO\CategoryDTO;
 
-trait CategoryHelpers
+trait CategoryCheckFunctions
 {
     public function checkCategoryWritable(CategoryDTO $category)
     {
@@ -13,6 +13,7 @@ trait CategoryHelpers
             throw new \App\Exceptions\IllegalUserApproach('cannot write a post on this category');
         }
     }
+
     public function checkCategoryTradeAble(CategoryDTO $category)
     {
         if(!$category->getUse_trade())
@@ -26,6 +27,5 @@ trait CategoryHelpers
         $categoryId=$category->getId();
         return ($categoryId===2 || $categoryId===3)? 'ongoing': null;
     }
-
 
 }

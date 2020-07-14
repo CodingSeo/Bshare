@@ -8,13 +8,13 @@ use App\Repositories\Interfaces\CategoryRepository;
 use App\Repositories\Interfaces\CommentRepository;
 use App\Repositories\Interfaces\ContentRepository;
 use App\Repositories\Interfaces\PostRepository;
-use App\Services\Implement\traits\CategoryHelpers;
+use App\Services\Implement\traits\CategoryCheckFunctions;
 use App\Services\Interfaces\PostService;
 use Illuminate\Support\Facades\DB;
 
 class PostServiceImp implements PostService
 {
-    use CategoryHelpers;
+    use CategoryCheckFunctions;
 
     protected $postRepository;
     protected $categoryRepository;
@@ -59,7 +59,7 @@ class PostServiceImp implements PostService
     {
         $category = $this->categoryRepository->getCategory($requestContent['category_id']);
 
-        $this->checkCategoryAvaliable($category);
+        $this->checkCategoryWritable($category);
 
         $requestContent['trade_status'] = $this->setTrade_status($category);
 
