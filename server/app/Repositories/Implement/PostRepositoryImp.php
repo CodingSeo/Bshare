@@ -62,8 +62,7 @@ class PostRepositoryImp implements PostRepository
     {
         $result = Post::where('id', $requestContent['post_id'])
             ->update([
-                'title' => $requestContent['title'],
-                'trade_status' =>$requestContent['trade_status']
+                'title' => $requestContent['title']
             ]);
         return $result;
     }
@@ -71,15 +70,6 @@ class PostRepositoryImp implements PostRepository
     public function delete(PostDTO $postDTO): bool
     {
         $post_id = $postDTO->getId();
-<<<<<<< HEAD
-        // $result  = Post::where('id', $post_id)->delete();
-        $postUpdateResult = Post::where('id', $post_id)->update([
-            'active' => 0,
-        ]);
-        $commentUpdateResult = Comment::where('post_id', $post_id)->update([
-            'active' => 0,
-        ]);
-=======
         $postUpdateResult = Post::where('id', $post_id)
             ->update([
                 'active' => 0,
@@ -88,7 +78,6 @@ class PostRepositoryImp implements PostRepository
             ->update([
                 'active' => 0,
             ]);
->>>>>>> fac61fc99ab0209ba1b4d30d44d410f09e30c660
         return ($postUpdateResult || $commentUpdateResult);
     }
 
@@ -97,6 +86,7 @@ class PostRepositoryImp implements PostRepository
         $post = new Post();
         $post->user_id = $user_email;
         $post->title = $requestContent['title'];
+        $post->trade_status = $requestContent['trade_status'];
         $post->category_id = $requestContent['category_id'];
         $post->save();
         return $this->mapper->map($post, PostDTO::class);
