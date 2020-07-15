@@ -32,13 +32,18 @@ use App\Auth\JWTAttemptUser;
 use App\Auth\Oauth\HiworksLoginService;
 use App\Auth\Oauth\OauthLoginService;
 use App\Cache\CacheContract;
-use App\Cache\FileCache;
 use App\Cache\MemcachedCache;
 use App\Cache\NoneCache;
+use App\Http\Controllers\ImagesController;
 use App\Http\Controllers\SocialiteController;
 use App\Repositories\Implement\ContentRepositoryImp;
+use App\Repositories\Implement\ImageRepositoryImp;
+use App\Repositories\Implement\StorageRepositoryImp;
 use App\Repositories\Interfaces\ContentRepository;
-use Exception;
+use App\Repositories\Interfaces\ImageRepository;
+use App\Repositories\Interfaces\StorageRepository;
+use App\Services\Implement\ImageServiceImp;
+use App\Services\Interfaces\ImageService;
 
 class BshareProvider extends ServiceProvider
 {
@@ -50,7 +55,7 @@ class BshareProvider extends ServiceProvider
     public function register()
     {
         $container = app();
-        if ((config('memcached.check_cache')==='memcached')) {
+        if ((config('memcached.check_cache') === 'memcached')) {
             $cacheService = new MemcachedCache(
                 config('memcached.server'),
                 config('memcached.port')
@@ -58,7 +63,7 @@ class BshareProvider extends ServiceProvider
         } else {
             $cacheService = new NoneCache(); //file cache로 변경
         }
-        // $cacheService = new NoneCache(); //file cache로 변경
+
         $container->singleton(CacheContract::class, function () use ($cacheService) {
             return $cacheService;
         });
@@ -96,6 +101,11 @@ class BshareProvider extends ServiceProvider
         $container->when(UserServiceImp::class)->needs(UserRepository::class)->give(UserRepositoryImp::class);
         $container->when(JWTAuthController::class)->needs(UserService::class)->give(UserServiceImp::class);
         $container->when(SocialiteController::class)->needs(UserService::class)->give(UserServiceImp::class);
+
+        $container->when(ImagesController::class)->needs(ImageService::class)->give(ImageServiceImp::class);
+        $container->when(ImageServiceImp::class)->needs(ImageRepository::class)->give(ImageRepositoryImp::class);
+        $container->when(ImageServiceImp::class)->needs(StorageRepository::class)->give(StorageRepositoryImp::class);
+
     }
 
     /**

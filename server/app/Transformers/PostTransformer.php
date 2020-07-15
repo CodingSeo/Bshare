@@ -4,6 +4,7 @@ namespace App\Transformers;
 
 use App\DTO\CommentDTO;
 use App\DTO\ContentDTO;
+use App\DTO\ImageDTO;
 use App\DTO\PostCommentsDTO;
 use App\DTO\PostDTO;
 use App\DTO\PostPaginateDTO;
@@ -84,20 +85,29 @@ class PostTransformer
             ],
         ];
     }
+
     public function transformContent(ContentDTO $content)
     {
         return [
             'body' => $content->getBody(),
+            'images' => empty($content->getImages()) ? [] : array_map([$this, 'transformImages'], $content->getImages()),
+        ];
+    }
+
+    public function transformImages(ImageDTO $image)
+    {
+        return [
+            'filename' => $image->getFilename(),
+            'src' => url('images/' . $image->getFilename()),
         ];
     }
 
     public function transformComments(CommentDTO $comments)
     {
-
         return [
-            'id' => $comments->id,
-            'user_id' => $comments->user_id,
-            'body' => $comments->body,
+            'id' => $comments->getId(),
+            'user_id' => $comments->getUser_id(),
+            'body' => $comments->getBody(),
             'created_at' => $this->changeDateTime($comments->created_at),
             'replies' => empty($comments->replies) ? [] : array_map([$this, 'transformReplies'], $comments->replies),
         ];

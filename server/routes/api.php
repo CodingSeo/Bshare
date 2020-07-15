@@ -93,13 +93,17 @@ Route::delete('comments/{comment_id}', [
 ])->middleware('jwt');
 
 
-//today's mission to implement this part
-Route::post('file', [
-    'as' => 'posts.file.store',
-    'uses' => 'FilesController@store'
+Route::post('images', [
+    'as' => 'posts.image.upload',
+    'uses' => 'ImagesController@uploadImages'
 ])->middleware('jwt');
 
-Route::delete('file/{file_id}', [
-    'as' => 'posts.file.delete',
-    'uses' => 'FilesController@destroy'
+Route::get('imagesget', [
+    'as' => 'posts.image.upload',
+    'uses' => 'ImagesController@get'
+]);
+
+Route::delete('images/{image_id}', [
+    'as' => 'posts.image.delete',
+    'uses' => 'ImagesController@deleteImages'
 ])->middleware('jwt');

@@ -25,6 +25,22 @@ if (!function_exists('onlyContent')) {
     }
 }
 
+if (!function_exists('getValuesFromJsonArray')) {
+    /**
+     * @param array $json_array
+     * @param string $key
+     */
+    function getValuesFromJsonArray($json_array, $key): array
+    {
+        $values = array();
+        foreach ($json_array as $json) {
+            array_push($values, json_decode($json)->$key);
+        }
+        return $values;
+    }
+}
+
+
 if (!function_exists('checkKeyNull')) {
     /**
      * @param array $content
@@ -33,5 +49,16 @@ if (!function_exists('checkKeyNull')) {
     function checkKeyNull($content, $key): bool
     {
         return array_key_exists($key, $content) && $content[$key] !== null;
+    }
+}
+
+if (!function_exists('images_path')) {
+    /**
+     * @param string $path
+     * @return string
+     */
+    function images_path($path = null)
+    {
+        return public_path('images' . ($path ? DIRECTORY_SEPARATOR . $path : $path));
     }
 }

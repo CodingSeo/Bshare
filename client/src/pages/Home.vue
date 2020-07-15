@@ -8,21 +8,15 @@
           <v-card class="my-3" height="30%">
             <v-card-text>
               <div>{{this.RandomPost.id}}</div>
-              <p class="display-1 text--primary">
-                {{this.RandomPost.title}}
-              </p>
-              <div class="text--primary">
-                {{this.RandomPost.body}}
-              </div>
+              <p class="display-1 text--primary">{{this.RandomPost.title}}</p>
+              <div class="text--primary">{{this.RandomPost.body}}</div>
             </v-card-text>
           </v-card>
 
           <v-divider></v-divider>
           <v-card class="my-3 indigo">
             <v-card-title>
-              <p class="display-1 pl-4 pt-2 text-uppercase white--text">
-                Most Viewed Posts
-              </p>
+              <p class="display-1 pl-4 pt-2 text-uppercase white--text">Most Viewed Posts</p>
             </v-card-title>
             <v-divider></v-divider>
             <v-carousel
@@ -33,16 +27,9 @@
               hide-delimiters
               show-arrows-on-hover
             >
-              <v-carousel-item
-                v-for="post in this.MostViewedPosts"
-                :key="post.id"
-              >
+              <v-carousel-item v-for="post in this.MostViewedPosts" :key="post.id">
                 <v-sheet height="100%">
-                  <v-row
-                    class="pa-10 fill-height"
-                    align="center"
-                    justify="center"
-                  >
+                  <v-row class="pa-10 fill-height" align="center" justify="center">
                     <v-flex xs12 md6>
                       <div class="caption grey--text">postName</div>
                       <div>{{ post.title }}</div>
@@ -68,9 +55,7 @@
 
           <v-card class="my-3 indigo">
             <v-card-title class="height=20">
-              <p class="display-1  pl-4 pt-2 text-uppercase  white--text">
-                Most Recent Posts
-              </p>
+              <p class="display-1 pl-4 pt-2 text-uppercase white--text">Most Recent Posts</p>
             </v-card-title>
             <v-divider></v-divider>
             <v-carousel
@@ -81,16 +66,9 @@
               hide-delimiters
               show-arrows-on-hover
             >
-              <v-carousel-item
-                v-for="post in this.MostRecentPosts"
-                :key="post.id"
-              >
+              <v-carousel-item v-for="post in this.MostRecentPosts" :key="post.id">
                 <v-sheet height="100%">
-                  <v-row
-                    class="pa-10 fill-height"
-                    align="center"
-                    justify="center"
-                  >
+                  <v-row class="pa-10 fill-height" align="center" justify="center">
                     <v-flex xs12 md6>
                       <div class="caption grey--text">postName</div>
                       <div>{{ post.title }}</div>
@@ -111,7 +89,6 @@
                 </v-sheet>
               </v-carousel-item>
             </v-carousel>
-
           </v-card>
         </v-flex>
       </v-layout>
@@ -128,7 +105,7 @@ export default {
     return {
       MostViewedPosts: [],
       MostRecentPosts: [],
-      RandomPost: new Post(),
+      RandomPost: new Post()
     };
   },
   created() {

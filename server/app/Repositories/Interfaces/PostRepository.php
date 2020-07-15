@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Interfaces;
 
+use App\DTO\ContentDTO;
 use App\DTO\PostDTO;
 
 interface PostRepository
@@ -14,6 +15,7 @@ interface PostRepository
     public function updatePostByDTO(PostDTO $postDTO): bool;
     public function updateByRequestContent(array $requestContent): bool;
     public function updateTradeInfoByRequestContent(array $requestContent): bool;
+    public function attachPostwithImage(array $image_info, ContentDTO $postDTO): void;
 
     public function delete(PostDTO $requestContent): bool;
     public function save($requestContent, string $user_email): PostDTO;

@@ -1,42 +1,56 @@
 <template>
   <div class="reviewpost">
     <v-container class="my-5">
-      <v-chip v-if="trade_status!==null" small :class="`${trade_status} white--text caption my-2`">{{trade_status}}</v-chip>
+      <v-chip
+        v-if="trade_status!==null"
+        small
+        :class="`${trade_status} white--text caption my-2`"
+      >{{trade_status}}</v-chip>
       <h1 class="subheading grey--text" v-text="title"></h1>
       <v-divider></v-divider>
       <!-- body -->
       <v-layout row wrap justify-end>
         <v-flex col-xs-8>
-          <div class="subtitle-1 grey--text ml-5 mt-1 mb-2">
-            view count : {{ view_count }}
-          </div>
+          <div class="subtitle-1 grey--text ml-5 mt-1 mb-2">view count : {{ view_count }}</div>
         </v-flex>
         <template v-if="isYours(user.email, user_id)">
-
           <v-btn v-if="trade_status=='ongoing'" @click="completePost" text>
             <span>Complete</span>
             <v-icon right>done</v-icon>
           </v-btn>
 
-          <PostUpdate
-            :postid="postid"
-            :content="content"
-            :title="title"
-            :category="category"
-          ></PostUpdate>
+          <PostUpdate :postid="postid" :content="content" :title="title" :category="category"></PostUpdate>
           <v-btn @click="deletePost" text>
             <span>Delete</span>
             <v-icon right>delete</v-icon>
           </v-btn>
-
-          
-
         </template>
       </v-layout>
       <v-divider></v-divider>
       <div>
-        <v-card flat min-height="400">
-          <v-card-text>{{ content }}</v-card-text>
+        <v-card flat min-height="800">
+          <template v-if="this.imagesUrl.length > 0">
+            <v-carousel
+              cycle
+              light
+              height="300"
+              hide-delimiter-background
+              hide-delimiters
+              show-arrows-on-hover
+              class="my-3"
+            >
+              <v-carousel-item
+                v-for="(image,i) in this.imagesUrl"
+                :src="image.src"
+                :key="i"
+                style="width:600px;height:auto;margin-left: auto;margin-right:auto;"
+                :alt="image.filename"
+              ></v-carousel-item>
+            </v-carousel>
+          </template>
+          <v-card-text>
+            <h2>{{ content }}</h2>
+          </v-card-text>
         </v-card>
       </div>
       <v-divider></v-divider>
@@ -65,12 +79,7 @@
         </v-flex>
       </v-layout>
       <v-divider></v-divider>
-      <v-card
-        class="pl-3 mb-2"
-        flat
-        v-for="comment in comments"
-        :key="comment.id"
-      >
+      <v-card class="pl-3 mb-2" flat v-for="comment in comments" :key="comment.id">
         <v-layout row wrap class="pa-2">
           <v-flex xs12>
             <div class="caption grey--text">content</div>
@@ -92,11 +101,7 @@
               :category="category"
             />
           </v-flex>
-          <v-flex
-            xs1
-            v-if="isYours(user.email, comment.user_id)"
-            class="d-flex align-center"
-          >
+          <v-flex xs1 v-if="isYours(user.email, comment.user_id)" class="d-flex align-center">
             <v-btn small text @click="deleteComment(comment.id)">
               <span>Delete</span>
               <v-icon right>delete</v-icon>
@@ -110,12 +115,7 @@
           </v-flex>
         </v-layout>
         <v-divider></v-divider>
-        <v-card
-          class="pl-10 mb-2"
-          flat
-          v-for="replie in comment.replies"
-          :key="replie.id"
-        >
+        <v-card class="pl-10 mb-2" flat v-for="replie in comment.replies" :key="replie.id">
           <v-layout row wrap class="pa-2">
             <v-flex xs12>
               <div class="caption grey--text">
@@ -131,11 +131,7 @@
               <div class="caption grey--text">Create At</div>
               <div>{{ replie.created_at }}</div>
             </v-flex>
-            <v-flex
-              xs1
-              v-if="isYours(user.email, replie.user_id)"
-              class="d-flex align-center"
-            >
+            <v-flex xs1 v-if="isYours(user.email, replie.user_id)" class="d-flex align-center">
               <v-btn small text @click="deleteComment(replie.id)">
                 <span>Delete</span>
                 <v-icon right>delete</v-icon>
@@ -173,6 +169,7 @@ export default {
       let content = result.data;
       this.title = content.title;
       this.content = content.content.body;
+      this.imagesUrl = content.content.images;
       this.comments = content.comments;
       this.created_at = content.created_at;
       this.user_id = content.user_id;
@@ -180,6 +177,7 @@ export default {
       this.trade_status = content.trade_status;
       this.commentModel.postid = content.id;
       console.log(content);
+      console.log(this.imagesUrl);
     });
   },
   data() {
@@ -190,6 +188,7 @@ export default {
       user_id: "",
       view_count: "",
       trade_status: "",
+      imagesUrl: [],
       comments: [],
       commentModel: new CommentModel("", "", "", this.user.email),
       commentRules: [v => !!v || "comment is required"]

@@ -4,227 +4,87 @@ namespace App\DTO;
 
 class FileDTO
 {
-    /**
-     * @var int
-     */
-    public $id;
-    /**
-     * @var int
-     */
-    public $content_id;
-    /**
-     * @var string
-     */
-    public $file_name;
-    /**
-     * @var string
-     */
-    public $file_path;
-    /**
-     * @var int
-     */
-    public $file_size;
-    /**
-     * @var string
-     */
-    public $file_type;
-    /**
-     * @var string
-     */
-    public $created_at;
-    /**
-     * @var string
-     */
-    public $updated_at;
+    public $filename;
+    public $filepath;
+    public $size;
+    public $extension;
 
     /**
-     * Get the value of id
-     *
-     * @return  int
+     * Get the value of filename
      */
-    public function getId()
+    public function getFilename()
     {
-        return $this->id;
+        return $this->filename;
     }
 
     /**
-     * Set the value of id
-     *
-     * @param  int  $id
+     * Set the value of filename
      *
      * @return  self
      */
-    public function setId(int $id)
+    public function setFilename($filename)
     {
-        $this->id = $id;
+        $this->filename = $filename;
 
         return $this;
     }
 
     /**
-     * Get the value of content_id
-     *
-     * @return  int
+     * Get the value of size
      */
-    public function getContent_id()
+    public function getSize()
     {
-        return $this->content_id;
+        return $this->size;
     }
 
     /**
-     * Set the value of content_id
-     *
-     * @param  int  $content_id
+     * Set the value of size
      *
      * @return  self
      */
-    public function setContent_id(int $content_id)
+    public function setSize($size)
     {
-        $this->content_id = $content_id;
+        $this->size = $size;
 
         return $this;
     }
 
     /**
-     * Get the value of file_name
-     *
-     * @return  string
+     * Get the value of extension
      */
-    public function getFile_name()
+    public function getExtension()
     {
-        return $this->file_name;
+        return $this->extension;
     }
 
     /**
-     * Set the value of file_name
-     *
-     * @param  string  $file_name
+     * Set the value of extension
      *
      * @return  self
      */
-    public function setFile_name(string $file_name)
+    public function setExtension($extension)
     {
-        $this->file_name = $file_name;
+        $this->extension = $extension;
 
         return $this;
     }
 
     /**
-     * Get the value of file_path
-     *
-     * @return  string
+     * Get the value of filepath
      */
-    public function getFile_path()
+    public function getFilepath()
     {
-        return $this->file_path;
+        return $this->filepath;
     }
 
     /**
-     * Set the value of file_path
-     *
-     * @param  string  $file_path
+     * Set the value of filepath
      *
      * @return  self
      */
-    public function setFile_path(string $file_path)
+    public function setFilepath($filepath)
     {
-        $this->file_path = $file_path;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of file_size
-     *
-     * @return  int
-     */
-    public function getFile_size()
-    {
-        return $this->file_size;
-    }
-
-    /**
-     * Set the value of file_size
-     *
-     * @param  int  $file_size
-     *
-     * @return  self
-     */
-    public function setFile_size(int $file_size)
-    {
-        $this->file_size = $file_size;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of file_type
-     *
-     * @return  string
-     */
-    public function getFile_type()
-    {
-        return $this->file_type;
-    }
-
-    /**
-     * Set the value of file_type
-     *
-     * @param  string  $file_type
-     *
-     * @return  self
-     */
-    public function setFile_type(string $file_type)
-    {
-        $this->file_type = $file_type;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of created_at
-     *
-     * @return  string
-     */
-    public function getCreated_at()
-    {
-        return $this->created_at;
-    }
-
-    /**
-     * Set the value of created_at
-     *
-     * @param  string  $created_at
-     *
-     * @return  self
-     */
-    public function setCreated_at(string $created_at)
-    {
-        $this->created_at = $created_at;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of updated_at
-     *
-     * @return  string
-     */
-    public function getUpdated_at()
-    {
-        return $this->updated_at;
-    }
-
-    /**
-     * Set the value of updated_at
-     *
-     * @param  string  $updated_at
-     *
-     * @return  self
-     */
-    public function setUpdated_at(string $updated_at)
-    {
-        $this->updated_at = $updated_at;
+        $this->filepath = $filepath;
 
         return $this;
     }

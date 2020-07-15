@@ -33,6 +33,7 @@ abstract class ApiRequest extends FormRequest
             'max'  => ':attribute should be no shorter than length',
             'confirmed' => ':attribute does not match',
             'email' => ':attribute must be email type',
+            'mimetypes'=>':attribute is not supported type'
         ];
     }
 }
