@@ -59,7 +59,7 @@ class PostServiceImp implements PostService
     {
         $category = $this->categoryRepository->getCategory($requestContent['category_id']);
 
-        $this->checkCategoryAvaliable($category);
+        $this->checkCategoryWritable($category);
 
         $requestContent['trade_status'] = $this->setTrade_status($category);
 
