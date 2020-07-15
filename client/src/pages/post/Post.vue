@@ -6,12 +6,12 @@
         small
         :class="`${trade_status} white--text caption my-2`"
       >{{trade_status}}</v-chip>
-      <h1 class="subheading grey--text" v-text="title"></h1>
+      <h1 class="subheading indigo--text" v-text="title"></h1>
       <v-divider></v-divider>
       <!-- body -->
       <v-layout row wrap justify-end>
         <v-flex col-xs-8>
-          <div class="subtitle-1 grey--text ml-5 mt-1 mb-2">view count : {{ view_count }}</div>
+          <div class="subtitle-1 indigo--text ml-5 mt-1 mb-2">view count : {{ view_count }}</div>
         </v-flex>
         <template v-if="isYours(user.email, user_id)">
           <v-btn v-if="trade_status=='ongoing'" @click="completePost" text>

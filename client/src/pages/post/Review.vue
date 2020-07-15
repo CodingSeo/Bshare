@@ -1,7 +1,7 @@
 <template>
   <div class="review">
     <v-container class="my-5">
-      <h1 class="subheading grey--text">Book Review</h1>
+      <h1 class="subheading indigo--text">Book Review</h1>
       <v-divider></v-divider>
       <!-- body -->
       <v-layout row wrap justify-end>

@@ -8,7 +8,7 @@
         </v-btn>
       </template>
       <v-card>
-        <v-card-title class="headline grey lighten-2" primary-title>{{category}} new post</v-card-title>
+        <v-card-title class="headline grey lighten-2" primary-title>{{category}} New Post</v-card-title>
         <v-card-text>
           <v-form class="px-3" ref="form">
             <v-file-input
@@ -126,10 +126,10 @@ export default {
                 this.imageloading = false;
               } else {
                 console.log(result);
-                if (i == files.length) {
+                this.uploadedfiles.push(JSON.stringify(result));
+                if (this.uploadedfiles.length == files.length) {
                   this.imageloading = false;
                 }
-                this.uploadedfiles.push(JSON.stringify(result));
               }
             });
           }

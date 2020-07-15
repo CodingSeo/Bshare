@@ -152,11 +152,14 @@ class PostRepositoryImp implements PostRepository
     public function getRandomPost(array $category_id): PostDTO
     {
         $randomPost = $this->cache->remember('api.posts.randomPost', 200, function () use ($category_id) {
-            return POST::with('content')
+            $post = POST::with('content')
                 ->active()
                 ->whereIn('category_id', $category_id)
                 ->inRandomOrder()
                 ->first();
+            $images = $post->content->images()->get();
+            $post->content->images = $images;
+            return $post;
         });
         return $this->mapper->map($randomPost, PostDTO::class);
     }

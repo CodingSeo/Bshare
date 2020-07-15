@@ -1,7 +1,7 @@
 <template>
   <div class="help">
     <v-container class="my-5">
-      <h1 class="subheading grey--text">Q/N</h1>
+      <h1 class="subheading indigo--text">Q/N</h1>
       <v-divider></v-divider>
       <div>
         <v-expansion-panels multiple>

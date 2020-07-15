@@ -1,7 +1,7 @@
 `<template>
   <div class="home">
     <v-container class="my-5">
-      <h1 class="subheading grey--text">Home</h1>
+      <h1 class="subheading indigo--text">Home</h1>
       <v-divider></v-divider>
       <v-layout col wrap>
         <v-flex>

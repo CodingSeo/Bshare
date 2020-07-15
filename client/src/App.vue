@@ -1,7 +1,7 @@
 <template>
   <v-app class="grey lighten-4">
     <NavBar :login="loggedIn" :user="user_info" />
-    <v-content class="mx-4 mb-4">
+    <v-content class="bsharebody pb-12">
       <router-view :login="loggedIn" :user="user_info"></router-view>
     </v-content>
   </v-app>
@@ -16,7 +16,7 @@ export default {
   },
   computed: {
     ...mapState({
-      auth: 'auth' 
+      auth: "auth"
     }),
     loggedIn() {
       return this.auth.status.loggedIn;
@@ -29,11 +29,11 @@ export default {
 </script>
 
 <style>
-.theme--light.v-application {
-  background: #f5f5f5;
+.v-application {
+  background: url(./images/bsharebackground.jpg);
 }
 .routerLink {
-  text-decoration: none;
+  text-decoration: #f5f5f5;
 }
 .post.review {
   border-left: 4px solid rgb(65, 75, 221);
@@ -42,13 +42,24 @@ export default {
   border-left: 4px solid tomato;
 }
 .post.ongoing {
-  border-left: 4px solid green;
+  border-left: 4px solid skyblue;
 }
 
 .v-chip.complete {
   background: tomato !important;
 }
 .v-chip.ongoing {
-  background: green !important;
+  background: skyblue !important;
+}
+.bsharebody {
+  background: url(./images/bsharebackground.jpg) no-repeat center center fixed;
+
+  -webkit-background-size: cover;
+
+  -moz-background-size: cover;
+
+  -o-background-size: cover;
+
+  background-size: cover;
 }
 </style>
