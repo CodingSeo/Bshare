@@ -35,7 +35,7 @@ class ContentRepositoryImp implements ContentRepository
     }
     public function getImagesByContent(ContentDTO $contentDTO): array
     {
-        $images = $this->cache->remember('api.posts.content.images.' . $contentDTO->getId(), 1000, function () use ($contentDTO) {
+        $images = $this->cache->remember('api.posts.content.images.' . $contentDTO->getId(), 210000, function () use ($contentDTO) {
 
             $content = new Content();
 
