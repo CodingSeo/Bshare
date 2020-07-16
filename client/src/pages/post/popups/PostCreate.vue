@@ -70,10 +70,6 @@ export default {
           !values ||
           !values.some(value => value.size > 2000000) ||
           "image size should be less than 2 MB!",
-        values =>
-          !values ||
-          !values.some(value => value.type === "image/png") ||
-          "file should be image files"
       ],
       titleRules: [v => !!v || "title is required"],
       bodyRules: [v => !!v || "body is required"],

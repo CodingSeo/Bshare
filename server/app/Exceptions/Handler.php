@@ -72,10 +72,10 @@ class Handler extends ExceptionHandler
                 break;
         }
         // making the response better
-        // return response()->json([
-        //     'code' => $code ?: 400,
-        //     'errors' => $message,
-        // ], $code ?: 400);
+        return response()->json([
+            'code' => $code ?: 400,
+            'errors' => $message,
+        ], $code ?: 400);
         return parent::render($request, $e);
     }
 
